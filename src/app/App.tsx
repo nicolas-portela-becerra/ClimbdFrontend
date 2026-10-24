@@ -1,17 +1,14 @@
-import { Routes, Route } from 'react-router-dom'
-import Login from "../routes/login.tsx"
+import { RouterProvider } from 'react-router-dom'
+import { ErrorBoundary } from './ErrorBoundary'
+import { Providers } from './providers'
+import { router } from './router'
 
-
-function App() {
+export function App() {
   return (
-    <main>
-        <h1>Climbd</h1>
-      <Routes>
-          <Route path="/" element={ <Login /> } />
-      </Routes>
-    </main>
-    
+    <ErrorBoundary>
+      <Providers>
+        <RouterProvider router={router} />
+      </Providers>
+    </ErrorBoundary>
   )
 }
-
-export default App

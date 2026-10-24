@@ -52,14 +52,15 @@ A feature never imports another feature; if two features need something, move it
     │
     ├── features/                 # domain modules
     │   ├── auth/
-    │   │   ├── AuthProvider.tsx  # session context (user, status, login, logout)
+    │   │   ├── AuthProvider.tsx  # mirrors session events into state (status, user, endReason)
     │   │   ├── tokenStore.ts     # access token (memory) + refresh token (localStorage)
-    │   │   ├── useAuth.ts
-    │   │   ├── components/       # LoginForm, RegisterForm, OAuthButtons
+    │   │   ├── session.ts        # login/register/logout/refresh, boot, cross-tab sync, session events
+    │   │   ├── useAuth.ts        # AuthContext + useAuth hook
+    │   │   ├── components/       # LoginForm, RegisterForm (OAuthButtons: not implemented yet)
     │   │   └── actions.ts        # React 19 form actions + validation
     │   ├── gyms/
     │   │   ├── components/       # GymList, GymHeader, ChangeGymButton
-    │   │   └── lastGym.ts        # remembers last visited gym (localStorage)
+    │   │   └── lastGym.ts        # empty, unused for now (`/` always redirects to /gyms)
     │   ├── walls/
     │   │   └── components/       # WallCarousel, WallPhoto
     │   ├── boulders/
@@ -82,14 +83,16 @@ A feature never imports another feature; if two features need something, move it
     │   │                         # TabBar, Sheet, Spinner, EmptyState, ErrorState, AuthImage
     │   ├── hooks/                # useMediaQuery, usePrefersReducedMotion, useOnline…
     │   ├── lib/                  # pure helpers: format, storage, cn() (class merge)
-    │   └── icons/                # SVG icon components
+    │   └── icons/index.tsx       # SVG icon components
     │
     ├── theme/
     │   ├── ThemeProvider.tsx     # system | light | dark, sets <html data-theme>
+    │   ├── useTheme.ts           # ThemeContext + useTheme hook
     │   └── tokens.css            # CSS variables for both themes + Tailwind @theme mapping
     │
     ├── i18n/
-    │   ├── index.ts              # i18next init + language detector (fallback es)
+    │   ├── index.ts              # i18next init + language detector (fallback es), setLanguage()
+    │   ├── resources.ts          # imports every locale JSON, supported languages, default namespace
     │   ├── i18next.d.ts          # typed keys
     │   └── locales/
     │       ├── es/{common,auth,gyms,boulders,editor}.json
@@ -111,21 +114,23 @@ Tests live next to the code they test: `BoulderRow.tsx` + `BoulderRow.test.tsx`.
 ## Routing
 
 - React Router with `createBrowserRouter`; every route component is `lazy()` (code-splitting).
-- Public: `/login`, `/register`. Everything else is under `RequireAuth` + `AppLayout`.
-- `/` redirects to the last visited gym (`/gyms/:gymId`) or to `/gyms` if none.
+- Public: `/login`, `/register`. Everything else is under `RequireAuth`.
+- `AppLayout` (bottom tab bar) wraps `/gyms`, `/gyms/:gymId` and `/me`. Boulder detail and create are full screens without the tab bar, as in the mockups.
+- `/` redirects to `/gyms`.
+- Pages are default exports loaded with `lazy`; the root route has a `hydrateFallbackElement` (centred `Spinner`) shown while the first page's code loads.
 - **The URL is the state** for selection: gym, wall (`?wall=id`), boulder. Refresh, back button and
   shared links must always reproduce the same screen.
 - Each route has an `errorElement` and a 404 route exists.
 
 ## State
 
-| Kind | Where | Examples |
-|---|---|---|
-| Server data | TanStack Query | gyms, walls, boulders, favourites (future, stored in backend) |
-| Session | `AuthProvider` (Context) | user, status, login/logout |
-| Selection | URL | gymId, wallId, boulderId |
-| Preferences | `localStorage` via small helpers | theme, language, last gym |
-| Local UI | `useState` in the component | sheet open, selected hold role |
+| Kind        | Where                            | Examples                                                      |
+| ----------- | -------------------------------- | ------------------------------------------------------------- |
+| Server data | TanStack Query                   | gyms, walls, boulders, favourites (future, stored in backend) |
+| Session     | `AuthProvider` (Context)         | user, status, login/logout                                    |
+| Selection   | URL                              | gymId, wallId, boulderId                                      |
+| Preferences | `localStorage` via small helpers | theme, language, last gym                                     |
+| Local UI    | `useState` in the component      | sheet open, selected hold role                                |
 
 No Redux/Zustand. Revisit only if real client-side state grows (e.g. offline queue).
 
@@ -139,6 +144,6 @@ No Redux/Zustand. Revisit only if real client-side state grows (e.g. offline que
 
 ## PWA
 
-Installable now (manifest + basic service worker via `vite-plugin-pwa`, `registerType: 'prompt'`).
+Installable now (manifest + basic service worker via `vite-plugin-pwa`, `registerType: 'autoUpdate'`: new versions apply silently on the next load).
 Planned later, configuration-only: offline app shell, runtime caching of wall images for favourite gyms.
 Never cache `/api/auth/*`.

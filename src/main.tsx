@@ -1,12 +1,14 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
-import App from './app/App.tsx'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './styles/index.css'
+import './i18n'
+import { App } from './app/App'
+import { registerServiceWorker } from './pwa/registerSW'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+registerServiceWorker()
+
+createRoot(document.getElementById('root') as HTMLElement).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
 )

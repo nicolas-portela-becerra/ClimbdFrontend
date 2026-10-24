@@ -7,18 +7,19 @@ Reference: `mockups/a-stencil.html`. Gym & walls uses wall-photo carousel on top
 Defined once in `src/theme/tokens.css` as CSS variables, mapped into Tailwind with `@theme`.
 Components use only these names.
 
-| Token | Light | Dark | Use |
-|---|---|---|---|
-| `ground` | #e8e7e3 | #10110f | page background |
-| `surface` | #f6f5f2 | #191a18 | cards, inputs bg |
-| `raised` | #ffffff | #22231f | pressed/selected |
-| `ink` | #141414 | #ecebe6 | text, borders |
-| `muted` | #57554f | #a29f97 | secondary text |
-| `line` | ink 14 % | ink 14 % | dividers |
-| `accent` / `on-accent` | #0d6a4b / #fff | #3cbf86 / #06130d | primary actions |
-| `accent-field` | #d6e7de | #15291f | tinted panels |
-| `tape` / `on-tape` | ink / ground | ink / ground | grade tape |
-| `start` `hand` `foot` `finish` | #16c25a #1fb8e6 #f4a10b #ee2f86 | same | hold roles (`HoldDto.color` 0..3) |
+| Token                          | Light                           | Dark              | Use                               |
+| ------------------------------ | ------------------------------- | ----------------- | --------------------------------- |
+| `ground`                       | #e8e7e3                         | #10110f           | page background                   |
+| `surface`                      | #f6f5f2                         | #191a18           | cards, inputs bg                  |
+| `raised`                       | #ffffff                         | #22231f           | pressed/selected                  |
+| `ink`                          | #141414                         | #ecebe6           | text, borders                     |
+| `muted`                        | #57554f                         | #a29f97           | secondary text                    |
+| `line`                         | ink 14 %                        | ink 14 %          | dividers                          |
+| `accent` / `on-accent`         | #0d6a4b / #fff                  | #3cbf86 / #06130d | primary actions                   |
+| `accent-field`                 | #d6e7de                         | #15291f           | tinted panels                     |
+| `tape` / `on-tape`             | ink / ground                    | ink / ground      | grade tape                        |
+| `error`                        | #b3261e                         | #ff7b72           | form errors (text and borders)    |
+| `start` `hand` `foot` `finish` | #16c25a #1fb8e6 #f4a10b #ee2f86 | same              | hold roles (`HoldDto.color` 0..3) |
 
 Fonts: `display` Big Shoulders Stencil (titles, grades), `cond` Barlow Semi Condensed (labels,
 uppercase UI), `text` Barlow (body). Self-host them (no Google Fonts request) so they work offline.

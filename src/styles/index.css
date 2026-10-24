@@ -1,0 +1,39 @@
+@import 'tailwindcss';
+@import '@fontsource/big-shoulders-stencil/700.css';
+@import '@fontsource/big-shoulders-stencil/800.css';
+@import '@fontsource/big-shoulders-stencil/900.css';
+@import '@fontsource/barlow/400.css';
+@import '@fontsource/barlow/500.css';
+@import '@fontsource/barlow/600.css';
+@import '@fontsource/barlow/700.css';
+@import '@fontsource/barlow-semi-condensed/600.css';
+@import '@fontsource/barlow-semi-condensed/700.css';
+@import '../theme/tokens.css';
+
+@layer base {
+  html {
+    background-color: var(--ground);
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-text);
+    font-variant-numeric: tabular-nums;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+}

@@ -38,6 +38,6 @@ Run after every `openapi.yml` change and commit the result. The Docker build may
 ## PWA
 
 - `vite-plugin-pwa`: manifest (name, icons 192/512/maskable, `display: standalone`, theme colors),
-  `registerType: 'prompt'` + in-app "Update available" toast.
+  `registerType: 'autoUpdate'`: updates are applied silently on the next load (no prompt).
 - Installable requires HTTPS — provided by Cloudflare.
 - Later (config only): precache app shell for offline start; runtime cache wall images of favourite gyms.

@@ -2,7 +2,7 @@
 
 ## TypeScript
 
-- `strict: true`, `noUncheckedIndexedAccess`, `noImplicitOverride`, `exactOptionalPropertyTypes`.
+- `strict: true`. The stricter flags (`noUncheckedIndexedAccess`, `noImplicitOverride`, `exactOptionalPropertyTypes`) are off because the generated API client doesn't compile with them; write code as if they were on.
 - No `any`. Use `unknown` and narrow. No non-null `!` unless a comment explains why it is safe.
 - Use the generated DTO types (`GymDto`, `BoulderDetailDto`…) — never redefine API shapes by hand.
 - Type-only imports use `import type`.
@@ -10,14 +10,14 @@
 
 ## Naming
 
-| Thing | Style | Example |
-|---|---|---|
-| Components / their files | PascalCase | `BoulderRow.tsx` |
-| Hooks | `useX`, camelCase file | `useBoulders.ts` |
-| Other modules | camelCase | `tokenStore.ts` |
-| Route files | kebab-case | `gym-walls.tsx` |
-| i18n keys | `namespace:section.key` camelCase | `boulders:list.empty` |
-| Booleans | `is/has/can` | `isValid`, `hasFinish` |
+| Thing                    | Style                             | Example                |
+| ------------------------ | --------------------------------- | ---------------------- |
+| Components / their files | PascalCase                        | `BoulderRow.tsx`       |
+| Hooks                    | `useX`, camelCase file            | `useBoulders.ts`       |
+| Other modules            | camelCase                         | `tokenStore.ts`        |
+| Route files              | kebab-case                        | `gym-walls.tsx`        |
+| i18n keys                | `namespace:section.key` camelCase | `boulders:list.empty`  |
+| Booleans                 | `is/has/can`                      | `isValid`, `hasFinish` |
 
 Named exports everywhere, except route modules (default export for `lazy()`).
 
@@ -65,7 +65,7 @@ Named exports everywhere, except route modules (default export for `lazy()`).
 
 ## Tooling
 
-- Prettier formats; ESLint (typescript-eslint, react-hooks, jsx-a11y) catches bugs. Don't fight them.
+- Prettier formats; ESLint (typescript-eslint, react-hooks) catches bugs. Don't fight them.
 - Husky pre-commit runs lint-staged (eslint --fix + prettier on staged files) and typecheck.
 - Scripts: `dev`, `build`, `preview`, `lint`, `format`, `typecheck`, `test`, `generate:api`.
 
