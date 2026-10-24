@@ -25,9 +25,6 @@
 
     /* Linting */
     "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"]

@@ -1,1 +1,28 @@
-{}
+{
+  "appName": "Climbd",
+  "loading": "Loading",
+  "nav": {
+    "walls": "Walls",
+    "logbook": "Logbook",
+    "set": "Set",
+    "me": "Me",
+    "label": "Main navigation"
+  },
+  "routes": {
+    "gyms": "Gyms",
+    "gymWalls": "Gym walls",
+    "boulderDetail": "Boulder",
+    "boulderCreate": "New boulder",
+    "profile": "Me"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "message": "An unexpected error happened. Try again.",
+    "retry": "Try again",
+    "notFoundTitle": "Page not found",
+    "notFoundMessage": "This page doesn't exist.",
+    "forbiddenTitle": "No access",
+    "forbiddenMessage": "You don't have permission to see this page.",
+    "goHome": "Go to walls"
+  }
+}
