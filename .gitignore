@@ -24,6 +24,7 @@ dist-ssr
 *.sw?
 mockups
 .playwright-mcp
+docs
 
 # Environment (keep the example)
 .env

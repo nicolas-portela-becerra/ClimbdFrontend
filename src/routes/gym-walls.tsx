@@ -1,8 +1,24 @@
-import { useTranslation } from 'react-i18next'
+import { useLocation, useParams } from 'react-router-dom'
+import { useAuth } from '@/features/auth/useAuth'
+import { GymWallsHeader } from '@/features/gyms/components/GymWallsHeader'
+import { NewWallButton } from '@/features/walls/components/NewWallButton'
+import { WallList } from '@/features/walls/components/WallList'
 
 export default function GymWalls() {
-  const { t } = useTranslation()
+  const { gymId } = useParams()
+  const location = useLocation()
+  const { user } = useAuth()
+  const name = (location.state as { gymName?: string } | null)?.gymName
+
   return (
-    <h1 className="p-5 font-display text-4xl font-extrabold uppercase">{t('routes.gymWalls')}</h1>
+    <GymWallsHeader
+      gymId={Number(gymId)}
+      name={name}
+      action={
+        user?.id !== undefined ? <NewWallButton gymId={Number(gymId)} userId={user.id} /> : null
+      }
+    >
+      <WallList gymId={Number(gymId)} />
+    </GymWallsHeader>
   )
 }

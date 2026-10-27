@@ -1,18 +1,45 @@
-import { useActionState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/shared/lib/cn'
 import { Button } from '@/shared/ui/Button'
 import { TextField } from '@/shared/ui/TextField'
 import { initialAuthFormState, loginAction } from '../actions'
 
-export function LoginForm() {
+const NOTICE_MS = 5000
+
+type LoginFormProps = {
+  // Message shown above the form (account created, session expired).
+  notice?: { text: string; tone: 'success' | 'info' } | undefined
+}
+
+export function LoginForm({ notice }: LoginFormProps) {
   const { t } = useTranslation('auth')
   const [state, action, pending] = useActionState(loginAction, initialAuthFormState)
+  const [noticeHidden, setNoticeHidden] = useState(false)
+
+  // The notice goes away after 5 s or as soon as the user presses Log in.
+  useEffect(() => {
+    if (!notice) return
+    const id = setTimeout(() => setNoticeHidden(true), NOTICE_MS)
+    return () => clearTimeout(id)
+  }, [notice])
 
   return (
-    <form action={action} noValidate className="grid gap-3">
+    <form action={action} onSubmit={() => setNoticeHidden(true)} noValidate className="grid gap-3">
+      {/* One message at a time: a login error replaces the notice. */}
       {state.formError ? (
         <p role="alert" className="border-2 border-error bg-surface p-3 font-semibold">
           {t(state.formError)}
+        </p>
+      ) : notice && !noticeHidden ? (
+        <p
+          role="status"
+          className={cn(
+            'border-2 p-3 font-semibold',
+            notice.tone === 'success' ? 'border-accent bg-accent-field' : 'border-ink bg-surface',
+          )}
+        >
+          {notice.text}
         </p>
       ) : null}
       <TextField

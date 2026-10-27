@@ -23,7 +23,7 @@ export function Button({
       aria-busy={loading || undefined}
       className={cn(
         'flex min-h-14 w-full items-center justify-center gap-2.5 border-2 px-4 font-cond text-lg font-bold tracking-wide uppercase',
-        'transition-[transform,background-color,color] duration-150 ease-out active:scale-95 motion-reduce:active:scale-100',
+        'transition-[scale,background-color,color] duration-150 ease-out active:scale-95 motion-reduce:active:scale-100',
         'disabled:opacity-50',
         variant === 'primary'
           ? 'border-accent bg-accent text-on-accent'

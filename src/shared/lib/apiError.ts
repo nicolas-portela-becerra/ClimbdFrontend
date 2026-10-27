@@ -1,7 +1,14 @@
 import { ResponseError } from '@api'
 
 export type ApiErrorKind =
-  'invalid' | 'unauthorized' | 'forbidden' | 'notFound' | 'conflict' | 'network' | 'unknown'
+  | 'invalid'
+  | 'unauthorized'
+  | 'forbidden'
+  | 'notFound'
+  | 'conflict'
+  | 'locked'
+  | 'network'
+  | 'unknown'
 
 export function apiErrorKind(error: unknown): ApiErrorKind {
   if (error instanceof ResponseError) {
@@ -16,6 +23,9 @@ export function apiErrorKind(error: unknown): ApiErrorKind {
         return 'notFound'
       case 409:
         return 'conflict'
+      case 423:
+        // Locked: the account exists but is deactivated.
+        return 'locked'
       default:
         return 'unknown'
     }

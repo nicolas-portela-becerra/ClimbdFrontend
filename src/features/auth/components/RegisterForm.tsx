@@ -35,11 +35,26 @@ export function RegisterForm({ onRegistered }: { onRegistered: () => void }) {
         error={state.fieldErrors.email ? t(state.fieldErrors.email) : undefined}
       />
       <TextField
+        name="confirmEmail"
+        type="email"
+        autoComplete="off"
+        label={t('fields.confirmEmail')}
+        defaultValue={state.values.confirmEmail}
+        error={state.fieldErrors.confirmEmail ? t(state.fieldErrors.confirmEmail) : undefined}
+      />
+      <TextField
         name="password"
         type="password"
         autoComplete="new-password"
         label={t('fields.password')}
         error={state.fieldErrors.password ? t(state.fieldErrors.password) : undefined}
+      />
+      <TextField
+        name="confirmPassword"
+        type="password"
+        autoComplete="new-password"
+        label={t('fields.confirmPassword')}
+        error={state.fieldErrors.confirmPassword ? t(state.fieldErrors.confirmPassword) : undefined}
       />
       <Button type="submit" variant="primary" loading={pending} className="mt-2">
         {t('register.submit')}

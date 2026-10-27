@@ -1,1 +1,49 @@
-{}
+{
+  "title": "Rocódromos",
+  "create": "Nuevo rocódromo",
+  "search": {
+    "open": "Buscar rocódromos",
+    "close": "Cerrar búsqueda",
+    "placeholder": "Buscar rocódromos",
+    "underConstruction": "En construcción"
+  },
+  "list": {
+    "label": "Rocódromos",
+    "loadMore": "Cargar más",
+    "loadMoreError": "No se han podido cargar más rocódromos. Inténtalo de nuevo."
+  },
+  "empty": {
+    "title": "Aún no hay rocódromos",
+    "message": "No hay rocódromos que mostrar."
+  },
+  "walls": {
+    "title": "Muros de {{name}}",
+    "back": "Volver a rocódromos"
+  },
+  "notFound": {
+    "title": "Rocódromo no encontrado",
+    "message": "Este rocódromo no existe."
+  },
+  "form": {
+    "title": "Nuevo rocódromo",
+    "close": "Cerrar",
+    "name": "Nombre del rocódromo",
+    "location": "Ubicación",
+    "description": "Descripción",
+    "logo": "Logo",
+    "chooseLogo": "Elegir logo",
+    "changeLogo": "Cambiar logo",
+    "removeLogo": "Quitar logo",
+    "logoPreview": "Vista previa del logo elegido",
+    "submit": "Crear rocódromo",
+    "errors": {
+      "nameRequired": "Escribe el nombre del rocódromo",
+      "wrongType": "Usa una imagen JPEG, PNG o WebP",
+      "logoFailed": "No se ha podido leer la imagen. Prueba con otra",
+      "invalid": "Algunos datos no son válidos",
+      "forbidden": "Solo los administradores pueden crear rocódromos",
+      "network": "No se puede conectar con el servidor. Revisa tu conexión",
+      "unknown": "Algo ha salido mal. Inténtalo de nuevo"
+    }
+  }
+}

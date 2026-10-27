@@ -1,0 +1,38 @@
+{
+  "list": {
+    "label": "Walls",
+    "loadMore": "Load more",
+    "loadMoreError": "Couldn't load more walls. Try again."
+  },
+  "empty": {
+    "title": "No walls yet",
+    "message": "This gym has no walls to show."
+  },
+  "back": "Back to walls",
+  "notFound": {
+    "title": "Wall not found",
+    "message": "This wall doesn't exist."
+  },
+  "upload": {
+    "open": "Upload wall",
+    "title": "Upload wall",
+    "close": "Close",
+    "photo": "Photo",
+    "choose": "Choose photo",
+    "change": "Change photo",
+    "rotate": "Rotate photo",
+    "previewLabel": "Preview of the chosen photo",
+    "name": "Wall name",
+    "submit": "Upload"
+  },
+  "errors": {
+    "nameRequired": "Enter the wall name",
+    "photoRequired": "Choose a photo",
+    "wrongType": "Use a JPEG, PNG or WebP photo",
+    "tooLarge": "The photo is too large (maximum 5 MB)",
+    "invalidPhoto": "Invalid photo. Use JPEG, PNG or WebP",
+    "forbidden": "Only an admin or the gym owner can upload walls",
+    "network": "Can't reach the server. Check your connection",
+    "unknown": "Something went wrong. Try again"
+  }
+}

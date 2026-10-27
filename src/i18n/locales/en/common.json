@@ -4,15 +4,13 @@
   "nav": {
     "walls": "Walls",
     "logbook": "Logbook",
-    "set": "Set",
     "me": "Me",
-    "label": "Main navigation"
+    "label": "Main navigation",
+    "users": "Users"
   },
   "routes": {
     "gyms": "Gyms",
     "gymWalls": "Gym walls",
-    "boulderDetail": "Boulder",
-    "boulderCreate": "New boulder",
     "profile": "Me"
   },
   "error": {
@@ -24,5 +22,11 @@
     "forbiddenTitle": "No access",
     "forbiddenMessage": "You don't have permission to see this page.",
     "goHome": "Go to walls"
+  },
+  "toast": {
+    "close": "Close"
+  },
+  "profile": {
+    "logout": "Log out"
   }
 }
