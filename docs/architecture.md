@@ -44,9 +44,9 @@ A feature never imports another feature; if two features need something, move it
     │   ├── login.tsx
     │   ├── register.tsx
     │   ├── gyms.tsx                      # /gyms           (choose gym)
-    │   ├── gym-walls.tsx                 # /gyms/:gymId    (wall photo + boulder list)
-    │   ├── boulder-detail.tsx            # /boulders/:boulderId
-    │   ├── boulder-create.tsx            # /gyms/:gymId/walls/:wallId/new
+    │   ├── gym-walls.tsx                 # /gyms/:gymId    (title + list of the gym's walls)
+    │   ├── wall-boulders.tsx             # /gyms/:gymId/walls/:wallId (wall photo + boulders of the wall)
+    │   ├── users-activate.tsx            # /users/activate (ADMIN only: activate pending users)
     │   ├── profile.tsx                   # /me (theme, language, logout)
     │   └── not-found.tsx
     │
@@ -59,30 +59,38 @@ A feature never imports another feature; if two features need something, move it
     │   │   ├── components/       # LoginForm, RegisterForm (OAuthButtons: not implemented yet)
     │   │   └── actions.ts        # React 19 form actions + validation
     │   ├── gyms/
-    │   │   ├── components/       # GymList, GymHeader, ChangeGymButton
+    │   │   ├── components/       # GymList, GymRow, GymLogo (whole logo + auto black/white background), GymHeader, ChangeGymButton,
+    │   │                     # NewGymButton + CreateGymModal (local-state modal) + LogoPicker (sent untouched as base64)
     │   │   └── lastGym.ts        # empty, unused for now (`/` always redirects to /gyms)
     │   ├── walls/
-    │   │   └── components/       # WallCarousel, WallPhoto
+    │   │   ├── components/       # WallList, WallRow, WallHeader (loads/validates the wall), WallHero,
+    │   │   │                     # NewWallButton + UploadWallModal (local-state modal) + PhotoPicker (preview + rotate)
+    │   │   ├── actions.ts        # upload form validation + error mapping
+    │   │   └── photo.ts          # accepted types, 5 MB limit, rotatePhoto()
     │   ├── boulders/
-    │   │   ├── components/       # BoulderList, BoulderRow, BoulderHolds (SVG rings), GradeTape
-    │   │   └── grades.ts
+    │   │   └── components/       # BoulderList, BoulderRow, GradeTape, BoulderHolds (photo + SVG rings),
+    │   │                         # BoulderViewer (full-screen boulder over the wall photo)
+    │   ├── users/
+    │   │   └── components/       # UserList, UserRow (activate one user)
     │   └── boulder-editor/
-    │       ├── components/       # EditorCanvas, RolePicker
-    │       └── useHoldEditor.ts  # pure state for tapping holds (undo/clear/validation)
+    │       ├── components/       # NewBoulderButton, CreateBoulderModal (2 steps), EditorCanvas, RolePicker, DetailsForm
+    │       ├── actions.ts        # details-form validation + save error mapping
+    │       └── useHoldEditor.ts  # pure hold logic (tap/undo/clear/validateHolds) + the hook
     │
     ├── api/
     │   ├── generated/            # ⚠ generated, never edited
     │   ├── client.ts             # one Configuration: basePath "", auth + refresh middleware
     │   ├── queryClient.ts        # QueryClient defaults (staleTime, retry rules)
     │   ├── keys.ts               # query-key factory: qk.gyms.list(), qk.boulders.byWall(id)…
-    │   └── queries/              # useGyms, useGym, useWallImages, useBoulders, useBoulder,
-    │                             # useCreateBoulder, useWallImageBlob …
+    │   └── queries/              # useGyms, useGym, useWallImages, useBouldersByWall, useBoulder,
+    │                             # useCreateBoulder, useWallImage, useWallImageBlob …
     │
     ├── shared/
     │   ├── ui/                   # design-system primitives: Button, Tape, TextField, IconButton,
-    │   │                         # TabBar, Sheet, Spinner, EmptyState, ErrorState, AuthImage
-    │   ├── hooks/                # useMediaQuery, usePrefersReducedMotion, useOnline…
-    │   ├── lib/                  # pure helpers: format, storage, cn() (class merge)
+    │   │                         # TabBar, Sheet (draggable bottom sheet), Overlay (portal modal layer), ModalPanel/ModalHeader (full-screen modal page), ToastProvider (error pop-up),
+    │   │                         # SelectField, TextAreaField, HoldRing, BlobImage, Spinner, EmptyState, ErrorState, AuthImage
+    │   ├── hooks/                # usePrefersReducedMotion, useToast, useFieldError, useMediaQuery, useOnline…
+    │   ├── lib/                  # pure helpers: format, storage, cn() (class merge), holds (roles), grades
     │   └── icons/index.tsx       # SVG icon components
     │
     ├── theme/
@@ -95,8 +103,8 @@ A feature never imports another feature; if two features need something, move it
     │   ├── resources.ts          # imports every locale JSON, supported languages, default namespace
     │   ├── i18next.d.ts          # typed keys
     │   └── locales/
-    │       ├── es/{common,auth,gyms,boulders,editor}.json
-    │       └── en/{common,auth,gyms,boulders,editor}.json
+    │       ├── es/{common,auth,gyms,walls,boulders,editor}.json
+    │       └── en/{common,auth,gyms,walls,boulders,editor}.json
     │
     ├── styles/
     │   └── index.css             # @import "tailwindcss"; tokens; base layer; fonts
@@ -115,8 +123,10 @@ Tests live next to the code they test: `BoulderRow.tsx` + `BoulderRow.test.tsx`.
 
 - React Router with `createBrowserRouter`; every route component is `lazy()` (code-splitting).
 - Public: `/login`, `/register`. Everything else is under `RequireAuth`.
-- `AppLayout` (bottom tab bar) wraps `/gyms`, `/gyms/:gymId` and `/me`. Boulder detail and create are full screens without the tab bar, as in the mockups.
+- `AppLayout` (bottom tab bar) wraps `/gyms`, `/gyms/:gymId`, `/gyms/:gymId/walls/:wallId`, `/me` and the admin-only `/users/activate` (behind `RequireRole`; its lock tab shows only to ADMIN users). The boulder viewer and the create-boulder modal are full-screen overlays on top of the wall screen, so the tab bar is covered while they are open.
 - `/` redirects to `/gyms`.
+- A boulder opens over its wall screen through the query param `?boulder=ID` (`BoulderViewer`, built on `shared/ui/Overlay`: a portal layer that makes the page behind `inert` and stays mounted while it animates out). Opening pushes a history entry, picking another boulder from the sheet replaces it, and the back arrow goes back (or replaces the URL on a direct link).
+- `<ScrollRestoration />` sits in the root route: back/forward restores the scroll position. In-app "back" arrows must call `navigate(-1)` (falling back to a link when there is no history) so they count as going back. Lists that should survive the trip back keep their query data longer (`gcTime`, see `useWallImages`).
 - Pages are default exports loaded with `lazy`; the root route has a `hydrateFallbackElement` (centred `Spinner`) shown while the first page's code loads.
 - **The URL is the state** for selection: gym, wall (`?wall=id`), boulder. Refresh, back button and
   shared links must always reproduce the same screen.

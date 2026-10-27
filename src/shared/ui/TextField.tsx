@@ -1,5 +1,5 @@
-import { useId, useState, type InputHTMLAttributes } from 'react'
-import { useFormStatus } from 'react-dom'
+import { useId, type InputHTMLAttributes } from 'react'
+import { useFieldError } from '@/shared/hooks/useFieldError'
 import { cn } from '@/shared/lib/cn'
 
 type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
@@ -16,17 +16,7 @@ export function TextField({
   onInput,
   ...props
 }: TextFieldProps) {
-  const [dismissed, setDismissed] = useState(false)
-  const [wasPending, setWasPending] = useState(false)
-  const { pending } = useFormStatus()
-
-  // While submitting, the previous result is stale, so errors stay hidden; the new result brings them back.
-  if (pending !== wasPending) {
-    setWasPending(pending)
-    if (!pending) setDismissed(false)
-  }
-  const error = dismissed || pending ? undefined : errorProp
-
+  const { error, dismiss } = useFieldError(errorProp)
   const generatedId = useId()
   const inputId = id ?? generatedId
   const errorId = `${inputId}-error`
@@ -39,7 +29,7 @@ export function TextField({
       <input
         id={inputId}
         onInput={(event) => {
-          setDismissed(true)
+          dismiss()
           onInput?.(event)
         }}
         aria-invalid={error ? true : undefined}

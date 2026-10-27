@@ -1,1 +1,24 @@
-{}
+{
+  "list": {
+    "label": "Boulders",
+    "loadMore": "Load more",
+    "loadMoreError": "Couldn't load more boulders. Try again."
+  },
+  "empty": {
+    "title": "No boulders yet",
+    "message": "This wall has no boulders to show."
+  },
+  "viewer": {
+    "back": "Back to boulders",
+    "list": "Boulders",
+    "photoLabel": "Wall photo with the holds of {{name}}",
+    "dialogLabel": "Boulder"
+  },
+  "legend": {
+    "label": "Hold colours",
+    "start": "Start",
+    "hand": "Hand",
+    "foot": "Foot",
+    "finish": "Top"
+  }
+}

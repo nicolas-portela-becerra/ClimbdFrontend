@@ -1,6 +1,17 @@
-import { useTranslation } from 'react-i18next'
+import { UserDtoRoleEnum } from '@api'
+import { useAuth } from '@/features/auth/useAuth'
+import { GymHeader } from '@/features/gyms/components/GymHeader'
+import { GymList } from '@/features/gyms/components/GymList'
+import { NewGymButton } from '@/features/gyms/components/NewGymButton'
 
 export default function Gyms() {
-  const { t } = useTranslation()
-  return <h1 className="p-5 font-display text-4xl font-extrabold uppercase">{t('routes.gyms')}</h1>
+  const { user } = useAuth()
+  const adminId = user?.role === UserDtoRoleEnum.Admin ? user.id : undefined
+
+  return (
+    <>
+      <GymHeader action={adminId !== undefined ? <NewGymButton userId={adminId} /> : null} />
+      <GymList />
+    </>
+  )
 }

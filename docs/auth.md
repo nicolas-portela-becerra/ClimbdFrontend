@@ -54,10 +54,20 @@ OAuth (Google/Apple) is not implemented yet.
 Wall images (`/api/wall-images/{id}/data` and `/thumbnail`) return **binary** and require the Bearer
 token, so `<img src>` cannot load them directly. `shared/ui/AuthImage`:
 
-1. `useWallImageBlob(url)` (TanStack Query, `staleTime: Infinity`) fetches through the authenticated
-   client and returns a `Blob`.
-2. The component creates `URL.createObjectURL(blob)` and revokes it on unmount/change.
-3. Renders a normal `<img>` with `alt`, `width/height` (no layout shift) and a skeleton while loading.
+1. `useWallImageThumbnail(id)` (`api/queries/useWallImageBlob.ts`, TanStack Query, `staleTime: Infinity`)
+   fetches through the authenticated client and returns a `Blob`.
+2. A feature component passes that `blob` to `shared/ui/AuthImage` (shared never imports `api/`).
+3. `AuthImage` renders a normal `<img>`, creating `URL.createObjectURL(blob)` and revoking it on unmount.
+   Until the blob arrives the `<img>` has no source, so the parent's placeholder stays visible (also on failure).
 
 This replaces the old app's base64 data URI approach (less memory, no conversion code).
 If the backend later makes image GETs public, only `AuthImage` changes to a plain `<img>`.
+
+## Login errors
+
+The login endpoint answers **401** for wrong credentials and **423 (Locked)** for a deactivated account
+(`loginErrorKey` in `features/auth/actions.ts`): 423 shows `auth:errors.notActivated`, 401 shows
+`invalidCredentials`.
+
+The notices above the login form (account created, session expired) disappear after 5 s or when Log in is
+pressed, and a login error replaces them (one message at a time).

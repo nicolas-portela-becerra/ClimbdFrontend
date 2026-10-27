@@ -22,21 +22,17 @@ export default function Login() {
   if (status === 'authenticated') return <Navigate to={safeNext(params.get('next'))} replace />
 
   const registered = (location.state as { registered?: boolean } | null)?.registered === true
+  // One notice at a time: the account-created one wins over the session-expired one.
+  const notice = registered
+    ? { text: t('notices.accountCreated'), tone: 'success' as const }
+    : endReason === 'expired'
+      ? { text: t('notices.sessionExpired'), tone: 'info' as const }
+      : undefined
 
   return (
     <section className="grid gap-4">
       <h1 className="font-cond text-2xl font-bold uppercase">{t('login.title')}</h1>
-      {endReason === 'expired' ? (
-        <p role="status" className="border-2 border-ink bg-surface p-3 font-semibold">
-          {t('notices.sessionExpired')}
-        </p>
-      ) : null}
-      {registered ? (
-        <p role="status" className="border-2 border-accent bg-accent-field p-3 font-semibold">
-          {t('notices.accountCreated')}
-        </p>
-      ) : null}
-      <LoginForm />
+      <LoginForm notice={notice} />
       <p className="text-muted">
         {t('login.noAccount')}{' '}
         <Link to="/register" className="font-semibold text-accent underline underline-offset-4">

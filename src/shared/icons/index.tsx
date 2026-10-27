@@ -42,3 +42,67 @@ export function MeIcon(props: IconProps) {
     </Icon>
   )
 }
+
+export function SearchIcon(props: IconProps) {
+  return (
+    <Icon strokeWidth={2} {...props}>
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="M16 16l4.5 4.5" strokeLinecap="round" />
+    </Icon>
+  )
+}
+
+export function CloseIcon(props: IconProps) {
+  return (
+    <Icon strokeWidth={2.2} {...props}>
+      <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+    </Icon>
+  )
+}
+
+export function ChevronIcon(props: IconProps) {
+  return (
+    <Icon strokeWidth={2.2} {...props}>
+      <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+    </Icon>
+  )
+}
+
+export function BackIcon(props: IconProps) {
+  return (
+    <Icon strokeWidth={2.2} {...props}>
+      <path d="M15 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />
+    </Icon>
+  )
+}
+
+export function LockIcon(props: IconProps) {
+  return (
+    <Icon strokeWidth={2} {...props}>
+      <rect x="5" y="11" width="14" height="10" rx="1" strokeLinejoin="round" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" strokeLinecap="round" />
+    </Icon>
+  )
+}
+
+export function LogoutIcon(props: IconProps) {
+  return (
+    <Icon strokeWidth={2.2} {...props}>
+      <path
+        d="M10 4H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M15 8l4 4-4 4M19 12H9" strokeLinecap="round" strokeLinejoin="round" />
+    </Icon>
+  )
+}
+
+export function RotateIcon(props: IconProps) {
+  return (
+    <Icon strokeWidth={2.2} {...props}>
+      <path d="M20 12a8 8 0 1 1-2.8-6.1" strokeLinecap="round" />
+      <path d="M20 4v5h-5" strokeLinecap="round" strokeLinejoin="round" />
+    </Icon>
+  )
+}

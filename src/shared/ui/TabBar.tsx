@@ -6,7 +6,6 @@ export type TabItem = {
   label: string
   icon: ReactNode
   to?: string
-  accent?: boolean
 }
 
 const itemClass =
@@ -16,16 +15,14 @@ export function TabBar({ items, label }: { items: TabItem[]; label: string }) {
   return (
     <nav
       aria-label={label}
-      className="sticky bottom-0 z-10 grid grid-cols-4 border-t-2 border-ink bg-ground pt-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))]"
+      className="sticky bottom-0 z-10 grid auto-cols-fr grid-flow-col border-t-2 border-ink bg-ground pt-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))]"
     >
       {items.map((item) =>
         item.to ? (
           <NavLink
             key={item.label}
             to={item.to}
-            className={({ isActive }) =>
-              cn(itemClass, isActive ? 'text-ink' : 'text-muted', item.accent && 'text-accent')
-            }
+            className={({ isActive }) => cn(itemClass, isActive ? 'text-ink' : 'text-muted')}
           >
             {item.icon}
             {item.label}

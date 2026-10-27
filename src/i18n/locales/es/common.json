@@ -4,15 +4,13 @@
   "nav": {
     "walls": "Muros",
     "logbook": "Libreta",
-    "set": "Abrir",
     "me": "Yo",
-    "label": "Navegación principal"
+    "label": "Navegación principal",
+    "users": "Usuarios"
   },
   "routes": {
     "gyms": "Rocódromos",
     "gymWalls": "Muros del rocódromo",
-    "boulderDetail": "Bloque",
-    "boulderCreate": "Nuevo bloque",
     "profile": "Yo"
   },
   "error": {
@@ -24,5 +22,11 @@
     "forbiddenTitle": "Sin acceso",
     "forbiddenMessage": "No tienes permiso para ver esta página.",
     "goHome": "Ir a muros"
+  },
+  "toast": {
+    "close": "Cerrar"
+  },
+  "profile": {
+    "logout": "Cerrar sesión"
   }
 }
