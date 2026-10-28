@@ -28,5 +28,10 @@
   },
   "profile": {
     "logout": "Log out"
+  },
+  "zoom": {
+    "in": "Zoom in",
+    "out": "Zoom out",
+    "reset": "Reset zoom"
   }
 }

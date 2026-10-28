@@ -11,11 +11,13 @@ type PhotoPickerProps = {
   // Called with the file to upload (rotation already applied), or null when there is none.
   onChange: (photo: File | null) => void
   error: string | undefined
+  // The photo the wall has now (when editing): shown until another one is chosen.
+  current?: Blob | undefined
 }
 
 // File picker with a preview and a rotate button. The rotation is always applied to the original
 // file, so rotating several times never re-compresses an already re-compressed image.
-export function PhotoPicker({ onChange, error: errorProp }: PhotoPickerProps) {
+export function PhotoPicker({ onChange, error: errorProp, current }: PhotoPickerProps) {
   const { t } = useTranslation('walls')
   const { error: fieldError, dismiss } = useFieldError(errorProp)
   const [original, setOriginal] = useState<File | null>(null)
@@ -23,6 +25,7 @@ export function PhotoPicker({ onChange, error: errorProp }: PhotoPickerProps) {
   const [shown, setShown] = useState<File | null>(null)
   const [pickError, setPickError] = useState<string | null>(null)
   const error = pickError ?? fieldError
+  const preview = shown ?? current
 
   const show = (file: File | null) => {
     setShown(file)
@@ -62,14 +65,14 @@ export function PhotoPicker({ onChange, error: errorProp }: PhotoPickerProps) {
         {t('upload.photo')}
       </span>
       <div className="grid min-h-56 place-items-center bg-neutral-800">
-        {shown ? (
+        {preview ? (
           <img
             alt={t('upload.previewLabel')}
             className="max-h-72 w-full object-contain"
             // The ref owns the object URL: created when the element shows this file, revoked after.
             ref={(img) => {
               if (!img) return
-              const url = URL.createObjectURL(shown)
+              const url = URL.createObjectURL(preview)
               img.src = url
               return () => URL.revokeObjectURL(url)
             }}
@@ -89,7 +92,7 @@ export function PhotoPicker({ onChange, error: errorProp }: PhotoPickerProps) {
             onChange={pick}
             className="sr-only"
           />
-          {shown ? t('upload.change') : t('upload.choose')}
+          {preview ? t('upload.change') : t('upload.choose')}
         </label>
         <Button
           type="button"

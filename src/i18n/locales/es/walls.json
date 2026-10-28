@@ -33,6 +33,24 @@
     "invalidPhoto": "Foto no válida. Usa JPEG, PNG o WebP",
     "forbidden": "Solo un administrador o el dueño del rocódromo puede subir muros",
     "network": "No se puede conectar con el servidor. Revisa tu conexión",
-    "unknown": "Algo ha salido mal. Inténtalo de nuevo"
+    "unknown": "Algo ha salido mal. Inténtalo de nuevo",
+    "forbiddenEdit": "No tienes permiso para editar este muro"
+  },
+  "menu": {
+    "label": "Opciones del muro",
+    "edit": "Editar",
+    "delete": "Borrar"
+  },
+  "edit": {
+    "title": "Editar muro",
+    "submit": "Guardar"
+  },
+  "delete": {
+    "title": "¿Borrar muro?",
+    "message": "{{name}} y todos sus bloques se borrarán. No se puede deshacer.",
+    "cancel": "Cancelar",
+    "confirm": "Borrar",
+    "forbidden": "No tienes permiso para borrar este muro",
+    "failed": "No se pudo borrar el muro. Inténtalo de nuevo."
   }
 }
