@@ -33,6 +33,24 @@
     "invalidPhoto": "Invalid photo. Use JPEG, PNG or WebP",
     "forbidden": "Only an admin or the gym owner can upload walls",
     "network": "Can't reach the server. Check your connection",
-    "unknown": "Something went wrong. Try again"
+    "unknown": "Something went wrong. Try again",
+    "forbiddenEdit": "You don't have permission to edit this wall"
+  },
+  "menu": {
+    "label": "Wall options",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "edit": {
+    "title": "Edit wall",
+    "submit": "Save"
+  },
+  "delete": {
+    "title": "Delete wall?",
+    "message": "{{name}} and all its boulders will be deleted. This can't be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete",
+    "forbidden": "You don't have permission to delete this wall",
+    "failed": "Couldn't delete the wall. Try again."
   }
 }

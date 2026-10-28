@@ -24,6 +24,17 @@ import {
     WallImagePageResponseToJSON,
 } from '../models/WallImagePageResponse';
 
+export interface DeleteWallImageRequest {
+    /**
+     * 
+     */
+    wallImageId: number;
+    /**
+     * 
+     */
+    gymId: number;
+}
+
 export interface GetWallImageByIdRequest {
     /**
      * 
@@ -60,6 +71,25 @@ export interface ListWallImagesRequest {
     size?: number;
 }
 
+export interface UpdateWallImageRequest {
+    /**
+     * 
+     */
+    wallImageId: number;
+    /**
+     * Gym the wall belongs to
+     */
+    gymId: number;
+    /**
+     * Name of the physical wall
+     */
+    wallName: string;
+    /**
+     * New wall photo (JPEG, PNG, or WebP). Omit to keep the current one
+     */
+    image?: Blob;
+}
+
 export interface UploadWallImageRequest {
     /**
      * 
@@ -83,6 +113,69 @@ export interface UploadWallImageRequest {
  * 
  */
 export class WallImagesApi extends runtime.BaseAPI {
+
+    /**
+     * Creates request options for deleteWallImage without sending the request
+     */
+    async deleteWallImageRequestOpts(requestParameters: DeleteWallImageRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['wallImageId'] == null) {
+            throw new runtime.RequiredError(
+                'wallImageId',
+                'Required parameter "wallImageId" was null or undefined when calling deleteWallImage().'
+            );
+        }
+
+        if (requestParameters['gymId'] == null) {
+            throw new runtime.RequiredError(
+                'gymId',
+                'Required parameter "gymId" was null or undefined when calling deleteWallImage().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['gymId'] != null) {
+            queryParameters['gymId'] = requestParameters['gymId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/wall-images/{wallImageId}`;
+        urlPath = urlPath.replace('{wallImageId}', encodeURIComponent(String(requestParameters['wallImageId'])));
+
+        return {
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Delete a wall image
+     */
+    async deleteWallImageRaw(requestParameters: DeleteWallImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.deleteWallImageRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete a wall image
+     */
+    async deleteWallImage(requestParameters: DeleteWallImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteWallImageRaw(requestParameters, initOverrides);
+    }
 
     /**
      * Creates request options for getWallImageById without sending the request
@@ -302,6 +395,101 @@ export class WallImagesApi extends runtime.BaseAPI {
     async listWallImages(requestParameters: ListWallImagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WallImagePageResponse> {
         const response = await this.listWallImagesRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Creates request options for updateWallImage without sending the request
+     */
+    async updateWallImageRequestOpts(requestParameters: UpdateWallImageRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['wallImageId'] == null) {
+            throw new runtime.RequiredError(
+                'wallImageId',
+                'Required parameter "wallImageId" was null or undefined when calling updateWallImage().'
+            );
+        }
+
+        if (requestParameters['gymId'] == null) {
+            throw new runtime.RequiredError(
+                'gymId',
+                'Required parameter "gymId" was null or undefined when calling updateWallImage().'
+            );
+        }
+
+        if (requestParameters['wallName'] == null) {
+            throw new runtime.RequiredError(
+                'wallName',
+                'Required parameter "wallName" was null or undefined when calling updateWallImage().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const consumes: runtime.Consume[] = [
+            { contentType: 'multipart/form-data' },
+        ];
+        // @ts-ignore: canConsumeForm may be unused
+        const canConsumeForm = runtime.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any };
+        let useForm = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new URLSearchParams();
+        }
+
+        if (requestParameters['gymId'] != null) {
+            formParams.append('gymId', requestParameters['gymId'] as any);
+        }
+
+        if (requestParameters['image'] != null) {
+            formParams.append('image', requestParameters['image'] as any);
+        }
+
+        if (requestParameters['wallName'] != null) {
+            formParams.append('wallName', requestParameters['wallName'] as any);
+        }
+
+
+        let urlPath = `/api/wall-images/{wallImageId}`;
+        urlPath = urlPath.replace('{wallImageId}', encodeURIComponent(String(requestParameters['wallImageId'])));
+
+        return {
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: formParams,
+        };
+    }
+
+    /**
+     * Update a wall image (name and, optionally, the photo)
+     */
+    async updateWallImageRaw(requestParameters: UpdateWallImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.updateWallImageRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Update a wall image (name and, optionally, the photo)
+     */
+    async updateWallImage(requestParameters: UpdateWallImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.updateWallImageRaw(requestParameters, initOverrides);
     }
 
     /**

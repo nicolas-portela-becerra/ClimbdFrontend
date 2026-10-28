@@ -10,11 +10,13 @@ type DropdownMenuProps = {
   label: string
   items: MenuItem[]
   className?: string
+  // Extra classes for the three-dots button (e.g. a background when it sits over a photo).
+  buttonClassName?: string
 }
 
 // Three-dots button that opens a small list of actions. Closes on a click outside, on Escape, or after
 // choosing an item.
-export function DropdownMenu({ label, items, className }: DropdownMenuProps) {
+export function DropdownMenu({ label, items, className, buttonClassName }: DropdownMenuProps) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
 
@@ -40,6 +42,7 @@ export function DropdownMenu({ label, items, className }: DropdownMenuProps) {
         label={label}
         aria-haspopup="menu"
         aria-expanded={open}
+        className={buttonClassName}
         onClick={() => setOpen((current) => !current)}
       >
         <MoreIcon className="size-6" />

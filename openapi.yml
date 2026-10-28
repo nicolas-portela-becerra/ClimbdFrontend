@@ -468,6 +468,57 @@ paths:
           description: Wall image not found
       security:
         - bearerAuth: []
+    put:
+      operationId: updateWallImage
+      tags: [Wall Images]
+      summary: Update a wall image (name and, optionally, the photo)
+      parameters:
+        - name: wallImageId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WallImageUpdateRequest'
+      responses:
+        '204':
+          description: Wall image updated
+        '400':
+          description: Invalid file
+        '403':
+          description: Forbidden
+        '404':
+          description: Wall image not found
+      security:
+        - bearerAuth: []
+    delete:
+      operationId: deleteWallImage
+      tags: [Wall Images]
+      summary: Delete a wall image
+      parameters:
+        - name: wallImageId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: gymId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Wall image deleted
+        '403':
+          description: Forbidden
+        '404':
+          description: Wall image not found
+      security:
+        - bearerAuth: []
   /api/wall-images/{wallImageId}/data:
     get:
       operationId: getWallImageData
@@ -856,6 +907,23 @@ components:
           properties:
             imageUrl:
               type: string
+
+    WallImageUpdateRequest:
+      type: object
+      required:
+        - wallName
+        - gymId
+      properties:
+        gymId:
+          type: integer
+          description: Gym the wall belongs to
+        image:
+          type: string
+          format: binary
+          description: New wall photo (JPEG, PNG, or WebP). Omit to keep the current one
+        wallName:
+          type: string
+          description: Name of the physical wall
 
     WallImageUploadRequest:
       type: object
