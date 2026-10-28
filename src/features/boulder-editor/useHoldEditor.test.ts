@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest'
 import { UpdateBoulderRequestToJSON } from '@api'
 import { FINISH_ROLE, HAND_ROLE, START_ROLE } from '@/shared/lib/holds'
 import {
+  clampRadius,
   findHold,
   holdsFromDto,
   isRoleFull,
   MAX_RADIUS,
   MIN_RADIUS,
-  radiusAfterDrag,
   tapHolds,
   toCreateHoldPayload,
   toUpdateHoldPayload,
@@ -15,23 +15,12 @@ import {
   type EditorHold,
 } from './useHoldEditor'
 
-const size = { width: 900, height: 1200 }
 const hold = (id: number, role: number): EditorHold => ({ id, x: 0.5, y: 0.5, r: 0.045, role })
 
 describe('tapHolds', () => {
-  it('adds a hold with the selected role on an empty spot', () => {
-    const holds = tapHolds([], { x: 0.2, y: 0.3 }, START_ROLE, size, 7)
+  it('adds a hold with the selected role', () => {
+    const holds = tapHolds([], { x: 0.2, y: 0.3 }, START_ROLE, 7)
     expect(holds).toEqual([{ id: 7, x: 0.2, y: 0.3, r: 0.045, role: START_ROLE }])
-  })
-
-  it('removes a hold tapped again with the same role', () => {
-    const holds = tapHolds([hold(1, HAND_ROLE)], { x: 0.5, y: 0.5 }, HAND_ROLE, size, 2)
-    expect(holds).toEqual([])
-  })
-
-  it('changes the role of a hold tapped with another role', () => {
-    const holds = tapHolds([hold(1, HAND_ROLE)], { x: 0.5, y: 0.5 }, FINISH_ROLE, size, 2)
-    expect(holds).toEqual([{ ...hold(1, FINISH_ROLE) }])
   })
 })
 
@@ -127,7 +116,7 @@ describe('hold payloads', () => {
   })
 })
 
-describe('findHold / radiusAfterDrag', () => {
+describe('findHold / clampRadius', () => {
   const photo = { width: 1000, height: 2000 }
   const holds = [{ id: 1, x: 0.5, y: 0.5, r: 0.05, role: HAND_ROLE }] // radius 50 px
 
@@ -137,14 +126,14 @@ describe('findHold / radiusAfterDrag', () => {
     expect(findHold(holds, { x: 0.5, y: 0.53 }, photo)).toBe(-1) // 60 px away vertically (height 2000)
   })
 
-  it('grows when the finger moves away from the centre and shrinks when it comes closer', () => {
-    expect(radiusAfterDrag(0.05, 40, 70, 1000)).toBeCloseTo(0.08)
-    expect(radiusAfterDrag(0.05, 40, 20, 1000)).toBeCloseTo(0.03)
-    expect(radiusAfterDrag(0.045, 0, 30, 1000)).toBeCloseTo(0.075) // a new hold starts at its centre
+  it('lets small holds be grabbed from a little farther away', () => {
+    const tiny = [{ ...holds[0]!, r: 0.02 }]
+    expect(findHold(tiny, { x: 0.53, y: 0.5 }, photo)).toBe(0) // 30 px away, under the 40 px minimum
   })
 
-  it('stays between the minimum and maximum radius', () => {
-    expect(radiusAfterDrag(0.05, 0, 5000, 1000)).toBe(MAX_RADIUS)
-    expect(radiusAfterDrag(0.05, 500, 0, 1000)).toBe(MIN_RADIUS)
+  it('keeps the radius between the minimum and maximum', () => {
+    expect(clampRadius(5)).toBe(MAX_RADIUS)
+    expect(clampRadius(0)).toBe(MIN_RADIUS)
+    expect(clampRadius(0.05)).toBe(0.05)
   })
 })

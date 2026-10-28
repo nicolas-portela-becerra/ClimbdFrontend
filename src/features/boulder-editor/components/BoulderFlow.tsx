@@ -7,7 +7,6 @@ import { ModalHeader } from '@/shared/ui/ModalPanel'
 import type { BoulderDetails } from '../actions'
 import {
   countRoles,
-  findHold,
   isRoleFull,
   useHoldEditor,
   validateHolds,
@@ -74,25 +73,15 @@ export function BoulderFlow({
               wallImageId={wallImageId}
               holds={editor.holds}
               label={t('photoLabel')}
-              onTap={(point, size) => {
-                const holds = editor.tap(point, role, size)
+              role={role}
+              onTap={(point) => {
+                const holds = editor.tap(point, role)
                 // A role that just got full can't be used again: switch to hand holds.
                 if (isRoleFull(holds, role)) setRole(HAND_ROLE)
               }}
-              onLongPress={(point, size) => {
-                // Over a marked hold: resize that one (a single undo step restores its size).
-                const existing = editor.holds[findHold(editor.holds, point, size)]
-                if (existing) {
-                  editor.beginResize()
-                  return { id: existing.id, x: existing.x, y: existing.y, r: existing.r }
-                }
-                // Over empty photo: place a new hold with the selected role, then resize it.
-                const holds = editor.tap(point, role, size)
-                if (isRoleFull(holds, role)) setRole(HAND_ROLE)
-                const created = holds.at(-1)
-                return created && { id: created.id, x: created.x, y: created.y, r: created.r }
-              }}
-              onResize={editor.resizeHold}
+              onEditStart={editor.beginEdit}
+              onChange={editor.updateHold}
+              onRemove={editor.remove}
             />
           </div>
           <div className="shrink-0 border-t-2 border-ink bg-ground px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))]">

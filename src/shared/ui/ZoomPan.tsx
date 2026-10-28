@@ -11,15 +11,14 @@ const DOUBLE_TAP_MS = 300
 const DOUBLE_TAP_SCALE = 2.5
 // Movement (px) from which a touch/click is a drag, not a tap.
 const DRAG_THRESHOLD = 6
-// Keeping a finger still this long (ms) starts the long-press gesture.
-const LONG_PRESS_MS = 350
 
 type Point = { x: number; y: number }
 
-type LongPress = {
-  // Called when a finger/mouse stays pressed (without moving) long enough; client coordinates.
-  onStart: (point: Point) => void
-  // Called as the pointer then moves; the photo is not panned while it is active.
+type Grab = {
+  // Called when a finger/mouse goes down; return true to take over the gesture (e.g. to drag something
+  // instead of panning the photo). Client coordinates.
+  onGrab: (point: Point) => boolean
+  // Called while the grabbed pointer moves past the drag threshold.
   onMove: (point: Point) => void
   onEnd: () => void
 }
@@ -27,7 +26,11 @@ type LongPress = {
 type ZoomPanProps = {
   children: ReactNode
   className?: string
-  longPress?: LongPress
+  grab?: Grab
+  // The +, - and 1× buttons. Off where the caller supplies its own controls.
+  zoomButtons?: boolean
+  // Extra controls drawn over the photo, top right.
+  controls?: ReactNode
   // Double tap (or double click) toggles the zoom. Off where quick repeated taps do something else.
   doubleTapZoom?: boolean
 }
@@ -35,7 +38,14 @@ type ZoomPanProps = {
 // Zoom and pan for whatever it wraps (the wall photo): pinch, drag, wheel / trackpad, double tap and
 // +/- buttons. It uses one CSS transform, so zooming costs nothing extra. A drag never counts as a click
 // on the children (so panning in the editor doesn't place holds).
-export function ZoomPan({ children, className, longPress, doubleTapZoom = true }: ZoomPanProps) {
+export function ZoomPan({
+  children,
+  className,
+  grab,
+  zoomButtons = true,
+  controls,
+  doubleTapZoom = true,
+}: ZoomPanProps) {
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const [view, setView] = useState<ZoomView>({ scale: 1, x: 0, y: 0 })
@@ -48,23 +58,17 @@ export function ZoomPan({ children, className, longPress, doubleTapZoom = true }
   const dragged = useRef(false)
   const swallowClick = useRef(false)
   const lastTap = useRef<{ time: number; point: Point } | null>(null)
-  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const longPressActive = useRef(false)
-  // Always the latest callbacks, so the timer never calls stale ones.
-  const longPressRef = useRef(longPress)
+  const grabActive = useRef(false)
+  // Always the latest callbacks.
+  const grabRef = useRef(grab)
   useEffect(() => {
-    longPressRef.current = longPress
+    grabRef.current = grab
   })
 
-  const cancelLongPressTimer = () => {
-    if (longPressTimer.current) clearTimeout(longPressTimer.current)
-    longPressTimer.current = null
-  }
-  const endLongPress = () => {
-    cancelLongPressTimer()
-    if (!longPressActive.current) return
-    longPressActive.current = false
-    longPressRef.current?.onEnd()
+  const endGrab = () => {
+    if (!grabActive.current) return
+    grabActive.current = false
+    grabRef.current?.onEnd()
   }
 
   const size = () => {
@@ -106,20 +110,10 @@ export function ZoomPan({ children, className, longPress, doubleTapZoom = true }
     setGesturing(true)
     if (pointers.current.size === 1) {
       dragged.current = false
-      if (longPressRef.current) {
-        const at = { x: event.clientX, y: event.clientY }
-        longPressTimer.current = setTimeout(() => {
-          longPressTimer.current = null
-          if (pointers.current.size !== 1 || dragged.current) return
-          longPressActive.current = true
-          // Counts as a drag from now on, so the click at the end is swallowed.
-          dragged.current = true
-          longPressRef.current?.onStart(at)
-        }, LONG_PRESS_MS)
-      }
+      grabActive.current = grabRef.current?.onGrab({ x: event.clientX, y: event.clientY }) ?? false
     }
     if (pointers.current.size === 2) {
-      endLongPress()
+      endGrab()
       dragged.current = true
       lastPinch.current = pinchState(pointers.current)
     }
@@ -132,8 +126,10 @@ export function ZoomPan({ children, className, longPress, doubleTapZoom = true }
     pointers.current.set(event.pointerId, next)
     const { width, height, left, top } = size()
 
-    if (longPressActive.current) {
-      longPressRef.current?.onMove(next)
+    if (grabActive.current) {
+      const start = downAt.current.get(event.pointerId) ?? previous
+      if (Math.hypot(next.x - start.x, next.y - start.y) > DRAG_THRESHOLD) dragged.current = true
+      if (dragged.current) grabRef.current?.onMove(next)
       return
     }
 
@@ -166,8 +162,6 @@ export function ZoomPan({ children, className, longPress, doubleTapZoom = true }
     const start = downAt.current.get(event.pointerId) ?? previous
     if (Math.hypot(next.x - start.x, next.y - start.y) > DRAG_THRESHOLD) {
       dragged.current = true
-      // Moved before the delay: it is a pan, not a long press.
-      cancelLongPressTimer()
     }
     setView((current) => panBy(current, next.x - previous.x, next.y - previous.y, width, height))
   }
@@ -179,7 +173,7 @@ export function ZoomPan({ children, className, longPress, doubleTapZoom = true }
     lastPinch.current = null
     if (pointers.current.size === 0) setGesturing(false)
     if (!down) return
-    endLongPress()
+    endGrab()
 
     if (dragged.current) {
       // The click that follows a drag or pinch must not reach the children.
@@ -214,7 +208,7 @@ export function ZoomPan({ children, className, longPress, doubleTapZoom = true }
   }
 
   const onPointerCancel = (event: PointerEvent<HTMLDivElement>) => {
-    endLongPress()
+    endGrab()
     pointers.current.delete(event.pointerId)
     downAt.current.delete(event.pointerId)
     lastPinch.current = null
@@ -237,8 +231,6 @@ export function ZoomPan({ children, className, longPress, doubleTapZoom = true }
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
-      // A long press must not open the browser's context menu (e.g. "save image").
-      onContextMenu={(event) => event.preventDefault()}
       onClickCapture={(event) => {
         if (swallowClick.current) {
           event.stopPropagation()
@@ -260,31 +252,36 @@ export function ZoomPan({ children, className, longPress, doubleTapZoom = true }
         onPointerDown={(event) => event.stopPropagation()}
         className="absolute top-3.5 right-3.5 flex flex-col gap-1"
       >
-        <IconButton
-          label={t('zoom.in')}
-          onClick={() => zoomBy(BUTTON_STEP)}
-          disabled={view.scale >= MAX_SCALE}
-          className="bg-ground disabled:opacity-50"
-        >
-          <PlusIcon className="size-6" />
-        </IconButton>
-        <IconButton
-          label={t('zoom.out')}
-          onClick={() => zoomBy(1 / BUTTON_STEP)}
-          disabled={view.scale <= MIN_SCALE}
-          className="bg-ground disabled:opacity-50"
-        >
-          <MinusIcon className="size-6" />
-        </IconButton>
-        {view.scale > MIN_SCALE ? (
-          <IconButton
-            label={t('zoom.reset')}
-            onClick={reset}
-            className="bg-ground font-cond text-sm font-bold"
-          >
-            1×
-          </IconButton>
+        {zoomButtons ? (
+          <>
+            <IconButton
+              label={t('zoom.in')}
+              onClick={() => zoomBy(BUTTON_STEP)}
+              disabled={view.scale >= MAX_SCALE}
+              className="bg-ground disabled:opacity-50"
+            >
+              <PlusIcon className="size-6" />
+            </IconButton>
+            <IconButton
+              label={t('zoom.out')}
+              onClick={() => zoomBy(1 / BUTTON_STEP)}
+              disabled={view.scale <= MIN_SCALE}
+              className="bg-ground disabled:opacity-50"
+            >
+              <MinusIcon className="size-6" />
+            </IconButton>
+            {view.scale > MIN_SCALE ? (
+              <IconButton
+                label={t('zoom.reset')}
+                onClick={reset}
+                className="bg-ground font-cond text-sm font-bold"
+              >
+                1×
+              </IconButton>
+            ) : null}
+          </>
         ) : null}
+        {controls}
       </div>
     </div>
   )

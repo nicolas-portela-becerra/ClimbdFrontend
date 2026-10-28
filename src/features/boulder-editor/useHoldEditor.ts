@@ -18,6 +18,10 @@ export const HOLD_RADIUS = 0.045
 // A hold can be resized between these radii (ratios of the photo width).
 export const MIN_RADIUS = 0.02
 export const MAX_RADIUS = 0.15
+// What the + and - buttons add to / take from a hold's radius.
+export const RADIUS_STEP = 0.01
+// Smallest radius that still counts as a touch on a hold, so tiny holds stay easy to grab.
+const MIN_HIT_RADIUS = 0.04
 export const MAX_STARTS = 2
 export const MAX_FINISHES = 1
 
@@ -60,7 +64,7 @@ export function holdsFromDto(holds: HoldDto[]): EditorHold[] {
 type PhotoSize = { width: number; height: number }
 
 // Ratios (0..1) of the photo; the size is needed because distances are measured in pixels.
-// Index of the hold under a point (ratios of the photo), or -1. Distances are measured in pixels.
+// Index of the hold under a point, or -1.
 export function findHold(
   holds: EditorHold[],
   point: { x: number; y: number },
@@ -69,36 +73,22 @@ export function findHold(
   return holds.findIndex(
     (hold) =>
       Math.hypot((hold.x - point.x) * size.width, (hold.y - point.y) * size.height) <
-      hold.r * size.width,
+      Math.max(hold.r, MIN_HIT_RADIUS) * size.width,
   )
 }
 
-// New radius while dragging to resize: it grows by how much farther from the hold's centre the finger is
-// than where the press started (all distances in photo pixels), within the allowed range.
-export function radiusAfterDrag(
-  startRadius: number,
-  startDistance: number,
-  distance: number,
-  photoWidth: number,
-): number {
-  const radius = startRadius + (distance - startDistance) / photoWidth
+export function clampRadius(radius: number): number {
   return Math.min(MAX_RADIUS, Math.max(MIN_RADIUS, radius))
 }
 
+// Adds a hold with the default size on an empty spot.
 export function tapHolds(
   holds: EditorHold[],
   tap: { x: number; y: number },
   role: number,
-  size: PhotoSize,
   nextId: number,
 ): EditorHold[] {
-  const hit = findHold(holds, tap, size)
-  if (hit < 0) return [...holds, { id: nextId, x: tap.x, y: tap.y, r: HOLD_RADIUS, role }]
-  // Tapping a marked hold: same role removes it, another role changes it.
-  return holds.flatMap((hold, index) => {
-    if (index !== hit) return [hold]
-    return hold.role === role ? [] : [{ ...hold, role }]
-  })
+  return [...holds, { id: nextId, x: tap.x, y: tap.y, r: HOLD_RADIUS, role }]
 }
 
 export function countRoles(holds: EditorHold[]): [number, number, number, number] {
@@ -143,18 +133,24 @@ export function useHoldEditor(initialHolds: EditorHold[] = []) {
     holds: state.holds,
     canUndo: state.history.length > 0,
     // Returns the resulting holds, so the caller can react to a role becoming full.
-    tap: (point: { x: number; y: number }, role: number, size: PhotoSize): EditorHold[] => {
-      const holds = tapHolds(state.holds, point, role, size, state.nextId)
+    tap: (point: { x: number; y: number }, role: number): EditorHold[] => {
+      const holds = tapHolds(state.holds, point, role, state.nextId)
       setState({ holds, history: [...state.history, state.holds], nextId: state.nextId + 1 })
       return holds
     },
-    // Call once when a resize starts on an existing hold, so undo restores its old size.
-    beginResize: () =>
+    // Call once before a change to an existing hold (move, resize), so undo restores it.
+    beginEdit: () =>
       setState((current) => ({ ...current, history: [...current.history, current.holds] })),
-    resizeHold: (id: number, radius: number) =>
+    updateHold: (id: number, patch: Partial<Pick<EditorHold, 'x' | 'y' | 'r'>>) =>
       setState((current) => ({
         ...current,
-        holds: current.holds.map((hold) => (hold.id === id ? { ...hold, r: radius } : hold)),
+        holds: current.holds.map((hold) => (hold.id === id ? { ...hold, ...patch } : hold)),
+      })),
+    remove: (id: number) =>
+      setState((current) => ({
+        ...current,
+        holds: current.holds.filter((hold) => hold.id !== id),
+        history: [...current.history, current.holds],
       })),
     undo: () =>
       setState((current) => {

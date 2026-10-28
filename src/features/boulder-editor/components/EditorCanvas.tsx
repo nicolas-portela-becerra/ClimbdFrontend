@@ -1,43 +1,61 @@
 import { useRef, useState, type MouseEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useWallImageData } from '@/api/queries/useWallImageBlob'
+import { MinusIcon, PlusIcon, TrashIcon } from '@/shared/icons'
 import { BlobImage } from '@/shared/ui/BlobImage'
 import { HoldRing } from '@/shared/ui/HoldRing'
+import { IconButton } from '@/shared/ui/IconButton'
 import { Spinner } from '@/shared/ui/Spinner'
 import { ZoomPan } from '@/shared/ui/ZoomPan'
-import { radiusAfterDrag, type EditorHold } from '../useHoldEditor'
+import {
+  clampRadius,
+  findHold,
+  MAX_RADIUS,
+  MIN_RADIUS,
+  RADIUS_STEP,
+  type EditorHold,
+} from '../useHoldEditor'
 
 type Point = { x: number; y: number }
-type PhotoSize = { width: number; height: number }
-
-// The hold a long press acts on: its id, centre (ratios of the photo) and current radius.
-export type ResizeTarget = { id: number; x: number; y: number; r: number }
 
 type EditorCanvasProps = {
   wallImageId: number
   holds: EditorHold[]
   label: string
-  onTap: (point: Point, size: PhotoSize) => void
-  // Press and hold: places a new hold there, or picks the existing hold under the finger, and returns it.
-  onLongPress: (point: Point, size: PhotoSize) => ResizeTarget | undefined
-  onResize: (id: number, radius: number) => void
+  // Role picked for new holds; choosing another one deselects the hold, so the next tap places a new one.
+  role: number
+  // A tap on empty photo (ratios of the photo).
+  onTap: (point: Point) => void
+  // Called once before a hold is moved, resized or deleted.
+  onEditStart: () => void
+  onChange: (id: number, patch: Partial<Pick<EditorHold, 'x' | 'y' | 'r'>>) => void
+  onRemove: (id: number) => void
 }
 
-type Resize = { id: number; centre: Point; startRadius: number; startDistance: number }
+type Drag = { id: number; offset: Point; started: boolean }
 
-// The wall photo with zoom/pan. A tap marks a hold; pressing and holding then dragging resizes one.
-// All positions are reported as ratios of the photo.
+// The wall photo with zoom/pan. Tapping a hold selects it (it glows): drag it to move it, use + and -
+// to resize it, or delete it. Tapping empty photo deselects, or marks a new hold when none is selected.
 export function EditorCanvas({
   wallImageId,
   holds,
   label,
+  role,
   onTap,
-  onLongPress,
-  onResize,
+  onEditStart,
+  onChange,
+  onRemove,
 }: EditorCanvasProps) {
+  const { t } = useTranslation('editor')
   const wall = useWallImageData(wallImageId)
   const svgRef = useRef<SVGSVGElement>(null)
-  const resize = useRef<Resize | null>(null)
-  const [glowing, setGlowing] = useState<number | null>(null)
+  const drag = useRef<Drag | null>(null)
+  const [selectedId, setSelectedId] = useState<number | null>(null)
+  const [seenRole, setSeenRole] = useState(role)
+  if (role !== seenRole) {
+    setSeenRole(role)
+    setSelectedId(null)
+  }
 
   if (!wall.data) {
     return (
@@ -48,60 +66,96 @@ export function EditorCanvas({
   }
   const { blob, width, height } = wall.data
   const size = { width, height }
+  const selected = holds.find((hold) => hold.id === selectedId)
 
-  // Screen position → position on the photo (ratios), or null when it is outside the photo.
-  const toPhoto = (clientX: number, clientY: number): Point | null => {
+  // Screen position → position on the photo (ratios); may fall outside 0..1.
+  const toPhotoRaw = (clientX: number, clientY: number): Point | null => {
     const matrix = svgRef.current?.getScreenCTM()
     if (!matrix) return null
     const point = new DOMPoint(clientX, clientY).matrixTransform(matrix.inverse())
-    const x = point.x / width
-    const y = point.y / height
-    return x < 0 || x > 1 || y < 0 || y > 1 ? null : { x, y }
+    return { x: point.x / width, y: point.y / height }
   }
+  const inside = (p: Point) => p.x >= 0 && p.x <= 1 && p.y >= 0 && p.y <= 1
 
   const handleClick = (event: MouseEvent<SVGSVGElement>) => {
-    const point = toPhoto(event.clientX, event.clientY)
-    if (point) onTap(point, size)
+    const point = toPhotoRaw(event.clientX, event.clientY)
+    if (!point || !inside(point)) return
+    const hit = holds[findHold(holds, point, size)]
+    if (hit) setSelectedId(hit.id)
+    else if (selected) setSelectedId(null)
+    else onTap(point)
   }
 
-  const startResize = ({ x, y }: Point) => {
-    const point = toPhoto(x, y)
-    if (!point) return
-    const target = onLongPress(point, size)
-    if (!target) return
-    const centre = { x: target.x, y: target.y }
-    resize.current = {
-      id: target.id,
-      centre,
-      startRadius: target.r,
-      startDistance: Math.hypot((point.x - centre.x) * width, (point.y - centre.y) * height),
+  const grab = ({ x, y }: Point) => {
+    const point = toPhotoRaw(x, y)
+    const hit = point && holds[findHold(holds, point, size)]
+    if (!point || !hit) return false
+    setSelectedId(hit.id)
+    drag.current = {
+      id: hit.id,
+      offset: { x: hit.x - point.x, y: hit.y - point.y },
+      started: false,
     }
-    setGlowing(target.id)
+    return true
   }
 
-  const moveResize = ({ x, y }: Point) => {
-    const current = resize.current
-    const point = toPhoto(x, y)
+  const moveGrabbed = ({ x, y }: Point) => {
+    const current = drag.current
+    const point = toPhotoRaw(x, y)
     if (!current || !point) return
-    const distance = Math.hypot(
-      (point.x - current.centre.x) * width,
-      (point.y - current.centre.y) * height,
-    )
-    onResize(
-      current.id,
-      radiusAfterDrag(current.startRadius, current.startDistance, distance, width),
-    )
+    if (!current.started) {
+      current.started = true
+      onEditStart()
+    }
+    onChange(current.id, {
+      x: Math.min(1, Math.max(0, point.x + current.offset.x)),
+      y: Math.min(1, Math.max(0, point.y + current.offset.y)),
+    })
   }
 
-  const endResize = () => {
-    resize.current = null
-    setGlowing(null)
+  const resizeSelected = (delta: number) => {
+    if (!selected) return
+    onEditStart()
+    onChange(selected.id, { r: clampRadius(selected.r + delta) })
   }
+
+  const controls = selected ? (
+    <>
+      <IconButton
+        label={t('hold.bigger')}
+        onClick={() => resizeSelected(RADIUS_STEP)}
+        disabled={selected.r >= MAX_RADIUS}
+        className="bg-ground disabled:opacity-50"
+      >
+        <PlusIcon className="size-6" />
+      </IconButton>
+      <IconButton
+        label={t('hold.smaller')}
+        onClick={() => resizeSelected(-RADIUS_STEP)}
+        disabled={selected.r <= MIN_RADIUS}
+        className="bg-ground disabled:opacity-50"
+      >
+        <MinusIcon className="size-6" />
+      </IconButton>
+      <IconButton
+        label={t('hold.delete')}
+        onClick={() => {
+          onRemove(selected.id)
+          setSelectedId(null)
+        }}
+        className="bg-ground"
+      >
+        <TrashIcon className="size-6" />
+      </IconButton>
+    </>
+  ) : null
 
   return (
     <ZoomPan
       doubleTapZoom={false}
-      longPress={{ onStart: startResize, onMove: moveResize, onEnd: endResize }}
+      zoomButtons={false}
+      controls={controls}
+      grab={{ onGrab: grab, onMove: moveGrabbed, onEnd: () => (drag.current = null) }}
     >
       <svg
         ref={svgRef}
@@ -120,7 +174,7 @@ export function EditorCanvas({
             cy={hold.y * height}
             r={hold.r * width}
             role={hold.role}
-            glow={hold.id === glowing}
+            glow={hold.id === selected?.id}
           />
         ))}
       </svg>
