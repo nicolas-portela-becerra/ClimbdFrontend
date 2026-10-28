@@ -2,13 +2,14 @@ import { Link } from 'react-router-dom'
 import type { WallImageSummary } from '@api'
 import { useWallImageThumbnail } from '@/api/queries/useWallImageBlob'
 import { AuthImage } from '@/shared/ui/AuthImage'
+import { WallMenu } from './WallMenu'
 
 export function WallRow({ wall, gymId }: { wall: WallImageSummary; gymId: number }) {
   const name = wall.wallName ?? ''
   const thumbnail = useWallImageThumbnail(wall.id ?? 0)
 
   return (
-    <li>
+    <li className="relative">
       <Link
         to={`/gyms/${gymId}/walls/${wall.id}`}
         state={{ wallName: name }}
@@ -23,6 +24,7 @@ export function WallRow({ wall, gymId }: { wall: WallImageSummary; gymId: number
           {name}
         </span>
       </Link>
+      <WallMenu wall={wall} gymId={gymId} className="absolute top-2 right-2" />
     </li>
   )
 }

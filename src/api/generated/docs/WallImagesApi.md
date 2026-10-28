@@ -4,12 +4,88 @@ All URIs are relative to *http://localhost:8080*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
+| [**deleteWallImage**](WallImagesApi.md#deletewallimage) | **DELETE** /api/wall-images/{wallImageId} | Delete a wall image |
 | [**getWallImageById**](WallImagesApi.md#getwallimagebyid) | **GET** /api/wall-images/{wallImageId} | Get wall image metadata |
 | [**getWallImageData**](WallImagesApi.md#getwallimagedata) | **GET** /api/wall-images/{wallImageId}/data | Download full wall image |
 | [**getWallImageThumbnail**](WallImagesApi.md#getwallimagethumbnail) | **GET** /api/wall-images/{wallImageId}/thumbnail | Download wall image thumbnail |
 | [**listWallImages**](WallImagesApi.md#listwallimages) | **GET** /api/gyms/{gymId}/wall-images | List wall images for a gym |
+| [**updateWallImage**](WallImagesApi.md#updatewallimage) | **PUT** /api/wall-images/{wallImageId} | Update a wall image (name and, optionally, the photo) |
 | [**uploadWallImage**](WallImagesApi.md#uploadwallimage) | **POST** /api/gyms/{gymId}/wall-images | Upload a wall image (admin or gym owner) |
 
+
+
+## deleteWallImage
+
+> deleteWallImage(wallImageId, gymId)
+
+Delete a wall image
+
+### Example
+
+```ts
+import {
+  Configuration,
+  WallImagesApi,
+} from '';
+import type { DeleteWallImageRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: bearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new WallImagesApi(config);
+
+  const body = {
+    // number
+    wallImageId: 56,
+    // number
+    gymId: 56,
+  } satisfies DeleteWallImageRequest;
+
+  try {
+    const data = await api.deleteWallImage(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **wallImageId** | `number` |  | [Defaults to `undefined`] |
+| **gymId** | `number` |  | [Defaults to `undefined`] |
+
+### Return type
+
+`void` (Empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **204** | Wall image deleted |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Wall image not found |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
 ## getWallImageById
@@ -293,6 +369,87 @@ example().catch(console.error);
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **200** | Paginated list of wall image summaries |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## updateWallImage
+
+> updateWallImage(wallImageId, gymId, wallName, image)
+
+Update a wall image (name and, optionally, the photo)
+
+### Example
+
+```ts
+import {
+  Configuration,
+  WallImagesApi,
+} from '';
+import type { UpdateWallImageRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: bearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new WallImagesApi(config);
+
+  const body = {
+    // number
+    wallImageId: 56,
+    // number | Gym the wall belongs to
+    gymId: 56,
+    // string | Name of the physical wall
+    wallName: wallName_example,
+    // Blob | New wall photo (JPEG, PNG, or WebP). Omit to keep the current one (optional)
+    image: BINARY_DATA_HERE,
+  } satisfies UpdateWallImageRequest;
+
+  try {
+    const data = await api.updateWallImage(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **wallImageId** | `number` |  | [Defaults to `undefined`] |
+| **gymId** | `number` | Gym the wall belongs to | [Defaults to `undefined`] |
+| **wallName** | `string` | Name of the physical wall | [Defaults to `undefined`] |
+| **image** | `Blob` | New wall photo (JPEG, PNG, or WebP). Omit to keep the current one | [Optional] [Defaults to `undefined`] |
+
+### Return type
+
+`void` (Empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: `multipart/form-data`
+- **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **204** | Wall image updated |  -  |
+| **400** | Invalid file |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Wall image not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 

@@ -35,3 +35,8 @@ export function uploadErrorKey(error: unknown): WallsKey {
       return 'errors.unknown'
   }
 }
+
+export function editErrorKey(error: unknown): WallsKey {
+  if (apiErrorKind(error) === 'forbidden') return 'errors.forbiddenEdit'
+  return uploadErrorKey(error)
+}
