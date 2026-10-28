@@ -1,1 +1,62 @@
-{}
+{
+  "open": "Nuevo bloque",
+  "title": "Crear bloque",
+  "close": "Cerrar",
+  "back": "Atrás",
+  "hint": "Toca una presa para marcarla. Tócala otra vez para quitarla.",
+  "status": {
+    "needs": "Necesita 1–2 presas de salida y 1 de top",
+    "ready_one": "{{count}} presa · Listo para nombrar y graduar",
+    "ready_other": "{{count}} presas · Listo para nombrar y graduar"
+  },
+  "actions": {
+    "undo": "Deshacer",
+    "clear": "Borrar",
+    "next": "Siguiente"
+  },
+  "roles": {
+    "start": "Salida",
+    "hand": "Mano",
+    "foot": "Pie",
+    "finish": "Top"
+  },
+  "holdsError": {
+    "needed": "El bloque necesita al menos 1 presa de salida/top",
+    "tooManyStarts": "El bloque puede tener como máximo 2 presas de salida",
+    "tooManyFinishes": "El bloque solo puede tener 1 presa de top"
+  },
+  "details": {
+    "name": "Nombre",
+    "grade": "Grado",
+    "gradePlaceholder": "Elige un grado",
+    "description": "Descripción",
+    "submit": "Crear bloque"
+  },
+  "errors": {
+    "nameRequired": "Escribe un nombre",
+    "gradeRequired": "Elige un grado",
+    "network": "No se puede conectar con el servidor. Revisa tu conexión",
+    "invalid": "Algunos datos no son válidos",
+    "forbidden": "No tienes permiso para crear bloques aquí",
+    "unknown": "Algo ha salido mal. Inténtalo de nuevo"
+  },
+  "photoLabel": "Foto del muro para marcar las presas",
+  "menu": {
+    "label": "Opciones del bloque",
+    "edit": "Editar",
+    "delete": "Eliminar"
+  },
+  "edit": {
+    "title": "Editar bloque",
+    "submit": "Guardar",
+    "forbidden": "Solo el creador puede editar un bloque"
+  },
+  "delete": {
+    "title": "¿Eliminar bloque?",
+    "message": "Se eliminará {{name}}. Esta acción no se puede deshacer.",
+    "cancel": "Cancelar",
+    "confirm": "Eliminar",
+    "forbidden": "Solo el creador puede eliminar un bloque",
+    "failed": "No se ha podido eliminar el bloque. Inténtalo de nuevo."
+  }
+}

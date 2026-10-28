@@ -30,11 +30,11 @@ export interface HoldDto {
     /**
      * 
      */
-    xRatio?: number;
+    coordX?: number;
     /**
      * 
      */
-    yRatio?: number;
+    coordY?: number;
     /**
      * 
      */
@@ -64,8 +64,8 @@ export function HoldDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): H
         
         'id': json['id'] == null ? undefined : json['id'],
         'boulderId': json['boulderId'] == null ? undefined : json['boulderId'],
-        'xRatio': json['xRatio'] == null ? undefined : json['xRatio'],
-        'yRatio': json['yRatio'] == null ? undefined : json['yRatio'],
+        'coordX': json['coordX'] == null ? undefined : json['coordX'],
+        'coordY': json['coordY'] == null ? undefined : json['coordY'],
         'radiusRatio': json['radiusRatio'] == null ? undefined : json['radiusRatio'],
         'color': json['color'] == null ? undefined : json['color'],
     };
@@ -84,8 +84,8 @@ export function HoldDtoToJSONTyped(value?: HoldDto | null, ignoreDiscriminator: 
         
         'id': value['id'],
         'boulderId': value['boulderId'],
-        'xRatio': value['xRatio'],
-        'yRatio': value['yRatio'],
+        'coordX': value['coordX'],
+        'coordY': value['coordY'],
         'radiusRatio': value['radiusRatio'],
         'color': value['color'],
     };

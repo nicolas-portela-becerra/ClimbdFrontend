@@ -1,1 +1,24 @@
-{}
+{
+  "list": {
+    "label": "Bloques",
+    "loadMore": "Cargar más",
+    "loadMoreError": "No se han podido cargar más bloques. Inténtalo de nuevo."
+  },
+  "empty": {
+    "title": "Aún no hay bloques",
+    "message": "Este muro no tiene bloques que mostrar."
+  },
+  "viewer": {
+    "back": "Volver a bloques",
+    "list": "Bloques",
+    "photoLabel": "Foto del muro con las presas de {{name}}",
+    "dialogLabel": "Bloque"
+  },
+  "legend": {
+    "label": "Colores de las presas",
+    "start": "Salida",
+    "hand": "Mano",
+    "foot": "Pie",
+    "finish": "Top"
+  }
+}

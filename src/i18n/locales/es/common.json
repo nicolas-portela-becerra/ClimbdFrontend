@@ -1,1 +1,32 @@
-{}
+{
+  "appName": "Climbd",
+  "loading": "Cargando",
+  "nav": {
+    "walls": "Muros",
+    "logbook": "Libreta",
+    "me": "Yo",
+    "label": "Navegación principal",
+    "users": "Usuarios"
+  },
+  "routes": {
+    "gyms": "Rocódromos",
+    "gymWalls": "Muros del rocódromo",
+    "profile": "Yo"
+  },
+  "error": {
+    "title": "Algo ha salido mal",
+    "message": "Ha ocurrido un error inesperado. Inténtalo de nuevo.",
+    "retry": "Reintentar",
+    "notFoundTitle": "Página no encontrada",
+    "notFoundMessage": "Esta página no existe.",
+    "forbiddenTitle": "Sin acceso",
+    "forbiddenMessage": "No tienes permiso para ver esta página.",
+    "goHome": "Ir a muros"
+  },
+  "toast": {
+    "close": "Cerrar"
+  },
+  "profile": {
+    "logout": "Cerrar sesión"
+  }
+}

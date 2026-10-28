@@ -1,1 +1,49 @@
-{}
+{
+  "title": "Gyms",
+  "create": "New gym",
+  "search": {
+    "open": "Search gyms",
+    "close": "Close search",
+    "placeholder": "Search gyms",
+    "underConstruction": "Under construction"
+  },
+  "list": {
+    "label": "Gyms",
+    "loadMore": "Load more",
+    "loadMoreError": "Couldn't load more gyms. Try again."
+  },
+  "empty": {
+    "title": "No gyms yet",
+    "message": "There are no gyms to show."
+  },
+  "walls": {
+    "title": "Walls of {{name}}",
+    "back": "Back to gyms"
+  },
+  "notFound": {
+    "title": "Gym not found",
+    "message": "This gym doesn't exist."
+  },
+  "form": {
+    "title": "New gym",
+    "close": "Close",
+    "name": "Gym name",
+    "location": "Location",
+    "description": "Description",
+    "logo": "Logo",
+    "chooseLogo": "Choose logo",
+    "changeLogo": "Change logo",
+    "removeLogo": "Remove logo",
+    "logoPreview": "Preview of the chosen logo",
+    "submit": "Create gym",
+    "errors": {
+      "nameRequired": "Enter the gym name",
+      "wrongType": "Use a JPEG, PNG or WebP image",
+      "logoFailed": "Couldn't read the image. Try another one",
+      "invalid": "Some of the data is not valid",
+      "forbidden": "Only admins can create gyms",
+      "network": "Can't reach the server. Check your connection",
+      "unknown": "Something went wrong. Try again"
+    }
+  }
+}

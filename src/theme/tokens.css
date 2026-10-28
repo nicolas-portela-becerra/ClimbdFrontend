@@ -1,0 +1,127 @@
+/* Direction A · Stencil tokens. Components use the Tailwind names below, never raw values. */
+:root {
+  --ground: #e8e7e3;
+  --surface: #f6f5f2;
+  --raised: #ffffff;
+  --ink: #141414;
+  --muted: #57554f;
+  --line: rgb(20 20 20 / 0.14);
+  --accent: #0d6a4b;
+  --on-accent: #ffffff;
+  --accent-field: #d6e7de;
+  --tape: #141414;
+  --on-tape: #e8e7e3;
+  --start: #16c25a;
+  --hand: #1fb8e6;
+  --foot: #f4a10b;
+  --finish: #ee2f86;
+  --error: #b3261e;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ground: #10110f;
+    --surface: #191a18;
+    --raised: #22231f;
+    --ink: #ecebe6;
+    --muted: #a29f97;
+    --line: rgb(236 235 230 / 0.14);
+    --accent: #3cbf86;
+    --on-accent: #06130d;
+    --accent-field: #15291f;
+    --tape: #ecebe6;
+    --on-tape: #10110f;
+    --error: #ff7b72;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --ground: #10110f;
+  --surface: #191a18;
+  --raised: #22231f;
+  --ink: #ecebe6;
+  --muted: #a29f97;
+  --line: rgb(236 235 230 / 0.14);
+  --accent: #3cbf86;
+  --on-accent: #06130d;
+  --accent-field: #15291f;
+  --tape: #ecebe6;
+  --on-tape: #10110f;
+  --error: #ff7b72;
+  color-scheme: dark;
+}
+
+/* `inline` keeps utilities pointing at the variables so the theme can switch at runtime. */
+@theme inline {
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-field: var(--accent-field);
+  --color-tape: var(--tape);
+  --color-on-tape: var(--on-tape);
+  --color-start: var(--start);
+  --color-hand: var(--hand);
+  --color-foot: var(--foot);
+  --color-finish: var(--finish);
+  --color-error: var(--error);
+
+  --font-display: 'Big Shoulders Stencil', 'Barlow Semi Condensed', sans-serif;
+  --font-cond: 'Barlow Semi Condensed', 'Barlow', sans-serif;
+  --font-text: 'Barlow', system-ui, sans-serif;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@theme {
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --animate-ring-in: ring-in 260ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  --animate-stage-in: stage-in 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  --animate-stage-out: stage-out 250ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  --animate-sheet-lower: sheet-lower 400ms cubic-bezier(0.32, 0.72, 0, 1) backwards;
+
+  @keyframes ring-in {
+    from {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+  }
+  @keyframes stage-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes stage-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes sheet-lower {
+    from {
+      translate: 0 0;
+    }
+  }
+}
+
+@theme {
+  --animate-panel-in: panel-in 320ms cubic-bezier(0.32, 0.72, 0, 1);
+  --animate-panel-out: panel-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+
+  @keyframes panel-in {
+    from {
+      translate: 0 100%;
+    }
+  }
+  @keyframes panel-out {
+    to {
+      translate: 0 100%;
+    }
+  }
+}

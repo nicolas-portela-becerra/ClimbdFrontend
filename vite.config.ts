@@ -11,19 +11,26 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
-      registerType: 'prompt',
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.svg', 'favicon.ico', 'apple-touch-icon.png'],
       manifest: {
         name: 'Climbd',
         short_name: 'Climbd',
         description: 'Boulders for your climbing gym',
         display: 'standalone',
         start_url: '/',
-        background_color: '#e8e7e3',
-        theme_color: '#e8e7e3',
+        // Same as the (dark) app icon: the install splash and the title bar match it.
+        background_color: '#000000',
+        theme_color: '#000000',
         icons: [
           { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: '/icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          {
+            src: '/icons/icon-maskable-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
         ],
       },
       workbox: {

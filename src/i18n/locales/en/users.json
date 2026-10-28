@@ -1,0 +1,14 @@
+{
+  "title": "Activate users",
+  "list": {
+    "label": "Users pending activation"
+  },
+  "activate": "Activate",
+  "empty": {
+    "title": "No pending users",
+    "message": "All users are active."
+  },
+  "errors": {
+    "activate": "Couldn't activate the user. Try again."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Activar usuarios",
+  "list": {
+    "label": "Usuarios pendientes de activar"
+  },
+  "activate": "Activar",
+  "empty": {
+    "title": "No hay usuarios pendientes",
+    "message": "Todos los usuarios están activos."
+  },
+  "errors": {
+    "activate": "No se ha podido activar al usuario. Inténtalo de nuevo."
+  }
+}

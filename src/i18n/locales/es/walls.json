@@ -1,0 +1,38 @@
+{
+  "list": {
+    "label": "Muros",
+    "loadMore": "Cargar más",
+    "loadMoreError": "No se han podido cargar más muros. Inténtalo de nuevo."
+  },
+  "empty": {
+    "title": "Aún no hay muros",
+    "message": "Este rocódromo no tiene muros que mostrar."
+  },
+  "back": "Volver a muros",
+  "notFound": {
+    "title": "Muro no encontrado",
+    "message": "Este muro no existe."
+  },
+  "upload": {
+    "open": "Subir muro",
+    "title": "Subir muro",
+    "close": "Cerrar",
+    "photo": "Foto",
+    "choose": "Elegir foto",
+    "change": "Cambiar foto",
+    "rotate": "Girar foto",
+    "previewLabel": "Vista previa de la foto elegida",
+    "name": "Nombre del muro",
+    "submit": "Subir"
+  },
+  "errors": {
+    "nameRequired": "Escribe el nombre del muro",
+    "photoRequired": "Elige una foto",
+    "wrongType": "Usa una foto JPEG, PNG o WebP",
+    "tooLarge": "La foto es demasiado grande (máximo 5 MB)",
+    "invalidPhoto": "Foto no válida. Usa JPEG, PNG o WebP",
+    "forbidden": "Solo un administrador o el dueño del rocódromo puede subir muros",
+    "network": "No se puede conectar con el servidor. Revisa tu conexión",
+    "unknown": "Algo ha salido mal. Inténtalo de nuevo"
+  }
+}

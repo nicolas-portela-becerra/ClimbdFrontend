@@ -1,1 +1,62 @@
-{}
+{
+  "open": "New boulder",
+  "title": "Create boulder",
+  "close": "Close",
+  "back": "Back",
+  "hint": "Tap a hold to mark it. Tap again to remove.",
+  "status": {
+    "needs": "Needs 1–2 start holds and 1 top",
+    "ready_one": "{{count}} hold · Ready to name and grade",
+    "ready_other": "{{count}} holds · Ready to name and grade"
+  },
+  "actions": {
+    "undo": "Undo",
+    "clear": "Clear",
+    "next": "Next"
+  },
+  "roles": {
+    "start": "Start",
+    "hand": "Hand",
+    "foot": "Foot",
+    "finish": "Top"
+  },
+  "holdsError": {
+    "needed": "The boulder needs at least 1 start/top hold",
+    "tooManyStarts": "The boulder can have at most 2 start holds",
+    "tooManyFinishes": "The boulder can have only 1 top hold"
+  },
+  "details": {
+    "name": "Name",
+    "grade": "Grade",
+    "gradePlaceholder": "Select a grade",
+    "description": "Description",
+    "submit": "Create boulder"
+  },
+  "errors": {
+    "nameRequired": "Enter a name",
+    "gradeRequired": "Select a grade",
+    "network": "Can't reach the server. Check your connection",
+    "invalid": "Some of the data is not valid",
+    "forbidden": "You don't have permission to create boulders here",
+    "unknown": "Something went wrong. Try again"
+  },
+  "photoLabel": "Wall photo to mark the holds on",
+  "menu": {
+    "label": "Boulder options",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "edit": {
+    "title": "Edit boulder",
+    "submit": "Save",
+    "forbidden": "Only the creator can edit a boulder"
+  },
+  "delete": {
+    "title": "Delete boulder?",
+    "message": "{{name}} will be deleted. This can't be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete",
+    "forbidden": "Only the creator can delete a boulder",
+    "failed": "Couldn't delete the boulder. Try again."
+  }
+}

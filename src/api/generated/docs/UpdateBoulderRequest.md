@@ -9,6 +9,10 @@ Name | Type
 `name` | string
 `grade` | string
 `description` | string
+`creatorId` | number
+`gymId` | number
+`wallImageId` | number
+`holds` | [Array&lt;HoldDto&gt;](HoldDto.md)
 
 ## Example
 
@@ -20,6 +24,10 @@ const example = {
   "name": null,
   "grade": null,
   "description": null,
+  "creatorId": null,
+  "gymId": null,
+  "wallImageId": null,
+  "holds": null,
 } satisfies UpdateBoulderRequest
 
 console.log(example)

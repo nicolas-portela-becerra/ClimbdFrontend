@@ -8,8 +8,8 @@ Name | Type
 ------------ | -------------
 `id` | number
 `boulderId` | number
-`xRatio` | number
-`yRatio` | number
+`coordX` | number
+`coordY` | number
 `radiusRatio` | number
 `color` | number
 
@@ -22,8 +22,8 @@ import type { HoldDto } from ''
 const example = {
   "id": null,
   "boulderId": null,
-  "xRatio": null,
-  "yRatio": null,
+  "coordX": null,
+  "coordY": null,
   "radiusRatio": null,
   "color": null,
 } satisfies HoldDto

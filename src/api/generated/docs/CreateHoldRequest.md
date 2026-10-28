@@ -6,8 +6,8 @@
 
 Name | Type
 ------------ | -------------
-`xRatio` | number
-`yRatio` | number
+`coordX` | number
+`coordY` | number
 `radiusRatio` | number
 `color` | number
 
@@ -18,8 +18,8 @@ import type { CreateHoldRequest } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "xRatio": null,
-  "yRatio": null,
+  "coordX": null,
+  "coordY": null,
   "radiusRatio": null,
   "color": null,
 } satisfies CreateHoldRequest
