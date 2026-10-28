@@ -22,11 +22,11 @@ export interface CreateHoldRequest {
     /**
      * 
      */
-    xRatio: number;
+    coordX: number;
     /**
      * 
      */
-    yRatio: number;
+    coordY: number;
     /**
      * 
      */
@@ -41,8 +41,8 @@ export interface CreateHoldRequest {
  * Check if a given object implements the CreateHoldRequest interface.
  */
 export function instanceOfCreateHoldRequest(value: object): value is CreateHoldRequest {
-    if (!('xRatio' in value) || value['xRatio'] === undefined) return false;
-    if (!('yRatio' in value) || value['yRatio'] === undefined) return false;
+    if (!('coordX' in value) || value['coordX'] === undefined) return false;
+    if (!('coordY' in value) || value['coordY'] === undefined) return false;
     if (!('radiusRatio' in value) || value['radiusRatio'] === undefined) return false;
     return true;
 }
@@ -57,8 +57,8 @@ export function CreateHoldRequestFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'xRatio': json['xRatio'],
-        'yRatio': json['yRatio'],
+        'coordX': json['coordX'],
+        'coordY': json['coordY'],
         'radiusRatio': json['radiusRatio'],
         'color': json['color'] == null ? undefined : json['color'],
     };
@@ -75,8 +75,8 @@ export function CreateHoldRequestToJSONTyped(value?: CreateHoldRequest | null, i
 
     return {
         
-        'xRatio': value['xRatio'],
-        'yRatio': value['yRatio'],
+        'coordX': value['coordX'],
+        'coordY': value['coordY'],
         'radiusRatio': value['radiusRatio'],
         'color': value['color'],
     };

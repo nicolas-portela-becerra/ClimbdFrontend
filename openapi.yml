@@ -68,6 +68,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+        '423':
+          description: User account is deactivated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /api/auth/logout:
     post:
       operationId: authLogout
@@ -267,7 +273,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GymPageResponse'
       security:
-          - bearerAuth: []
+        - bearerAuth: []
     post:
       operationId: createGym
       tags: [Gyms]
@@ -956,19 +962,29 @@ components:
         description:
           type: string
           nullable: true
+        creatorId:
+          type: integer
+        gymId:
+          type: integer
+        wallImageId:
+          type: integer
+        holds:
+          type: array
+          items:
+            $ref: '#/components/schemas/HoldDto'
     CreateHoldRequest:
       type: object
       required:
-        - xRatio
-        - yRatio
+        - coordX
+        - coordY
         - radiusRatio
       properties:
-        xRatio:
+        coordX:
           type: number
           format: float
           minimum: 0
           maximum: 1
-        yRatio:
+        coordY:
           type: number
           format: float
           minimum: 0
@@ -987,10 +1003,10 @@ components:
           type: integer
         boulderId:
           type: integer
-        xRatio:
+        coordX:
           type: number
           format: float
-        yRatio:
+        coordY:
           type: number
           format: float
         radiusRatio:

@@ -40,5 +40,23 @@
     "forbidden": "No tienes permiso para crear bloques aquí",
     "unknown": "Algo ha salido mal. Inténtalo de nuevo"
   },
-  "photoLabel": "Foto del muro para marcar las presas"
+  "photoLabel": "Foto del muro para marcar las presas",
+  "menu": {
+    "label": "Opciones del bloque",
+    "edit": "Editar",
+    "delete": "Eliminar"
+  },
+  "edit": {
+    "title": "Editar bloque",
+    "submit": "Guardar",
+    "forbidden": "Solo el creador puede editar un bloque"
+  },
+  "delete": {
+    "title": "¿Eliminar bloque?",
+    "message": "Se eliminará {{name}}. Esta acción no se puede deshacer.",
+    "cancel": "Cancelar",
+    "confirm": "Eliminar",
+    "forbidden": "Solo el creador puede eliminar un bloque",
+    "failed": "No se ha podido eliminar el bloque. Inténtalo de nuevo."
+  }
 }

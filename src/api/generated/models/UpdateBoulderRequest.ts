@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { HoldDto } from './HoldDto';
+import {
+    HoldDtoFromJSON,
+    HoldDtoFromJSONTyped,
+    HoldDtoToJSON,
+    HoldDtoToJSONTyped,
+} from './HoldDto';
+
 /**
  * 
  * @export
@@ -31,6 +39,22 @@ export interface UpdateBoulderRequest {
      * 
      */
     description?: string;
+    /**
+     * 
+     */
+    creatorId?: number;
+    /**
+     * 
+     */
+    gymId?: number;
+    /**
+     * 
+     */
+    wallImageId?: number;
+    /**
+     * 
+     */
+    holds?: Array<HoldDto>;
 }
 
 /**
@@ -53,6 +77,10 @@ export function UpdateBoulderRequestFromJSONTyped(json: any, ignoreDiscriminator
         'name': json['name'] == null ? undefined : json['name'],
         'grade': json['grade'] == null ? undefined : json['grade'],
         'description': json['description'] == null ? undefined : json['description'],
+        'creatorId': json['creatorId'] == null ? undefined : json['creatorId'],
+        'gymId': json['gymId'] == null ? undefined : json['gymId'],
+        'wallImageId': json['wallImageId'] == null ? undefined : json['wallImageId'],
+        'holds': json['holds'] == null ? undefined : ((json['holds'] as Array<any>).map(HoldDtoFromJSON)),
     };
 }
 
@@ -70,6 +98,10 @@ export function UpdateBoulderRequestToJSONTyped(value?: UpdateBoulderRequest | n
         'name': value['name'],
         'grade': value['grade'],
         'description': value['description'],
+        'creatorId': value['creatorId'],
+        'gymId': value['gymId'],
+        'wallImageId': value['wallImageId'],
+        'holds': value['holds'] == null ? undefined : ((value['holds'] as Array<any>).map(HoldDtoToJSON)),
     };
 }
 

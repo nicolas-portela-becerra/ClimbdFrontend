@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { BoulderResponseDto } from '@api'
 import { useBouldersByWall } from '@/api/queries/useBouldersByWall'
@@ -13,6 +14,8 @@ type BoulderListProps = {
   replace?: boolean
   linkState?: unknown
   onSelect?: () => void
+  // Controls shown at the right of each row (e.g. a menu).
+  renderActions?: (boulder: BoulderResponseDto) => ReactNode
   className?: string
 }
 
@@ -22,6 +25,7 @@ export function BoulderList({
   replace,
   linkState,
   onSelect,
+  renderActions,
   className,
 }: BoulderListProps) {
   const { t } = useTranslation(['boulders', 'common'])
@@ -62,6 +66,7 @@ export function BoulderList({
             replace={replace}
             linkState={linkState}
             onSelect={onSelect}
+            actions={renderActions?.(boulder)}
           />
         ))}
       </ul>
