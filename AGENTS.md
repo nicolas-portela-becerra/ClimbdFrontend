@@ -1,8 +1,9 @@
 # Climbd Frontend — rules for humans and agents
 
 Climbd is a mobile-first web app + PWA for climbing gyms: browse gyms and walls, view boulders
-drawn on the wall photo, log ascents and set new boulders. Visual direction: **mockups/a-stencil.html**
-(Direction A · Stencil), with the Gym & walls screen using the photo-on-top + boulder-list composition.
+drawn on the wall photo, set, edit and delete boulders, and manage gyms and walls (admins also activate users).
+Visual direction: **mockups/a-stencil.html** (Direction A · Stencil); the wall screen follows its photo-on-top +
+boulder-list composition.
 
 Read before coding:
 
@@ -12,12 +13,16 @@ Read before coding:
 - [docs/design-system.md](docs/design-system.md) — tokens, light/dark, typography, motion, a11y
 - [docs/deployment.md](docs/deployment.md) — env, Docker, nginx, Cloudflare tunnel, PWA
 
+Backend contract notes and pending work (gym search, OAuth, logbook) are at the end of
+[docs/architecture.md](docs/architecture.md).
+
 ## Stack (decided)
 
 React 19 · TypeScript (strict) · Vite · React Router (data/lazy routes) · TanStack Query ·
 OpenAPI-generated client (`typescript-fetch`) · Tailwind CSS v4 (no MUI) · react-i18next (ES + EN) ·
 React 19 form actions (no form library) · vite-plugin-pwa · Vitest + Testing Library ·
 ESLint + Prettier + Husky/lint-staged. Error tracking: none yet (error boundary is ready for it).
+Modals are overlays with local state; the open boulder lives in the URL (`?boulder=ID`).
 
 ## Non-negotiables
 
@@ -26,7 +31,7 @@ ESLint + Prettier + Husky/lint-staged. Error tracking: none yet (error boundary 
    only the auth session (React Context). The selected gym/wall lives in the **URL**.
 3. **No user-visible string in code.** Every text goes through `t()`; keys exist in both `es` and `en`.
 4. **No raw colors, fonts or px spacing in components.** Use design tokens (Tailwind theme / CSS vars).
-   Everything must work in light and dark.
+   Everything must work in light and dark. Only text/gradients over photos may use fixed white/black.
 5. **Tokens:** access token in memory only; refresh token in `localStorage`. Never log tokens.
 6. **API calls are same-origin `/api/...`.** No hard-coded hosts.
 7. **Features don't import from other features.** Shared code goes to `src/shared/`.

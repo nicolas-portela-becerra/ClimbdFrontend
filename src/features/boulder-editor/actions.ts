@@ -3,17 +3,13 @@ import { apiErrorKind } from '@/shared/lib/apiError'
 
 type EditorKey = ParseKeys<'editor'>
 
+export type BoulderDetails = { name: string; grade: string; description: string }
+
 export type DetailsFormState = {
   ok: boolean
   fieldErrors: Partial<Record<'name' | 'grade', EditorKey>>
   formError?: EditorKey
-  values: { name: string; grade: string; description: string }
-}
-
-export const initialDetailsState: DetailsFormState = {
-  ok: false,
-  fieldErrors: {},
-  values: { name: '', grade: '', description: '' },
+  values: BoulderDetails
 }
 
 export function validateDetails(input: {

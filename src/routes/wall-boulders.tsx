@@ -2,6 +2,7 @@ import { useLocation, useNavigate, useParams, useSearchParams } from 'react-rout
 import type { BoulderResponseDto } from '@api'
 import { useAuth } from '@/features/auth/useAuth'
 import { BoulderList } from '@/features/boulders/components/BoulderList'
+import { BoulderMenu } from '@/features/boulder-editor/components/BoulderMenu'
 import { NewBoulderButton } from '@/features/boulder-editor/components/NewBoulderButton'
 import { BoulderViewer } from '@/features/boulders/components/BoulderViewer'
 import { WallHeader } from '@/features/walls/components/WallHeader'
@@ -41,6 +42,16 @@ export default function WallBoulders() {
         wallImageId={Number(wallId)}
         getHref={getHref}
         linkState={location.state}
+        renderActions={(boulder) =>
+          user?.id !== undefined ? (
+            <BoulderMenu
+              boulder={boulder}
+              gymId={Number(gymId)}
+              wallImageId={Number(wallId)}
+              userId={user.id}
+            />
+          ) : null
+        }
         className="border-t-2 border-ink"
       />
       <BoulderViewer

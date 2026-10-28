@@ -18,7 +18,7 @@ const HOLE_FACTOR = 1.15
 export function BoulderHolds({ blob, width, height, holds, label }: BoulderHoldsProps) {
   const placed = holds.filter(
     (hold) =>
-      hold.xRatio !== undefined && hold.yRatio !== undefined && hold.radiusRatio !== undefined,
+      hold.coordX !== undefined && hold.coordY !== undefined && hold.radiusRatio !== undefined,
   )
 
   // One path: the whole photo with a hole cut around each hold, so everything else is dimmed.
@@ -26,8 +26,8 @@ export function BoulderHolds({ blob, width, height, holds, label }: BoulderHolds
     `M0 0H${width}V${height}H0Z` +
     placed
       .map((hold) => {
-        const cx = (hold.xRatio ?? 0) * width
-        const cy = (hold.yRatio ?? 0) * height
+        const cx = (hold.coordX ?? 0) * width
+        const cy = (hold.coordY ?? 0) * height
         const r = (hold.radiusRatio ?? 0) * width * HOLE_FACTOR
         return `M${cx - r} ${cy}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0Z`
       })
@@ -52,8 +52,8 @@ export function BoulderHolds({ blob, width, height, holds, label }: BoulderHolds
       {placed.map((hold, index) => (
         <HoldRing
           key={hold.id ?? index}
-          cx={(hold.xRatio ?? 0) * width}
-          cy={(hold.yRatio ?? 0) * height}
+          cx={(hold.coordX ?? 0) * width}
+          cy={(hold.coordY ?? 0) * height}
           r={(hold.radiusRatio ?? 0) * width}
           role={normalizeRole(hold.color)}
           delayMs={index * STAGGER_MS}

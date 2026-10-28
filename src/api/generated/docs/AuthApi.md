@@ -76,6 +76,7 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | Login successful |  -  |
 | **401** | Invalid credentials |  -  |
+| **423** | User account is deactivated |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 

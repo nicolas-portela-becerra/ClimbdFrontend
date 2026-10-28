@@ -1,25 +1,25 @@
 import { useActionState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useCreateBoulder } from '@/api/queries/useCreateBoulder'
+import { ResponseError } from '@api'
 import { GRADES } from '@/shared/lib/grades'
 import { Button } from '@/shared/ui/Button'
 import { SelectField } from '@/shared/ui/SelectField'
 import { TextAreaField } from '@/shared/ui/TextAreaField'
 import { TextField } from '@/shared/ui/TextField'
 import {
-  initialDetailsState,
   saveErrorKey,
   validateDetails,
+  type BoulderDetails,
   type DetailsFormState,
 } from '../actions'
-import type { EditorHold } from '../useHoldEditor'
 
 type DetailsFormProps = {
-  gymId: number
-  wallImageId: number
-  userId: number
-  holds: EditorHold[]
-  onCreated: () => void
+  initialValues: BoulderDetails
+  submitLabel: string
+  // Saves the boulder; throws when the server refuses.
+  onSubmit: (details: BoulderDetails) => Promise<void>
+  // Called instead of showing an inline error when the server answers 403 (not allowed).
+  onForbidden?: () => void
 }
 
 function text(data: FormData, key: string): string {
@@ -27,9 +27,13 @@ function text(data: FormData, key: string): string {
   return typeof value === 'string' ? value : ''
 }
 
-export function DetailsForm({ gymId, wallImageId, userId, holds, onCreated }: DetailsFormProps) {
+export function DetailsForm({
+  initialValues,
+  submitLabel,
+  onSubmit,
+  onForbidden,
+}: DetailsFormProps) {
   const { t } = useTranslation('editor')
-  const create = useCreateBoulder(gymId)
 
   const submit = async (_previous: DetailsFormState, data: FormData): Promise<DetailsFormState> => {
     const name = text(data, 'name').trim()
@@ -41,27 +45,22 @@ export function DetailsForm({ gymId, wallImageId, userId, holds, onCreated }: De
     if (Object.keys(fieldErrors).length > 0) return { ok: false, fieldErrors, values }
 
     try {
-      await create.mutateAsync({
-        name,
-        grade,
-        wallImageId,
-        createdBy: userId,
-        holds: holds.map((hold) => ({
-          xRatio: hold.x,
-          yRatio: hold.y,
-          radiusRatio: hold.r,
-          color: hold.role,
-        })),
-        ...(description ? { description } : {}),
-      })
-      onCreated()
+      await onSubmit(values)
       return { ok: true, fieldErrors: {}, values }
     } catch (error) {
+      if (onForbidden && error instanceof ResponseError && error.response.status === 403) {
+        onForbidden()
+        return { ok: false, fieldErrors: {}, values }
+      }
       return { ok: false, fieldErrors: {}, formError: saveErrorKey(error), values }
     }
   }
 
-  const [state, action, pending] = useActionState(submit, initialDetailsState)
+  const [state, action, pending] = useActionState(submit, {
+    ok: false,
+    fieldErrors: {},
+    values: initialValues,
+  })
 
   return (
     <form action={action} noValidate className="grid gap-3 px-5 pt-4 pb-8">
@@ -98,7 +97,7 @@ export function DetailsForm({ gymId, wallImageId, userId, holds, onCreated }: De
         defaultValue={state.values.description}
       />
       <Button type="submit" variant="primary" loading={pending} className="mt-2">
-        {t('details.submit')}
+        {submitLabel}
       </Button>
     </form>
   )

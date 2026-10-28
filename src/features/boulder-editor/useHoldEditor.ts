@@ -1,12 +1,58 @@
 import { useState } from 'react'
-import { FINISH_ROLE, START_ROLE } from '@/shared/lib/holds'
+import type { HoldDto } from '@api'
+import { FINISH_ROLE, START_ROLE, normalizeRole } from '@/shared/lib/holds'
 
-export type EditorHold = { id: number; x: number; y: number; r: number; role: number }
+export type EditorHold = {
+  // Key inside the editor (stable while editing).
+  id: number
+  x: number
+  y: number
+  r: number
+  role: number
+  // The hold's id on the server, only for holds that were loaded from a saved boulder.
+  savedId?: number
+}
 
 // Radius of every hold the user marks, as a ratio of the photo width (mockup value).
 export const HOLD_RADIUS = 0.045
 export const MAX_STARTS = 2
 export const MAX_FINISHES = 1
+
+// A hold of a NEW boulder, as sent in the create request.
+export function toCreateHoldPayload(hold: EditorHold) {
+  return { coordX: hold.x, coordY: hold.y, radiusRatio: hold.r, color: hold.role }
+}
+
+// A hold in the update request: all the fields of HoldDto. Holds loaded from the server keep their `id`;
+// new holds have none (the backend assigns it). `boulderId` is the boulder being edited, for every hold.
+export function toUpdateHoldPayload(hold: EditorHold, boulderId: number): HoldDto {
+  return {
+    ...(hold.savedId !== undefined ? { id: hold.savedId } : {}),
+    boulderId,
+    coordX: hold.x,
+    coordY: hold.y,
+    radiusRatio: hold.r,
+    color: hold.role,
+  }
+}
+
+// Holds of a saved boulder, as the editor's holds (to edit it).
+export function holdsFromDto(holds: HoldDto[]): EditorHold[] {
+  return holds.flatMap((hold, index) =>
+    hold.coordX === undefined || hold.coordY === undefined || hold.radiusRatio === undefined
+      ? []
+      : [
+          {
+            id: index + 1,
+            ...(hold.id !== undefined ? { savedId: hold.id } : {}),
+            x: hold.coordX,
+            y: hold.coordY,
+            r: hold.radiusRatio,
+            role: normalizeRole(hold.color),
+          },
+        ],
+  )
+}
 
 type PhotoSize = { width: number; height: number }
 
@@ -62,8 +108,12 @@ export function isRoleFull(holds: EditorHold[], role: number): boolean {
 
 type EditorState = { holds: EditorHold[]; history: EditorHold[][]; nextId: number }
 
-export function useHoldEditor() {
-  const [state, setState] = useState<EditorState>({ holds: [], history: [], nextId: 1 })
+export function useHoldEditor(initialHolds: EditorHold[] = []) {
+  const [state, setState] = useState<EditorState>(() => ({
+    holds: initialHolds,
+    history: [],
+    nextId: Math.max(0, ...initialHolds.map((hold) => hold.id)) + 1,
+  }))
 
   return {
     holds: state.holds,

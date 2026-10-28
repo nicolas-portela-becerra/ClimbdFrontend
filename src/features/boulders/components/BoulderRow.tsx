@@ -1,5 +1,7 @@
+import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import type { BoulderResponseDto } from '@api'
+import { cn } from '@/shared/lib/cn'
 import { GradeTape } from './GradeTape'
 
 type BoulderRowProps = {
@@ -9,11 +11,20 @@ type BoulderRowProps = {
   // Navigation state to keep (the page reads the wall name from it).
   linkState?: unknown
   onSelect?: () => void
+  // Extra controls at the right of the row (e.g. a menu), vertically centred.
+  actions?: ReactNode
 }
 
-export function BoulderRow({ boulder, href, replace, linkState, onSelect }: BoulderRowProps) {
+export function BoulderRow({
+  boulder,
+  href,
+  replace,
+  linkState,
+  onSelect,
+  actions,
+}: BoulderRowProps) {
   return (
-    <li className="border-b-2 border-line">
+    <li className="relative border-b-2 border-line">
       <Link
         to={href}
         replace={replace}
@@ -21,7 +32,10 @@ export function BoulderRow({ boulder, href, replace, linkState, onSelect }: Boul
         // The page must not jump to the top when a boulder opens over it.
         preventScrollReset
         onClick={onSelect}
-        className="grid min-h-16 grid-cols-[5.5rem_1fr] items-center gap-3 py-3.5 active:bg-surface"
+        className={cn(
+          'grid min-h-16 grid-cols-[5.5rem_1fr] items-center gap-3 py-3.5 active:bg-surface',
+          actions && 'pr-11',
+        )}
       >
         <GradeTape grade={boulder.grade ?? ''} />
         <span className="min-w-0">
@@ -36,6 +50,9 @@ export function BoulderRow({ boulder, href, replace, linkState, onSelect }: Boul
           ) : null}
         </span>
       </Link>
+      {actions ? (
+        <div className="absolute inset-y-0 right-0 flex items-center">{actions}</div>
+      ) : null}
     </li>
   )
 }

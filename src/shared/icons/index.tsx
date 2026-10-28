@@ -106,3 +106,13 @@ export function RotateIcon(props: IconProps) {
     </Icon>
   )
 }
+
+export function MoreIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="5.5" r="1.8" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="12" r="1.8" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="18.5" r="1.8" fill="currentColor" stroke="none" />
+    </Icon>
+  )
+}

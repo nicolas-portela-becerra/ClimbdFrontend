@@ -40,5 +40,23 @@
     "forbidden": "You don't have permission to create boulders here",
     "unknown": "Something went wrong. Try again"
   },
-  "photoLabel": "Wall photo to mark the holds on"
+  "photoLabel": "Wall photo to mark the holds on",
+  "menu": {
+    "label": "Boulder options",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "edit": {
+    "title": "Edit boulder",
+    "submit": "Save",
+    "forbidden": "Only the creator can edit a boulder"
+  },
+  "delete": {
+    "title": "Delete boulder?",
+    "message": "{{name}} will be deleted. This can't be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete",
+    "forbidden": "Only the creator can delete a boulder",
+    "failed": "Couldn't delete the boulder. Try again."
+  }
 }
