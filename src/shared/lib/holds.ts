@@ -9,6 +9,8 @@ export const FINISH_ROLE = 3
 
 // Full class names so Tailwind can see them.
 export const ROLE_STROKE = ['stroke-start', 'stroke-hand', 'stroke-foot', 'stroke-finish'] as const
+// CSS variable holding each role's colour (tokens.css).
+export const ROLE_COLOR_VAR = ['--start', '--hand', '--foot', '--finish'] as const
 export const ROLE_BORDER = ['border-start', 'border-hand', 'border-foot', 'border-finish'] as const
 
 // A hold without a (valid) colour is treated as a plain hand hold.

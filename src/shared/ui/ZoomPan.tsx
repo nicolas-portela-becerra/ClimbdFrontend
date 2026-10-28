@@ -11,20 +11,31 @@ const DOUBLE_TAP_MS = 300
 const DOUBLE_TAP_SCALE = 2.5
 // Movement (px) from which a touch/click is a drag, not a tap.
 const DRAG_THRESHOLD = 6
+// Keeping a finger still this long (ms) starts the long-press gesture.
+const LONG_PRESS_MS = 350
+
+type Point = { x: number; y: number }
+
+type LongPress = {
+  // Called when a finger/mouse stays pressed (without moving) long enough; client coordinates.
+  onStart: (point: Point) => void
+  // Called as the pointer then moves; the photo is not panned while it is active.
+  onMove: (point: Point) => void
+  onEnd: () => void
+}
 
 type ZoomPanProps = {
   children: ReactNode
   className?: string
+  longPress?: LongPress
   // Double tap (or double click) toggles the zoom. Off where quick repeated taps do something else.
   doubleTapZoom?: boolean
 }
 
-type Point = { x: number; y: number }
-
 // Zoom and pan for whatever it wraps (the wall photo): pinch, drag, wheel / trackpad, double tap and
 // +/- buttons. It uses one CSS transform, so zooming costs nothing extra. A drag never counts as a click
 // on the children (so panning in the editor doesn't place holds).
-export function ZoomPan({ children, className, doubleTapZoom = true }: ZoomPanProps) {
+export function ZoomPan({ children, className, longPress, doubleTapZoom = true }: ZoomPanProps) {
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const [view, setView] = useState<ZoomView>({ scale: 1, x: 0, y: 0 })
@@ -37,6 +48,24 @@ export function ZoomPan({ children, className, doubleTapZoom = true }: ZoomPanPr
   const dragged = useRef(false)
   const swallowClick = useRef(false)
   const lastTap = useRef<{ time: number; point: Point } | null>(null)
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const longPressActive = useRef(false)
+  // Always the latest callbacks, so the timer never calls stale ones.
+  const longPressRef = useRef(longPress)
+  useEffect(() => {
+    longPressRef.current = longPress
+  })
+
+  const cancelLongPressTimer = () => {
+    if (longPressTimer.current) clearTimeout(longPressTimer.current)
+    longPressTimer.current = null
+  }
+  const endLongPress = () => {
+    cancelLongPressTimer()
+    if (!longPressActive.current) return
+    longPressActive.current = false
+    longPressRef.current?.onEnd()
+  }
 
   const size = () => {
     const rect = containerRef.current?.getBoundingClientRect()
@@ -75,8 +104,22 @@ export function ZoomPan({ children, className, doubleTapZoom = true }: ZoomPanPr
     pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
     downAt.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
     setGesturing(true)
-    if (pointers.current.size === 1) dragged.current = false
+    if (pointers.current.size === 1) {
+      dragged.current = false
+      if (longPressRef.current) {
+        const at = { x: event.clientX, y: event.clientY }
+        longPressTimer.current = setTimeout(() => {
+          longPressTimer.current = null
+          if (pointers.current.size !== 1 || dragged.current) return
+          longPressActive.current = true
+          // Counts as a drag from now on, so the click at the end is swallowed.
+          dragged.current = true
+          longPressRef.current?.onStart(at)
+        }, LONG_PRESS_MS)
+      }
+    }
     if (pointers.current.size === 2) {
+      endLongPress()
       dragged.current = true
       lastPinch.current = pinchState(pointers.current)
     }
@@ -88,6 +131,11 @@ export function ZoomPan({ children, className, doubleTapZoom = true }: ZoomPanPr
     const next = { x: event.clientX, y: event.clientY }
     pointers.current.set(event.pointerId, next)
     const { width, height, left, top } = size()
+
+    if (longPressActive.current) {
+      longPressRef.current?.onMove(next)
+      return
+    }
 
     if (pointers.current.size >= 2) {
       const pinch = pinchState(pointers.current)
@@ -116,7 +164,11 @@ export function ZoomPan({ children, className, doubleTapZoom = true }: ZoomPanPr
 
     if (Math.hypot(next.x - previous.x, next.y - previous.y) === 0) return
     const start = downAt.current.get(event.pointerId) ?? previous
-    if (Math.hypot(next.x - start.x, next.y - start.y) > DRAG_THRESHOLD) dragged.current = true
+    if (Math.hypot(next.x - start.x, next.y - start.y) > DRAG_THRESHOLD) {
+      dragged.current = true
+      // Moved before the delay: it is a pan, not a long press.
+      cancelLongPressTimer()
+    }
     setView((current) => panBy(current, next.x - previous.x, next.y - previous.y, width, height))
   }
 
@@ -127,6 +179,7 @@ export function ZoomPan({ children, className, doubleTapZoom = true }: ZoomPanPr
     lastPinch.current = null
     if (pointers.current.size === 0) setGesturing(false)
     if (!down) return
+    endLongPress()
 
     if (dragged.current) {
       // The click that follows a drag or pinch must not reach the children.
@@ -161,6 +214,7 @@ export function ZoomPan({ children, className, doubleTapZoom = true }: ZoomPanPr
   }
 
   const onPointerCancel = (event: PointerEvent<HTMLDivElement>) => {
+    endLongPress()
     pointers.current.delete(event.pointerId)
     downAt.current.delete(event.pointerId)
     lastPinch.current = null
@@ -183,6 +237,8 @@ export function ZoomPan({ children, className, doubleTapZoom = true }: ZoomPanPr
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
+      // A long press must not open the browser's context menu (e.g. "save image").
+      onContextMenu={(event) => event.preventDefault()}
       onClickCapture={(event) => {
         if (swallowClick.current) {
           event.stopPropagation()

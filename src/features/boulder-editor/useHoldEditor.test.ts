@@ -2,8 +2,12 @@ import { describe, expect, it } from 'vitest'
 import { UpdateBoulderRequestToJSON } from '@api'
 import { FINISH_ROLE, HAND_ROLE, START_ROLE } from '@/shared/lib/holds'
 import {
+  findHold,
   holdsFromDto,
   isRoleFull,
+  MAX_RADIUS,
+  MIN_RADIUS,
+  radiusAfterDrag,
   tapHolds,
   toCreateHoldPayload,
   toUpdateHoldPayload,
@@ -120,5 +124,27 @@ describe('hold payloads', () => {
     expect(JSON.parse(JSON.stringify(body)).holds).toEqual([
       { id: 10, boulderId: 7, coordX: 0.25, coordY: 0.75, radiusRatio: 0.05, color: 1 },
     ])
+  })
+})
+
+describe('findHold / radiusAfterDrag', () => {
+  const photo = { width: 1000, height: 2000 }
+  const holds = [{ id: 1, x: 0.5, y: 0.5, r: 0.05, role: HAND_ROLE }] // radius 50 px
+
+  it('finds the hold under a point, measuring in pixels', () => {
+    expect(findHold(holds, { x: 0.52, y: 0.5 }, photo)).toBe(0) // 20 px from the centre
+    expect(findHold(holds, { x: 0.6, y: 0.5 }, photo)).toBe(-1) // 100 px away
+    expect(findHold(holds, { x: 0.5, y: 0.53 }, photo)).toBe(-1) // 60 px away vertically (height 2000)
+  })
+
+  it('grows when the finger moves away from the centre and shrinks when it comes closer', () => {
+    expect(radiusAfterDrag(0.05, 40, 70, 1000)).toBeCloseTo(0.08)
+    expect(radiusAfterDrag(0.05, 40, 20, 1000)).toBeCloseTo(0.03)
+    expect(radiusAfterDrag(0.045, 0, 30, 1000)).toBeCloseTo(0.075) // a new hold starts at its centre
+  })
+
+  it('stays between the minimum and maximum radius', () => {
+    expect(radiusAfterDrag(0.05, 0, 5000, 1000)).toBe(MAX_RADIUS)
+    expect(radiusAfterDrag(0.05, 500, 0, 1000)).toBe(MIN_RADIUS)
   })
 })
