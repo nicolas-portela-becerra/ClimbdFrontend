@@ -8,6 +8,7 @@ import { cn } from '@/shared/lib/cn'
 import { IconButton } from '@/shared/ui/IconButton'
 import { Overlay } from '@/shared/ui/Overlay'
 import { Sheet } from '@/shared/ui/Sheet'
+import { ZoomPan } from '@/shared/ui/ZoomPan'
 import { BoulderHolds } from './BoulderHolds'
 import { BoulderList } from './BoulderList'
 
@@ -55,15 +56,17 @@ export function BoulderViewer({
       className="data-[state=closed]:animate-stage-out motion-reduce:animate-none"
     >
       <div className="absolute inset-0 animate-stage-in touch-none bg-neutral-900 motion-reduce:animate-none">
-        {wall.data ? (
-          <BoulderHolds
-            blob={wall.data.blob}
-            width={wall.data.width}
-            height={wall.data.height}
-            holds={boulder.data?.holds ?? []}
-            label={t('viewer.photoLabel', { name: boulder.data?.name ?? '' })}
-          />
-        ) : null}
+        <ZoomPan>
+          {wall.data ? (
+            <BoulderHolds
+              blob={wall.data.blob}
+              width={wall.data.width}
+              height={wall.data.height}
+              holds={boulder.data?.holds ?? []}
+              label={t('viewer.photoLabel', { name: boulder.data?.name ?? '' })}
+            />
+          ) : null}
+        </ZoomPan>
       </div>
 
       <IconButton

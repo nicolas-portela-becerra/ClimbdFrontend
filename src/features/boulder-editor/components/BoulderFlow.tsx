@@ -73,11 +73,15 @@ export function BoulderFlow({
               wallImageId={wallImageId}
               holds={editor.holds}
               label={t('photoLabel')}
-              onTap={(point, size) => {
-                const holds = editor.tap(point, role, size)
+              role={role}
+              onTap={(point) => {
+                const holds = editor.tap(point, role)
                 // A role that just got full can't be used again: switch to hand holds.
                 if (isRoleFull(holds, role)) setRole(HAND_ROLE)
               }}
+              onEditStart={editor.beginEdit}
+              onChange={editor.updateHold}
+              onRemove={editor.remove}
             />
           </div>
           <div className="shrink-0 border-t-2 border-ink bg-ground px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))]">

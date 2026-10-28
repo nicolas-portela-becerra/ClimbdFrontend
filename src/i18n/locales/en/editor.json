@@ -3,7 +3,7 @@
   "title": "Create boulder",
   "close": "Close",
   "back": "Back",
-  "hint": "Tap a hold to mark it. Tap again to remove.",
+  "hint": "Tap the photo to mark a hold. Tap a hold to select it, then drag to move it or use + and − to resize.",
   "status": {
     "needs": "Needs 1–2 start holds and 1 top",
     "ready_one": "{{count}} hold · Ready to name and grade",
@@ -11,7 +11,7 @@
   },
   "actions": {
     "undo": "Undo",
-    "clear": "Clear",
+    "clear": "Delete all",
     "next": "Next"
   },
   "roles": {
@@ -58,5 +58,10 @@
     "confirm": "Delete",
     "forbidden": "Only the creator can delete a boulder",
     "failed": "Couldn't delete the boulder. Try again."
+  },
+  "hold": {
+    "bigger": "Bigger hold",
+    "smaller": "Smaller hold",
+    "delete": "Delete hold"
   }
 }
