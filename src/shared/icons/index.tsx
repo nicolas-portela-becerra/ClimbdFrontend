@@ -116,3 +116,11 @@ export function MoreIcon(props: IconProps) {
     </Icon>
   )
 }
+
+export function MinusIcon(props: IconProps) {
+  return (
+    <Icon strokeWidth={2.4} {...props}>
+      <path d="M5 12h14" strokeLinecap="round" />
+    </Icon>
+  )
+}

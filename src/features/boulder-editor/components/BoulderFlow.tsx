@@ -4,6 +4,7 @@ import { useToast } from '@/shared/hooks/useToast'
 import { FINISH_ROLE, HAND_ROLE, START_ROLE } from '@/shared/lib/holds'
 import { Button } from '@/shared/ui/Button'
 import { ModalHeader } from '@/shared/ui/ModalPanel'
+import { ZoomPan } from '@/shared/ui/ZoomPan'
 import type { BoulderDetails } from '../actions'
 import {
   countRoles,
@@ -69,16 +70,19 @@ export function BoulderFlow({
         <>
           <p className="shrink-0 px-5 pb-3 text-sm text-muted">{t('hint')}</p>
           <div className="min-h-0 flex-1 bg-neutral-900">
-            <EditorCanvas
-              wallImageId={wallImageId}
-              holds={editor.holds}
-              label={t('photoLabel')}
-              onTap={(point, size) => {
-                const holds = editor.tap(point, role, size)
-                // A role that just got full can't be used again: switch to hand holds.
-                if (isRoleFull(holds, role)) setRole(HAND_ROLE)
-              }}
-            />
+            {/* No double-tap zoom here: two quick taps on a hold add and remove it. */}
+            <ZoomPan doubleTapZoom={false}>
+              <EditorCanvas
+                wallImageId={wallImageId}
+                holds={editor.holds}
+                label={t('photoLabel')}
+                onTap={(point, size) => {
+                  const holds = editor.tap(point, role, size)
+                  // A role that just got full can't be used again: switch to hand holds.
+                  if (isRoleFull(holds, role)) setRole(HAND_ROLE)
+                }}
+              />
+            </ZoomPan>
           </div>
           <div className="shrink-0 border-t-2 border-ink bg-ground px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
             <div className="mb-2.5 flex items-center justify-between gap-3 font-cond text-sm font-semibold tracking-wide text-muted uppercase">
