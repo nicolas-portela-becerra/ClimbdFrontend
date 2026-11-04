@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Outlet } from 'react-router-dom'
 import { UserDtoRoleEnum } from '@api'
 import { useAuth } from '@/features/auth/useAuth'
+import { PendingResultsSync } from '@/features/competitions/components/PendingResultsSync'
 import { LockIcon, LogbookIcon, MeIcon, WallsIcon } from '@/shared/icons'
 import { TabBar, type TabItem } from '@/shared/ui/TabBar'
 
@@ -27,6 +28,7 @@ export function AppLayout() {
         <Outlet />
       </main>
       <TabBar items={items} label={t('nav.label')} />
+      {user?.id !== undefined ? <PendingResultsSync userId={user.id} /> : null}
     </div>
   )
 }

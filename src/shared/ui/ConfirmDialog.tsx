@@ -13,9 +13,11 @@ type ConfirmDialogProps = {
   onConfirm: () => void
   // While the confirmed action runs: the confirm button spins and the dialog can't be dismissed.
   loading?: boolean
+  // Red confirm button for actions that destroy something (the default).
+  destructive?: boolean
 }
 
-// Dialog centred on the screen over a dark backdrop. The confirm button is red (destructive actions).
+// Dialog centred on the screen over a dark backdrop. The confirm button is red for destructive actions.
 export function ConfirmDialog({
   open,
   title,
@@ -25,6 +27,7 @@ export function ConfirmDialog({
   onCancel,
   onConfirm,
   loading = false,
+  destructive = true,
 }: ConfirmDialogProps) {
   useEffect(() => {
     if (!open || loading) return
@@ -59,7 +62,9 @@ export function ConfirmDialog({
           <Button
             onClick={onConfirm}
             loading={loading}
-            className="border-error bg-error text-ground"
+            {...(destructive
+              ? { className: 'border-error bg-error text-ground' }
+              : { variant: 'primary' as const })}
           >
             {confirmLabel}
           </Button>

@@ -46,6 +46,10 @@ export const router = createBrowserRouter([
               { path: '/gyms', lazy: page(() => import('@/routes/gyms')) },
               { path: '/gyms/:gymId', lazy: page(() => import('@/routes/gym-walls')) },
               {
+                path: '/gyms/:gymId/competitions/:competitionId',
+                lazy: page(() => import('@/routes/competition')),
+              },
+              {
                 path: '/gyms/:gymId/walls/:wallId',
                 lazy: page(() => import('@/routes/wall-boulders')),
               },

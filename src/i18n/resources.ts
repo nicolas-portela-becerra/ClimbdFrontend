@@ -1,6 +1,7 @@
 import enAuth from './locales/en/auth.json'
 import enBoulders from './locales/en/boulders.json'
 import enCommon from './locales/en/common.json'
+import enCompetitions from './locales/en/competitions.json'
 import enEditor from './locales/en/editor.json'
 import enGyms from './locales/en/gyms.json'
 import enUsers from './locales/en/users.json'
@@ -8,6 +9,7 @@ import enWalls from './locales/en/walls.json'
 import esAuth from './locales/es/auth.json'
 import esBoulders from './locales/es/boulders.json'
 import esCommon from './locales/es/common.json'
+import esCompetitions from './locales/es/competitions.json'
 import esEditor from './locales/es/editor.json'
 import esGyms from './locales/es/gyms.json'
 import esUsers from './locales/es/users.json'
@@ -27,6 +29,7 @@ export const resources = {
     users: esUsers,
     boulders: esBoulders,
     editor: esEditor,
+    competitions: esCompetitions,
   },
   en: {
     common: enCommon,
@@ -36,5 +39,6 @@ export const resources = {
     users: enUsers,
     boulders: enBoulders,
     editor: enEditor,
+    competitions: enCompetitions,
   },
 } as const

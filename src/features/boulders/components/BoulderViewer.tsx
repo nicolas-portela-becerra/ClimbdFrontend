@@ -9,7 +9,7 @@ import { IconButton } from '@/shared/ui/IconButton'
 import { Overlay } from '@/shared/ui/Overlay'
 import { Sheet } from '@/shared/ui/Sheet'
 import { ZoomPan } from '@/shared/ui/ZoomPan'
-import { BoulderHolds } from './BoulderHolds'
+import { BoulderHolds } from '@/shared/ui/BoulderHolds'
 import { BoulderList } from './BoulderList'
 
 type BoulderViewerProps = {

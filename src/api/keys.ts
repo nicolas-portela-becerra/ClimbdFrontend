@@ -12,6 +12,13 @@ export const qk = {
     detail: (boulderId: number) => [...qk.boulders.all, 'detail', boulderId] as const,
     byWall: (wallImageId: number) => [...qk.boulders.all, 'wall', wallImageId] as const,
   },
+  competitions: {
+    all: ['competitions'] as const,
+    active: (gymId: number) => [...qk.competitions.all, 'active', gymId] as const,
+    boulders: (competitionId: number) =>
+      [...qk.competitions.all, 'boulders', competitionId] as const,
+    me: (competitionId: number) => [...qk.competitions.all, 'me', competitionId] as const,
+  },
   walls: {
     all: ['walls'] as const,
     list: (gymId: number) => [...qk.walls.all, 'list', gymId] as const,

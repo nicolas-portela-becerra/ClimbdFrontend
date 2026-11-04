@@ -23,7 +23,7 @@ export const RADIUS_STEP = 0.01
 // Smallest radius that still counts as a touch on a hold, so tiny holds stay easy to grab.
 const MIN_HIT_RADIUS = 0.04
 export const MAX_STARTS = 2
-export const MAX_FINISHES = 1
+export const MAX_FINISHES = 2
 
 // A hold of a NEW boulder, as sent in the create request.
 export function toCreateHoldPayload(hold: EditorHold) {

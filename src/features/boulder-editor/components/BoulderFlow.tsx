@@ -26,6 +26,7 @@ type BoulderFlowProps = {
   initialHolds?: EditorHold[]
   initialDetails?: BoulderDetails
   onForbidden?: () => void
+  withPoints?: boolean
 }
 
 const EMPTY_DETAILS: BoulderDetails = { name: '', grade: '', description: '' }
@@ -41,6 +42,7 @@ export function BoulderFlow({
   initialHolds,
   initialDetails = EMPTY_DETAILS,
   onForbidden,
+  withPoints = false,
 }: BoulderFlowProps) {
   const { t } = useTranslation('editor')
   const { showError } = useToast()
@@ -126,6 +128,7 @@ export function BoulderFlow({
           <DetailsForm
             initialValues={initialDetails}
             submitLabel={submitLabel}
+            withPoints={withPoints}
             onSubmit={async (details) => {
               await onSubmit(editor.holds, details)
               onClose()
