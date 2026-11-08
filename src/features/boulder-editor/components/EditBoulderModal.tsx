@@ -12,9 +12,7 @@ type EditBoulderModalProps = {
   open: boolean
   onClose: () => void
   boulderId: number
-  gymId: number
   wallImageId: number
-  userId: number
 }
 
 // The same modal as creating a boulder, opened with the boulder's holds and details already filled.
@@ -30,9 +28,7 @@ export function EditBoulderModal({ open, onClose, ...rest }: EditBoulderModalPro
 
 function EditBoulderContent({
   boulderId,
-  gymId,
   wallImageId,
-  userId,
   onClose,
 }: Omit<EditBoulderModalProps, 'open'>) {
   const { t } = useTranslation(['editor', 'common'])
@@ -78,8 +74,6 @@ function EditBoulderContent({
           name,
           grade,
           description,
-          creatorId: userId,
-          gymId: boulder.data?.gymId ?? gymId,
           wallImageId: boulder.data?.wallImageId ?? wallImageId,
           holds: holds.map((hold) => toUpdateHoldPayload(hold, boulderId)),
         })

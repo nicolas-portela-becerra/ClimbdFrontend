@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost:8080*
 | [**getWallImageThumbnail**](WallImagesApi.md#getwallimagethumbnail) | **GET** /api/wall-images/{wallImageId}/thumbnail | Download wall image thumbnail |
 | [**listWallImages**](WallImagesApi.md#listwallimages) | **GET** /api/gyms/{gymId}/wall-images | List wall images for a gym |
 | [**updateWallImage**](WallImagesApi.md#updatewallimage) | **PUT** /api/wall-images/{wallImageId} | Update a wall image (name and, optionally, the photo) |
-| [**uploadWallImage**](WallImagesApi.md#uploadwallimage) | **POST** /api/gyms/{gymId}/wall-images | Upload a wall image (admin or gym owner) |
+| [**uploadWallImage**](WallImagesApi.md#uploadwallimage) | **POST** /api/gyms/{gymId}/wall-images | Upload a wall image (admin or gym staff) |
 
 
 
@@ -457,9 +457,9 @@ example().catch(console.error);
 
 ## uploadWallImage
 
-> uploadWallImage(gymId, image, wallName, uploadedBy)
+> uploadWallImage(gymId, image, wallName)
 
-Upload a wall image (admin or gym owner)
+Upload a wall image (admin or gym staff)
 
 ### Example
 
@@ -485,8 +485,6 @@ async function example() {
     image: BINARY_DATA_HERE,
     // string | Name of the physical wall (e.g. \\\"Cave\\\", \\\"Slab Left\\\")
     wallName: wallName_example,
-    // number | ID of the user who uploaded the image
-    uploadedBy: 56,
   } satisfies UploadWallImageRequest;
 
   try {
@@ -509,7 +507,6 @@ example().catch(console.error);
 | **gymId** | `number` |  | [Defaults to `undefined`] |
 | **image** | `Blob` | Wall photo file (JPEG, PNG, or WebP) | [Defaults to `undefined`] |
 | **wallName** | `string` | Name of the physical wall (e.g. \\\&quot;Cave\\\&quot;, \\\&quot;Slab Left\\\&quot;) | [Defaults to `undefined`] |
-| **uploadedBy** | `number` | ID of the user who uploaded the image | [Defaults to `undefined`] |
 
 ### Return type
 

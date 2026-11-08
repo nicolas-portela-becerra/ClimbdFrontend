@@ -46,10 +46,6 @@ export interface CreateBoulderRequest {
     /**
      * 
      */
-    createdBy: number;
-    /**
-     * 
-     */
     holds: Array<CreateHoldRequest>;
 }
 
@@ -60,7 +56,6 @@ export function instanceOfCreateBoulderRequest(value: object): value is CreateBo
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('grade' in value) || value['grade'] === undefined) return false;
     if (!('wallImageId' in value) || value['wallImageId'] === undefined) return false;
-    if (!('createdBy' in value) || value['createdBy'] === undefined) return false;
     if (!('holds' in value) || value['holds'] === undefined) return false;
     return true;
 }
@@ -79,7 +74,6 @@ export function CreateBoulderRequestFromJSONTyped(json: any, ignoreDiscriminator
         'grade': json['grade'],
         'description': json['description'] == null ? undefined : json['description'],
         'wallImageId': json['wallImageId'],
-        'createdBy': json['createdBy'],
         'holds': ((json['holds'] as Array<any>).map(CreateHoldRequestFromJSON)),
     };
 }
@@ -99,7 +93,6 @@ export function CreateBoulderRequestToJSONTyped(value?: CreateBoulderRequest | n
         'grade': value['grade'],
         'description': value['description'],
         'wallImageId': value['wallImageId'],
-        'createdBy': value['createdBy'],
         'holds': ((value['holds'] as Array<any>).map(CreateHoldRequestToJSON)),
     };
 }

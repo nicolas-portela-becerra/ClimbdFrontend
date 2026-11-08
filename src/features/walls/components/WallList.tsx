@@ -5,7 +5,7 @@ import { ErrorState } from '@/shared/ui/ErrorState'
 import { Spinner } from '@/shared/ui/Spinner'
 import { WallRow } from './WallRow'
 
-export function WallList({ gymId }: { gymId: number }) {
+export function WallList({ gymId, canManage }: { gymId: number; canManage: boolean }) {
   const { t } = useTranslation(['walls', 'common'])
   const query = useWallImages(gymId)
 
@@ -37,7 +37,7 @@ export function WallList({ gymId }: { gymId: number }) {
     <div className="px-5 pb-6">
       <ul aria-label={t('list.label')} className="grid gap-4">
         {walls.map((wall) => (
-          <WallRow key={wall.id} wall={wall} gymId={gymId} />
+          <WallRow key={wall.id} wall={wall} gymId={gymId} canManage={canManage} />
         ))}
       </ul>
       {query.isFetchNextPageError ? (

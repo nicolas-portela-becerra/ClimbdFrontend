@@ -1,9 +1,13 @@
-import type { Gender } from '@api'
+import type { Gender, UserGymRoleDto } from '@api'
 import { ResponseError, type AuthResponse, type UserDto } from '@api'
-import { publicAuthApi, registerAuthHandlers, type RefreshOutcome } from '@/api/client'
+import { publicAuthApi, registerAuthHandlers, usersApi, type RefreshOutcome } from '@/api/client'
 import { REFRESH_TOKEN_KEY, tokenStore } from './tokenStore'
 
-export type SessionChange = { user: UserDto | null; expired: boolean }
+export type SessionChange = {
+  user: UserDto | null
+  gymRoles: UserGymRoleDto[]
+  expired: boolean
+}
 
 const listeners = new Set<(change: SessionChange) => void>()
 
@@ -16,16 +20,17 @@ function emit(change: SessionChange): void {
   listeners.forEach((listener) => listener(change))
 }
 
-function start(response: AuthResponse): UserDto {
-  const { accessToken, refreshToken, user } = response
+function start(response: AuthResponse): { user: UserDto; gymRoles: UserGymRoleDto[] } {
+  const { accessToken, refreshToken, user, gymRoles } = response
   if (!accessToken || !refreshToken || !user) throw new Error('Incomplete auth response')
+  const roles = gymRoles ?? []
   tokenStore.set({ accessToken, refreshToken })
-  emit({ user, expired: false })
-  return user
+  emit({ user, gymRoles: roles, expired: false })
+  return { user, gymRoles: roles }
 }
 
 export async function login(email: string, password: string): Promise<UserDto> {
-  return start(await publicAuthApi.authLogin({ loginRequest: { email, password } }))
+  return start(await publicAuthApi.authLogin({ loginRequest: { email, password } })).user
 }
 
 // Registering does not start a session: the user goes to the login screen afterwards.
@@ -74,28 +79,41 @@ export async function logout(): Promise<void> {
     }
   }
   tokenStore.clear()
-  emit({ user: null, expired: false })
+  emit({ user: null, gymRoles: [], expired: false })
 }
 
-// On app start: exchange the saved refresh token for a session. Returns the user or null.
-export async function bootSession(): Promise<UserDto | null> {
+// On app start: exchange the saved refresh token for a session. Returns the session or null.
+export async function bootSession(): Promise<{ user: UserDto; gymRoles: UserGymRoleDto[] } | null> {
   if (!tokenStore.getRefresh()) return null
   const outcome = await refreshSession()
   // 'unreachable' keeps the saved token; the user sees the login screen and a reload retries
-  return outcome === 'ok' ? currentUser : null
+  return outcome === 'ok' ? { user: currentUser!, gymRoles: currentGymRoles } : null
 }
 
 let currentUser: UserDto | null = null
-subscribeSession(({ user }) => {
+let currentGymRoles: UserGymRoleDto[] = []
+subscribeSession(({ user, gymRoles }) => {
   currentUser = user
+  currentGymRoles = gymRoles
 })
+
+// Fetches the user and their per-gym roles from the server, without touching the tokens. Used after a
+// role change (adding/removing staff) so the controls update without waiting for the next refresh.
+export async function refreshRoles(): Promise<void> {
+  try {
+    const { user, gymRoles } = await usersApi.getCurrentUser()
+    if (user) emit({ user, gymRoles: gymRoles ?? [], expired: false })
+  } catch {
+    // Roles refresh lazily elsewhere (login/refresh every 15 minutes); a failed fetch is not fatal.
+  }
+}
 
 // Another tab logged out (or storage was cleared): drop the in-memory session here too.
 export function watchOtherTabs(): () => void {
   const onStorage = (event: StorageEvent) => {
     if ((event.key === null || event.key === REFRESH_TOKEN_KEY) && event.newValue === null) {
       tokenStore.clear()
-      emit({ user: null, expired: false })
+      emit({ user: null, gymRoles: [], expired: false })
     }
   }
   window.addEventListener('storage', onStorage)
@@ -107,6 +125,6 @@ registerAuthHandlers({
   refresh: refreshSession,
   onSessionExpired: () => {
     tokenStore.clear()
-    emit({ user: null, expired: true })
+    emit({ user: null, gymRoles: [], expired: true })
   },
 })

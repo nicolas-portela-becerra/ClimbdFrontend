@@ -46,5 +46,53 @@
       "network": "No se puede conectar con el servidor. Revisa tu conexión",
       "unknown": "Algo ha salido mal. Inténtalo de nuevo"
     }
+  },
+  "manage": {
+    "label": "Gestionar rocódromo",
+    "editGym": "Editar rocódromo",
+    "staff": "Gestionar staff",
+    "deleteGym": "Borrar rocódromo"
+  },
+  "edit": {
+    "title": "Editar rocódromo",
+    "close": "Cerrar",
+    "name": "Nombre del rocódromo",
+    "logoKept": "Deja el logo sin elegir para conservarlo",
+    "submit": "Guardar cambios",
+    "errors": {
+      "forbidden": "Solo el dueño del rocódromo o un administrador pueden editarlo"
+    }
+  },
+  "delete": {
+    "title": "¿Borrar rocódromo?",
+    "message": "El rocódromo se borrará y no podrá recuperarse.",
+    "cancel": "Cancelar",
+    "confirm": "Borrar",
+    "forbidden": "Solo los administradores pueden borrar rocódromos",
+    "failed": "No se pudo borrar el rocódromo"
+  },
+  "staff": {
+    "title": "Staff del rocódromo",
+    "close": "Cerrar",
+    "email": "Correo electrónico",
+    "role": "Rol",
+    "roleOwner": "Owner",
+    "roleSetter": "Setter",
+    "submit": "Añadir",
+    "empty": "Aún no hay staff en este rocódromo",
+    "remove": "Quitar",
+    "removeTitle": "¿Quitar del staff?",
+    "removeMessage": "{{name}} dejará de gestionar este rocódromo.",
+    "removeCancel": "Cancelar",
+    "removeConfirm": "Quitar",
+    "errors": {
+      "emailRequired": "Escribe un correo",
+      "invalid": "Algunos datos no son válidos",
+      "forbidden": "Solo los administradores pueden dar el rol Owner",
+      "notFound": "No hay ningún usuario con ese correo",
+      "conflict": "No puedes quitarte a ti mismo del staff",
+      "network": "No se puede conectar con el servidor. Revisa tu conexión",
+      "unknown": "Algo ha salido mal. Inténtalo de nuevo"
+    }
   }
 }
