@@ -9,6 +9,7 @@ Name | Type
 `accessToken` | string
 `refreshToken` | string
 `user` | [UserDto](UserDto.md)
+`gymRoles` | [Array&lt;UserGymRoleDto&gt;](UserGymRoleDto.md)
 
 ## Example
 
@@ -20,6 +21,7 @@ const example = {
   "accessToken": null,
   "refreshToken": null,
   "user": null,
+  "gymRoles": null,
 } satisfies AuthResponse
 
 console.log(example)

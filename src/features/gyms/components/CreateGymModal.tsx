@@ -15,16 +15,16 @@ import {
 } from '../actions'
 import { LogoPicker } from './LogoPicker'
 
-type CreateGymModalProps = { open: boolean; onClose: () => void; userId: number }
+type CreateGymModalProps = { open: boolean; onClose: () => void }
 
-export function CreateGymModal({ open, onClose, userId }: CreateGymModalProps) {
+export function CreateGymModal({ open, onClose }: CreateGymModalProps) {
   const { t } = useTranslation('gyms')
 
   return (
     <ModalPanel open={open} label={t('form.title')}>
       <ModalHeader title={t('form.title')} closeLabel={t('form.close')} onClose={onClose} />
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <CreateGymForm userId={userId} onCreated={onClose} />
+        <CreateGymForm onCreated={onClose} />
       </div>
     </ModalPanel>
   )
@@ -35,7 +35,7 @@ function text(data: FormData, key: string): string {
   return typeof value === 'string' ? value.trim() : ''
 }
 
-function CreateGymForm({ userId, onCreated }: { userId: number; onCreated: () => void }) {
+function CreateGymForm({ onCreated }: { onCreated: () => void }) {
   const { t } = useTranslation('gyms')
   const create = useCreateGym()
   const logo = useRef<string | null>(null)
@@ -63,7 +63,6 @@ function CreateGymForm({ userId, onCreated }: { userId: number; onCreated: () =>
       await create.mutateAsync({
         name,
         timeZone,
-        createdBy: userId,
         ...(location ? { location } : {}),
         ...(description ? { description } : {}),
         ...(logo.current ? { logo: logo.current } : {}),

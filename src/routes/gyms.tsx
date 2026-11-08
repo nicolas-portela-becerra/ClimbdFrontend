@@ -1,16 +1,15 @@
-import { UserDtoRoleEnum } from '@api'
 import { useAuth } from '@/features/auth/useAuth'
+import { isAdmin } from '@/features/auth/gymRoles'
 import { GymHeader } from '@/features/gyms/components/GymHeader'
 import { GymList } from '@/features/gyms/components/GymList'
 import { NewGymButton } from '@/features/gyms/components/NewGymButton'
 
 export default function Gyms() {
   const { user } = useAuth()
-  const adminId = user?.role === UserDtoRoleEnum.Admin ? user.id : undefined
 
   return (
     <>
-      <GymHeader action={adminId !== undefined ? <NewGymButton userId={adminId} /> : null} />
+      <GymHeader action={isAdmin(user) ? <NewGymButton /> : null} />
       <GymList />
     </>
   )

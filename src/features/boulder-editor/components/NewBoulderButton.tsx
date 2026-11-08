@@ -4,7 +4,7 @@ import { PlusIcon } from '@/shared/icons'
 import { IconButton } from '@/shared/ui/IconButton'
 import { CreateBoulderModal } from './CreateBoulderModal'
 
-type NewBoulderButtonProps = { gymId: number; wallImageId: number; userId: number }
+type NewBoulderButtonProps = { gymId: number; wallImageId: number }
 
 export function NewBoulderButton(props: NewBoulderButtonProps) {
   const { t } = useTranslation('editor')

@@ -6,7 +6,7 @@ apis/UsersApi.ts
 apis/WallImagesApi.ts
 apis/index.ts
 docs/ActivateUsers200Response.md
-docs/AssignOwnerRequest.md
+docs/AddGymStaffRequest.md
 docs/AuthApi.md
 docs/AuthResponse.md
 docs/BoulderDetailDto.md
@@ -33,11 +33,14 @@ docs/CompetitionsApi.md
 docs/CreateBoulderRequest.md
 docs/CreateGymRequest.md
 docs/CreateHoldRequest.md
+docs/CurrentUserResponse.md
 docs/DeactivatedUsersResponse.md
 docs/ErrorResponse.md
 docs/Gender.md
 docs/GymDto.md
 docs/GymPageResponse.md
+docs/GymRole.md
+docs/GymStaffDto.md
 docs/GymsApi.md
 docs/HoldDto.md
 docs/LoginRequest.md
@@ -49,6 +52,7 @@ docs/SubmitCompetitionResultsRequest.md
 docs/UpdateBoulderRequest.md
 docs/UpdateGymRequest.md
 docs/UserDto.md
+docs/UserGymRoleDto.md
 docs/UsersApi.md
 docs/WallImageDetail.md
 docs/WallImagePageResponse.md
@@ -56,7 +60,7 @@ docs/WallImageSummary.md
 docs/WallImagesApi.md
 index.ts
 models/ActivateUsers200Response.ts
-models/AssignOwnerRequest.ts
+models/AddGymStaffRequest.ts
 models/AuthResponse.ts
 models/BoulderDetailDto.ts
 models/BoulderDto.ts
@@ -80,11 +84,14 @@ models/CompetitionUserStatusDto.ts
 models/CreateBoulderRequest.ts
 models/CreateGymRequest.ts
 models/CreateHoldRequest.ts
+models/CurrentUserResponse.ts
 models/DeactivatedUsersResponse.ts
 models/ErrorResponse.ts
 models/Gender.ts
 models/GymDto.ts
 models/GymPageResponse.ts
+models/GymRole.ts
+models/GymStaffDto.ts
 models/HoldDto.ts
 models/LoginRequest.ts
 models/OAuthRequest.ts
@@ -95,6 +102,7 @@ models/SubmitCompetitionResultsRequest.ts
 models/UpdateBoulderRequest.ts
 models/UpdateGymRequest.ts
 models/UserDto.ts
+models/UserGymRoleDto.ts
 models/WallImageDetail.ts
 models/WallImagePageResponse.ts
 models/WallImageSummary.ts

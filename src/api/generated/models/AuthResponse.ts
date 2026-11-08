@@ -20,6 +20,13 @@ import {
     UserDtoToJSON,
     UserDtoToJSONTyped,
 } from './UserDto';
+import type { UserGymRoleDto } from './UserGymRoleDto';
+import {
+    UserGymRoleDtoFromJSON,
+    UserGymRoleDtoFromJSONTyped,
+    UserGymRoleDtoToJSON,
+    UserGymRoleDtoToJSONTyped,
+} from './UserGymRoleDto';
 
 /**
  * 
@@ -39,6 +46,10 @@ export interface AuthResponse {
      * 
      */
     user?: UserDto;
+    /**
+     * Gyms where the user is OWNER or SETTER. Empty for regular users.
+     */
+    gymRoles?: Array<UserGymRoleDto>;
 }
 
 /**
@@ -61,6 +72,7 @@ export function AuthResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'accessToken': json['accessToken'] == null ? undefined : json['accessToken'],
         'refreshToken': json['refreshToken'] == null ? undefined : json['refreshToken'],
         'user': json['user'] == null ? undefined : UserDtoFromJSON(json['user']),
+        'gymRoles': json['gymRoles'] == null ? undefined : ((json['gymRoles'] as Array<any>).map(UserGymRoleDtoFromJSON)),
     };
 }
 
@@ -78,6 +90,7 @@ export function AuthResponseToJSONTyped(value?: AuthResponse | null, ignoreDiscr
         'accessToken': value['accessToken'],
         'refreshToken': value['refreshToken'],
         'user': UserDtoToJSON(value['user']),
+        'gymRoles': value['gymRoles'] == null ? undefined : ((value['gymRoles'] as Array<any>).map(UserGymRoleDtoToJSON)),
     };
 }
 

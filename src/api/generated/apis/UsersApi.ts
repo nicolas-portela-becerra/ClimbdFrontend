@@ -19,6 +19,11 @@ import {
     ActivateUsers200ResponseToJSON,
 } from '../models/ActivateUsers200Response';
 import {
+    type CurrentUserResponse,
+    CurrentUserResponseFromJSON,
+    CurrentUserResponseToJSON,
+} from '../models/CurrentUserResponse';
+import {
     type DeactivatedUsersResponse,
     DeactivatedUsersResponseFromJSON,
     DeactivatedUsersResponseToJSON,
@@ -93,6 +98,53 @@ export class UsersApi extends runtime.BaseAPI {
      */
     async activateUsers(requestParameters: ActivateUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ActivateUsers200Response> {
         const response = await this.activateUsersRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for getCurrentUser without sending the request
+     */
+    async getCurrentUserRequestOpts(): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/users/me`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Use it on app start and after a role change to decide which controls to show.
+     * Get the logged-in user with their per-gym roles
+     */
+    async getCurrentUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CurrentUserResponse>> {
+        const requestOptions = await this.getCurrentUserRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CurrentUserResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Use it on app start and after a role change to decide which controls to show.
+     * Get the logged-in user with their per-gym roles
+     */
+    async getCurrentUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CurrentUserResponse> {
+        const response = await this.getCurrentUserRaw(initOverrides);
         return await response.value();
     }
 

@@ -9,16 +9,9 @@ type CreateBoulderModalProps = {
   onClose: () => void
   gymId: number
   wallImageId: number
-  userId: number
 }
 
-export function CreateBoulderModal({
-  open,
-  onClose,
-  gymId,
-  wallImageId,
-  userId,
-}: CreateBoulderModalProps) {
+export function CreateBoulderModal({ open, onClose, gymId, wallImageId }: CreateBoulderModalProps) {
   const { t } = useTranslation('editor')
   const create = useCreateBoulder(gymId)
 
@@ -34,7 +27,6 @@ export function CreateBoulderModal({
             name,
             grade,
             wallImageId,
-            createdBy: userId,
             holds: holds.map(toCreateHoldPayload),
             ...(description ? { description } : {}),
           })

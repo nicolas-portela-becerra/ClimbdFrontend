@@ -4,20 +4,24 @@ All URIs are relative to *http://localhost:8080*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**assignGymOwner**](GymsApi.md#assigngymowner) | **POST** /api/gyms/{gymId}/owners | Assign a gym owner (admin only) |
+| [**addGymStaff**](GymsApi.md#addgymstaffoperation) | **POST** /api/gyms/{gymId}/staff | Add a user to the gym staff, or change their role (admin or gym owner) |
 | [**createGym**](GymsApi.md#creategymoperation) | **POST** /api/gyms | Create a new gym (admin only) |
 | [**deleteGym**](GymsApi.md#deletegym) | **DELETE** /api/gyms/{gymId} | Delete gym (admin) |
 | [**getGymById**](GymsApi.md#getgymbyid) | **GET** /api/gyms/{gymId} | Get gym by ID |
+| [**listGymStaff**](GymsApi.md#listgymstaff) | **GET** /api/gyms/{gymId}/staff | List the owners and setters of a gym (admin or gym owner) |
 | [**listGyms**](GymsApi.md#listgyms) | **GET** /api/gyms | List all gyms |
-| [**updateGym**](GymsApi.md#updategymoperation) | **PUT** /api/gyms/{gymId} | Update gym (admin or gym owner) |
+| [**removeGymStaff**](GymsApi.md#removegymstaff) | **DELETE** /api/gyms/{gymId}/staff/{userId} | Remove a user from the gym staff (admin or gym owner; only admins remove owners) |
+| [**updateGym**](GymsApi.md#updategymoperation) | **PUT** /api/gyms/{gymId} | Update gym, including its logo (admin or gym owner) |
 
 
 
-## assignGymOwner
+## addGymStaff
 
-> assignGymOwner(gymId, assignOwnerRequest)
+> GymStaffDto addGymStaff(gymId, addGymStaffRequest)
 
-Assign a gym owner (admin only)
+Add a user to the gym staff, or change their role (admin or gym owner)
+
+Gym owners can only add or change SETTERs. Only an admin can grant, change or remove the OWNER role.
 
 ### Example
 
@@ -26,7 +30,7 @@ import {
   Configuration,
   GymsApi,
 } from '';
-import type { AssignGymOwnerRequest } from '';
+import type { AddGymStaffOperationRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -39,12 +43,12 @@ async function example() {
   const body = {
     // number
     gymId: 56,
-    // AssignOwnerRequest
-    assignOwnerRequest: ...,
-  } satisfies AssignGymOwnerRequest;
+    // AddGymStaffRequest
+    addGymStaffRequest: ...,
+  } satisfies AddGymStaffOperationRequest;
 
   try {
-    const data = await api.assignGymOwner(body);
+    const data = await api.addGymStaff(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -61,11 +65,11 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **gymId** | `number` |  | [Defaults to `undefined`] |
-| **assignOwnerRequest** | [AssignOwnerRequest](AssignOwnerRequest.md) |  | |
+| **addGymStaffRequest** | [AddGymStaffRequest](AddGymStaffRequest.md) |  | |
 
 ### Return type
 
-`void` (Empty response body)
+[**GymStaffDto**](GymStaffDto.md)
 
 ### Authorization
 
@@ -74,14 +78,14 @@ example().catch(console.error);
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: Not defined
+- **Accept**: `application/json`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **201** | Owner assigned |  -  |
-| **403** | Forbidden - admin only |  -  |
+| **200** | Staff member added or updated |  -  |
+| **403** | Forbidden |  -  |
 | **404** | Gym or user not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
@@ -298,6 +302,77 @@ example().catch(console.error);
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## listGymStaff
+
+> Array&lt;GymStaffDto&gt; listGymStaff(gymId)
+
+List the owners and setters of a gym (admin or gym owner)
+
+### Example
+
+```ts
+import {
+  Configuration,
+  GymsApi,
+} from '';
+import type { ListGymStaffRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: bearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new GymsApi(config);
+
+  const body = {
+    // number
+    gymId: 56,
+  } satisfies ListGymStaffRequest;
+
+  try {
+    const data = await api.listGymStaff(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **gymId** | `number` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**Array&lt;GymStaffDto&gt;**](GymStaffDto.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Gym staff |  -  |
+| **403** | Forbidden - admin or gym owner only |  -  |
+| **404** | Gym not found |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## listGyms
 
 > GymPageResponse listGyms(page, size)
@@ -370,11 +445,85 @@ example().catch(console.error);
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## removeGymStaff
+
+> removeGymStaff(gymId, userId)
+
+Remove a user from the gym staff (admin or gym owner; only admins remove owners)
+
+### Example
+
+```ts
+import {
+  Configuration,
+  GymsApi,
+} from '';
+import type { RemoveGymStaffRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: bearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new GymsApi(config);
+
+  const body = {
+    // number
+    gymId: 56,
+    // number
+    userId: 56,
+  } satisfies RemoveGymStaffRequest;
+
+  try {
+    const data = await api.removeGymStaff(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **gymId** | `number` |  | [Defaults to `undefined`] |
+| **userId** | `number` |  | [Defaults to `undefined`] |
+
+### Return type
+
+`void` (Empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **204** | Staff member removed |  -  |
+| **403** | Forbidden |  -  |
+| **404** | The user is not staff of this gym |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## updateGym
 
 > GymDto updateGym(gymId, updateGymRequest)
 
-Update gym (admin or gym owner)
+Update gym, including its logo (admin or gym owner)
 
 ### Example
 

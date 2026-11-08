@@ -4,7 +4,7 @@ import { PlusIcon } from '@/shared/icons'
 import { Button } from '@/shared/ui/Button'
 import { CreateGymModal } from './CreateGymModal'
 
-export function NewGymButton({ userId }: { userId: number }) {
+export function NewGymButton() {
   const { t } = useTranslation('gyms')
   const [open, setOpen] = useState(false)
 
@@ -18,7 +18,7 @@ export function NewGymButton({ userId }: { userId: number }) {
       >
         <PlusIcon className="size-6" />
       </Button>
-      <CreateGymModal open={open} onClose={() => setOpen(false)} userId={userId} />
+      <CreateGymModal open={open} onClose={() => setOpen(false)} />
     </>
   )
 }

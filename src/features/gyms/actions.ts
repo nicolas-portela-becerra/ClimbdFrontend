@@ -33,3 +33,16 @@ export function createGymErrorKey(error: unknown): GymsKey {
       return 'form.errors.unknown'
   }
 }
+
+export function editGymErrorKey(error: unknown): GymsKey {
+  switch (apiErrorKind(error)) {
+    case 'network':
+      return 'form.errors.network'
+    case 'invalid':
+      return 'form.errors.invalid'
+    case 'forbidden':
+      return 'edit.errors.forbidden'
+    default:
+      return 'form.errors.unknown'
+  }
+}

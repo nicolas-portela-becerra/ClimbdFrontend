@@ -236,7 +236,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Create a competition for a gym (admin or gym owner)
+     * Create a competition for a gym (admin or gym staff)
      */
     async createCompetitionRaw(requestParameters: CreateCompetitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CompetitionDto>> {
         const requestOptions = await this.createCompetitionRequestOpts(requestParameters);
@@ -246,7 +246,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Create a competition for a gym (admin or gym owner)
+     * Create a competition for a gym (admin or gym staff)
      */
     async createCompetition(requestParameters: CreateCompetitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CompetitionDto> {
         const response = await this.createCompetitionRaw(requestParameters, initOverrides);
@@ -299,7 +299,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Create a competition boulder before it starts (admin or gym owner)
+     * Create a competition boulder before it starts (admin or gym staff)
      */
     async createCompetitionBoulderRaw(requestParameters: CreateCompetitionBoulderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CompetitionBoulderDto>> {
         const requestOptions = await this.createCompetitionBoulderRequestOpts(requestParameters);
@@ -309,7 +309,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Create a competition boulder before it starts (admin or gym owner)
+     * Create a competition boulder before it starts (admin or gym staff)
      */
     async createCompetitionBoulder(requestParameters: CreateCompetitionBoulderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CompetitionBoulderDto> {
         const response = await this.createCompetitionBoulderRaw(requestParameters, initOverrides);
@@ -360,7 +360,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Delete a competition boulder before it starts (admin or gym owner)
+     * Delete a competition boulder before it starts (admin or gym staff)
      */
     async deleteCompetitionBoulderRaw(requestParameters: DeleteCompetitionBoulderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const requestOptions = await this.deleteCompetitionBoulderRequestOpts(requestParameters);
@@ -370,7 +370,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Delete a competition boulder before it starts (admin or gym owner)
+     * Delete a competition boulder before it starts (admin or gym staff)
      */
     async deleteCompetitionBoulder(requestParameters: DeleteCompetitionBoulderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteCompetitionBoulderRaw(requestParameters, initOverrides);
@@ -413,7 +413,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
 
     /**
      * One row per participant, with their section and gender so the frontend can filter it into the four groups. Sorted by totalPoints, then flashTops, then totalAttempts. A competition shows its complete data once dateTo plus its grace period have passed; before that the list is empty.
-     * Full ranking of a competition (admin or gym owner)
+     * Full ranking of a competition (admin or gym staff)
      */
     async getCompetitionRankingRaw(requestParameters: GetCompetitionRankingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CompetitionRankingEntryDto>>> {
         const requestOptions = await this.getCompetitionRankingRequestOpts(requestParameters);
@@ -424,7 +424,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
 
     /**
      * One row per participant, with their section and gender so the frontend can filter it into the four groups. Sorted by totalPoints, then flashTops, then totalAttempts. A competition shows its complete data once dateTo plus its grace period have passed; before that the list is empty.
-     * Full ranking of a competition (admin or gym owner)
+     * Full ranking of a competition (admin or gym staff)
      */
     async getCompetitionRanking(requestParameters: GetCompetitionRankingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CompetitionRankingEntryDto>> {
         const response = await this.getCompetitionRankingRaw(requestParameters, initOverrides);
@@ -573,7 +573,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Only available from the start of the competition until 24 hours after it ends. Admins and owners of the gym can see them at any time.
+     * Only available from the start of the competition until 24 hours after it ends. Admins and gym staff (owners and setters) can see them at any time.
      * All boulders of a competition with their holds
      */
     async listCompetitionBouldersRaw(requestParameters: ListCompetitionBouldersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CompetitionBoulderDto>>> {
@@ -584,7 +584,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Only available from the start of the competition until 24 hours after it ends. Admins and owners of the gym can see them at any time.
+     * Only available from the start of the competition until 24 hours after it ends. Admins and gym staff (owners and setters) can see them at any time.
      * All boulders of a competition with their holds
      */
     async listCompetitionBoulders(requestParameters: ListCompetitionBouldersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CompetitionBoulderDto>> {
@@ -818,7 +818,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Replace a competition before it starts (admin or gym owner)
+     * Replace a competition before it starts (admin or gym staff)
      */
     async updateCompetitionRaw(requestParameters: UpdateCompetitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CompetitionDto>> {
         const requestOptions = await this.updateCompetitionRequestOpts(requestParameters);
@@ -828,7 +828,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Replace a competition before it starts (admin or gym owner)
+     * Replace a competition before it starts (admin or gym staff)
      */
     async updateCompetition(requestParameters: UpdateCompetitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CompetitionDto> {
         const response = await this.updateCompetitionRaw(requestParameters, initOverrides);
@@ -889,7 +889,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Replace a competition boulder and its holds before it starts (admin or gym owner)
+     * Replace a competition boulder and its holds before it starts (admin or gym staff)
      */
     async updateCompetitionBoulderRaw(requestParameters: UpdateCompetitionBoulderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CompetitionBoulderDto>> {
         const requestOptions = await this.updateCompetitionBoulderRequestOpts(requestParameters);
@@ -899,7 +899,7 @@ export class CompetitionsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Replace a competition boulder and its holds before it starts (admin or gym owner)
+     * Replace a competition boulder and its holds before it starts (admin or gym staff)
      */
     async updateCompetitionBoulder(requestParameters: UpdateCompetitionBoulderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CompetitionBoulderDto> {
         const response = await this.updateCompetitionBoulderRaw(requestParameters, initOverrides);
