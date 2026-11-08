@@ -3,11 +3,12 @@ import { apiErrorKind } from '@/shared/lib/apiError'
 
 type EditorKey = ParseKeys<'editor'>
 
-export type BoulderDetails = { name: string; grade: string; description: string }
+// `points`: only for All or Nothing competition boulders (whole number as typed, '' elsewhere).
+export type BoulderDetails = { name: string; grade: string; description: string; points?: string }
 
 export type DetailsFormState = {
   ok: boolean
-  fieldErrors: Partial<Record<'name' | 'grade', EditorKey>>
+  fieldErrors: Partial<Record<'name' | 'grade' | 'points', EditorKey>>
   formError?: EditorKey
   values: BoulderDetails
 }
@@ -15,10 +16,14 @@ export type DetailsFormState = {
 export function validateDetails(input: {
   name: string
   grade: string
+  points?: string | undefined
 }): DetailsFormState['fieldErrors'] {
   const errors: DetailsFormState['fieldErrors'] = {}
   if (!input.name.trim()) errors.name = 'errors.nameRequired'
   if (!input.grade) errors.grade = 'errors.gradeRequired'
+  if (input.points !== undefined && !/^\d+$/.test(input.points.trim())) {
+    errors.points = 'errors.pointsRequired'
+  }
   return errors
 }
 

@@ -24,6 +24,10 @@ export interface UpdateGymRequest {
      */
     name?: string;
     /**
+     * Optional. IANA time zone of the gym (region id such as Europe/Madrid, not a fixed offset). Competition times are shown in this zone.
+     */
+    timeZone?: string;
+    /**
      * 
      */
     location?: string;
@@ -51,6 +55,7 @@ export function UpdateGymRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'name': json['name'] == null ? undefined : json['name'],
+        'timeZone': json['timeZone'] == null ? undefined : json['timeZone'],
         'location': json['location'] == null ? undefined : json['location'],
         'description': json['description'] == null ? undefined : json['description'],
     };
@@ -68,6 +73,7 @@ export function UpdateGymRequestToJSONTyped(value?: UpdateGymRequest | null, ign
     return {
         
         'name': value['name'],
+        'timeZone': value['timeZone'],
         'location': value['location'],
         'description': value['description'],
     };

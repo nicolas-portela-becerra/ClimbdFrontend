@@ -1,6 +1,7 @@
 import {
   AuthApi,
   BouldersApi,
+  CompetitionsApi,
   Configuration,
   GymsApi,
   UsersApi,
@@ -62,6 +63,7 @@ export const usersApi = new UsersApi(config)
 export const gymsApi = new GymsApi(config)
 export const wallImagesApi = new WallImagesApi(config)
 export const bouldersApi = new BouldersApi(config)
+export const competitionsApi = new CompetitionsApi(config)
 
 // No middleware: used by the session code itself (login, refresh…) to avoid refresh loops.
 export const publicAuthApi = new AuthApi(new Configuration({ basePath: '' }))

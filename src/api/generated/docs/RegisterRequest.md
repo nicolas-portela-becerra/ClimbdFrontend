@@ -9,6 +9,7 @@ Name | Type
 `email` | string
 `name` | string
 `password` | string
+`gender` | [Gender](Gender.md)
 
 ## Example
 
@@ -20,6 +21,7 @@ const example = {
   "email": null,
   "name": null,
   "password": null,
+  "gender": null,
 } satisfies RegisterRequest
 
 console.log(example)

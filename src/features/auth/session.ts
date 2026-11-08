@@ -1,3 +1,4 @@
+import type { Gender } from '@api'
 import { ResponseError, type AuthResponse, type UserDto } from '@api'
 import { publicAuthApi, registerAuthHandlers, type RefreshOutcome } from '@/api/client'
 import { REFRESH_TOKEN_KEY, tokenStore } from './tokenStore'
@@ -28,8 +29,13 @@ export async function login(email: string, password: string): Promise<UserDto> {
 }
 
 // Registering does not start a session: the user goes to the login screen afterwards.
-export async function register(name: string, email: string, password: string): Promise<void> {
-  await publicAuthApi.authRegister({ registerRequest: { name, email, password } })
+export async function register(
+  name: string,
+  email: string,
+  password: string,
+  gender: Gender,
+): Promise<void> {
+  await publicAuthApi.authRegister({ registerRequest: { name, email, password, gender } })
 }
 
 let inflight: Promise<RefreshOutcome> | null = null

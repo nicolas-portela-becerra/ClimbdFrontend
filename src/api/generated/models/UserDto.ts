@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { Gender } from './Gender';
+import {
+    GenderFromJSON,
+    GenderFromJSONTyped,
+    GenderToJSON,
+    GenderToJSONTyped,
+} from './Gender';
+
 /**
  * 
  * @export
@@ -35,6 +43,10 @@ export interface UserDto {
      * 
      */
     role?: UserDtoRoleEnum;
+    /**
+     * Empty for accounts created before gender was required
+     */
+    gender?: Gender;
 }
 
 
@@ -69,6 +81,7 @@ export function UserDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): U
         'email': json['email'] == null ? undefined : json['email'],
         'name': json['name'] == null ? undefined : json['name'],
         'role': json['role'] == null ? undefined : json['role'],
+        'gender': json['gender'] == null ? undefined : GenderFromJSON(json['gender']),
     };
 }
 
@@ -87,6 +100,7 @@ export function UserDtoToJSONTyped(value?: UserDto | null, ignoreDiscriminator: 
         'email': value['email'],
         'name': value['name'],
         'role': value['role'],
+        'gender': GenderToJSON(value['gender']),
     };
 }
 

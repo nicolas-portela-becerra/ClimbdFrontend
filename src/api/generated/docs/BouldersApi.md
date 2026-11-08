@@ -144,7 +144,7 @@ example().catch(console.error);
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: `application/json`
 
 
 ### HTTP response details
@@ -153,6 +153,7 @@ example().catch(console.error);
 | **204** | Boulder deleted |  -  |
 | **403** | Forbidden |  -  |
 | **404** | Boulder not found |  -  |
+| **409** | Competition boulders must be managed through the competition endpoints |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
@@ -447,6 +448,7 @@ example().catch(console.error);
 | **200** | Boulder updated |  -  |
 | **403** | Forbidden - not the creator |  -  |
 | **404** | Boulder not found |  -  |
+| **409** | Competition boulders must be managed through the competition endpoints |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 

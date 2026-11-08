@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import type { BoulderResponseDto } from '@api'
 import { cn } from '@/shared/lib/cn'
-import { GradeTape } from './GradeTape'
+import { GradeTape } from '@/shared/ui/GradeTape'
 
 type BoulderRowProps = {
   boulder: BoulderResponseDto

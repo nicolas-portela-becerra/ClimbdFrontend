@@ -39,6 +39,11 @@ import {
     CreateBoulderRequestToJSON,
 } from '../models/CreateBoulderRequest';
 import {
+    type ErrorResponse,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
+} from '../models/ErrorResponse';
+import {
     type UpdateBoulderRequest,
     UpdateBoulderRequestFromJSON,
     UpdateBoulderRequestToJSON,

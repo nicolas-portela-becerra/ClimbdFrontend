@@ -7,6 +7,7 @@
 Name | Type
 ------------ | -------------
 `name` | string
+`timeZone` | string
 `location` | string
 `description` | string
 `createdBy` | number
@@ -20,6 +21,7 @@ import type { CreateGymRequest } from ''
 // TODO: Update the object below with actual values
 const example = {
   "name": null,
+  "timeZone": Europe/Madrid,
   "location": null,
   "description": null,
   "createdBy": null,

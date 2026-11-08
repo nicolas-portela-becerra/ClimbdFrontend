@@ -24,6 +24,10 @@ export interface CreateGymRequest {
      */
     name: string;
     /**
+     * IANA time zone of the gym (region id such as Europe/Madrid, not a fixed offset). Competition times are shown in this zone.
+     */
+    timeZone: string;
+    /**
      * 
      */
     location?: string;
@@ -46,6 +50,7 @@ export interface CreateGymRequest {
  */
 export function instanceOfCreateGymRequest(value: object): value is CreateGymRequest {
     if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('timeZone' in value) || value['timeZone'] === undefined) return false;
     return true;
 }
 
@@ -60,6 +65,7 @@ export function CreateGymRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'name': json['name'],
+        'timeZone': json['timeZone'],
         'location': json['location'] == null ? undefined : json['location'],
         'description': json['description'] == null ? undefined : json['description'],
         'createdBy': json['createdBy'] == null ? undefined : json['createdBy'],
@@ -79,6 +85,7 @@ export function CreateGymRequestToJSONTyped(value?: CreateGymRequest | null, ign
     return {
         
         'name': value['name'],
+        'timeZone': value['timeZone'],
         'location': value['location'],
         'description': value['description'],
         'createdBy': value['createdBy'],

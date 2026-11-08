@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { MoreIcon } from '@/shared/icons'
 import { cn } from '@/shared/lib/cn'
 import { IconButton } from './IconButton'
@@ -12,11 +12,19 @@ type DropdownMenuProps = {
   className?: string
   // Extra classes for the three-dots button (e.g. a background when it sits over a photo).
   buttonClassName?: string
+  // Icon of the button (three dots by default).
+  icon?: ReactNode
 }
 
 // Three-dots button that opens a small list of actions. Closes on a click outside, on Escape, or after
 // choosing an item.
-export function DropdownMenu({ label, items, className, buttonClassName }: DropdownMenuProps) {
+export function DropdownMenu({
+  label,
+  items,
+  className,
+  buttonClassName,
+  icon,
+}: DropdownMenuProps) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
 
@@ -45,12 +53,12 @@ export function DropdownMenu({ label, items, className, buttonClassName }: Dropd
         className={buttonClassName}
         onClick={() => setOpen((current) => !current)}
       >
-        <MoreIcon className="size-6" />
+        {icon ?? <MoreIcon className="size-6" />}
       </IconButton>
       {open ? (
         <div
           role="menu"
-          className="absolute top-full right-0 z-20 min-w-40 animate-stage-in border-2 border-ink bg-ground motion-reduce:animate-none"
+          className="absolute top-full right-0 z-20 w-max min-w-40 animate-stage-in border-2 border-ink bg-ground motion-reduce:animate-none"
         >
           {items.map((item, index) => (
             <button
@@ -63,7 +71,8 @@ export function DropdownMenu({ label, items, className, buttonClassName }: Dropd
                 item.onSelect()
               }}
               className={cn(
-                'flex min-h-11 w-full items-center px-4 text-left font-cond text-lg font-bold tracking-wide uppercase active:bg-surface',
+                'flex min-h-11 w-full items-center px-4 text-left font-cond text-lg font-bold tracking-wide whitespace-nowrap uppercase active:bg-surface',
+                index > 0 && 'border-t border-line',
                 item.destructive && 'text-error',
               )}
             >
