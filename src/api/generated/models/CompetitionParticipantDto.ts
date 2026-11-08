@@ -55,7 +55,7 @@ export interface CompetitionParticipantDto {
      */
     gender?: Gender;
     /**
-     * 
+     * RFC 3339 date-time. Requests must include an offset or Z (e.g. 2026-11-20T19:00:00+01:00); responses are always UTC (Z).
      */
     registeredAt?: Date;
 }

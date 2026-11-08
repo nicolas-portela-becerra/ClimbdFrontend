@@ -28,6 +28,7 @@
     "title": "Nuevo rocódromo",
     "close": "Cerrar",
     "name": "Nombre del rocódromo",
+    "timeZone": "Zona horaria",
     "location": "Ubicación",
     "description": "Descripción",
     "logo": "Logo",

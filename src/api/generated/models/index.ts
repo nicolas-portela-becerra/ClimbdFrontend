@@ -15,6 +15,7 @@ export * from './CompetitionBoulderDto';
 export * from './CompetitionBoulderRequest';
 export * from './CompetitionDto';
 export * from './CompetitionParticipantDto';
+export * from './CompetitionRankingEntryDto';
 export * from './CompetitionRegistrationRequest';
 export * from './CompetitionRequest';
 export * from './CompetitionSection';

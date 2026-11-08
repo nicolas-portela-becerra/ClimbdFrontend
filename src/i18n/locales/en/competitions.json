@@ -29,6 +29,7 @@
     },
     "dateFrom": "Starts",
     "dateTo": "Ends",
+    "timeZoneHint": "Times use the gym's time zone ({{timeZone}})",
     "graceMinutes": "Extra minutes to send results",
     "basePoints": "Points for a top on the first attempt",
     "attemptPenalty": "Points subtracted per extra attempt",
@@ -103,6 +104,8 @@
   "viewer": {
     "dialogLabel": "Competition boulder",
     "back": "Back to the list",
+    "previous": "Previous boulder",
+    "next": "Next boulder",
     "photoLabel": "Holds of {{name}}",
     "less": "Remove an attempt",
     "more": "Add an attempt",
@@ -129,5 +132,30 @@
     "label": "Create",
     "newWall": "New wall",
     "newCompetition": "New competition"
+  },
+  "checkResults": "Check results",
+  "ranking": {
+    "title": "Results",
+    "subtitle": "Ranking",
+    "back": "Back to the competition",
+    "pos": "Pos",
+    "name": "Name",
+    "pts": "Pts",
+    "attempts": "Attempts",
+    "firstTops": "Flashes",
+    "filtersGender": "Gender",
+    "genderAll": "All",
+    "filtersSection": "Category",
+    "sectionAll": "All",
+    "gender": {
+      "MAN": "Man",
+      "WOMAN": "Woman",
+      "OTHER": "Other"
+    },
+    "notReady": "Results are not available yet",
+    "empty": "No results for this group",
+    "staffTitle": "Results",
+    "staffMessage": "The staff will share the results",
+    "close": "Close"
   }
 }

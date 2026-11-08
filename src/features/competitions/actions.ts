@@ -1,6 +1,7 @@
 import type { ParseKeys } from 'i18next'
 import { CompetitionType, type CompetitionRequest } from '@api'
 import { apiErrorKind } from '@/shared/lib/apiError'
+import { deviceTimeZone, wallClockToDate } from '@/shared/lib/timezone'
 
 type Key = ParseKeys<'competitions'>
 
@@ -28,7 +29,10 @@ function count(value: string): number | null {
   return Number(value.trim())
 }
 
-export function validateCompetition(values: CompetitionFormValues): {
+export function validateCompetition(
+  values: CompetitionFormValues,
+  timeZone: string = deviceTimeZone(),
+): {
   errors: Partial<Record<CompetitionField, Key>>
   request: CompetitionRequest | null
 } {
@@ -36,9 +40,9 @@ export function validateCompetition(values: CompetitionFormValues): {
   const name = values.name.trim()
   if (!name) errors.name = 'errors.nameRequired'
 
-  // datetime-local values are in the phone's time zone; Date turns them into an instant.
-  const from = values.dateFrom ? new Date(values.dateFrom) : null
-  const to = values.dateTo ? new Date(values.dateTo) : null
+  // datetime-local values are wall-clock in the gym's zone; turn them into an instant.
+  const from = values.dateFrom ? wallClockToDate(values.dateFrom, timeZone) : null
+  const to = values.dateTo ? wallClockToDate(values.dateTo, timeZone) : null
   if (!from || Number.isNaN(from.getTime())) errors.dateFrom = 'errors.dateRequired'
   if (!to || Number.isNaN(to.getTime())) errors.dateTo = 'errors.dateRequired'
   else if (from && to <= from) errors.dateTo = 'errors.endBeforeStart'

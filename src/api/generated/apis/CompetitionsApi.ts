@@ -39,6 +39,11 @@ import {
     CompetitionParticipantDtoToJSON,
 } from '../models/CompetitionParticipantDto';
 import {
+    type CompetitionRankingEntryDto,
+    CompetitionRankingEntryDtoFromJSON,
+    CompetitionRankingEntryDtoToJSON,
+} from '../models/CompetitionRankingEntryDto';
+import {
     type CompetitionRegistrationRequest,
     CompetitionRegistrationRequestFromJSON,
     CompetitionRegistrationRequestToJSON,
@@ -95,6 +100,13 @@ export interface DeleteCompetitionBoulderRequest {
      * 
      */
     boulderId: number;
+}
+
+export interface GetCompetitionRankingRequest {
+    /**
+     * 
+     */
+    competitionId: number;
 }
 
 export interface GetMyCompetitionStatusRequest {
@@ -362,6 +374,61 @@ export class CompetitionsApi extends runtime.BaseAPI {
      */
     async deleteCompetitionBoulder(requestParameters: DeleteCompetitionBoulderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteCompetitionBoulderRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for getCompetitionRanking without sending the request
+     */
+    async getCompetitionRankingRequestOpts(requestParameters: GetCompetitionRankingRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['competitionId'] == null) {
+            throw new runtime.RequiredError(
+                'competitionId',
+                'Required parameter "competitionId" was null or undefined when calling getCompetitionRanking().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/competitions/{competitionId}/ranking`;
+        urlPath = urlPath.replace('{competitionId}', encodeURIComponent(String(requestParameters['competitionId'])));
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * One row per participant, with their section and gender so the frontend can filter it into the four groups. Sorted by totalPoints, then flashTops, then totalAttempts. A competition shows its complete data once dateTo plus its grace period have passed; before that the list is empty.
+     * Full ranking of a competition (admin or gym owner)
+     */
+    async getCompetitionRankingRaw(requestParameters: GetCompetitionRankingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CompetitionRankingEntryDto>>> {
+        const requestOptions = await this.getCompetitionRankingRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CompetitionRankingEntryDtoFromJSON));
+    }
+
+    /**
+     * One row per participant, with their section and gender so the frontend can filter it into the four groups. Sorted by totalPoints, then flashTops, then totalAttempts. A competition shows its complete data once dateTo plus its grace period have passed; before that the list is empty.
+     * Full ranking of a competition (admin or gym owner)
+     */
+    async getCompetitionRanking(requestParameters: GetCompetitionRankingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CompetitionRankingEntryDto>> {
+        const response = await this.getCompetitionRankingRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

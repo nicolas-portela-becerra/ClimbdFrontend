@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { CompetitionBoulderDto } from '@api'
 import { useWallImageData } from '@/api/queries/useWallImageBlob'
-import { BackIcon, MinusIcon, PlusIcon } from '@/shared/icons'
+import { BackIcon, ChevronIcon, MinusIcon, PlusIcon } from '@/shared/icons'
 import { cn } from '@/shared/lib/cn'
 import { BoulderHolds } from '@/shared/ui/BoulderHolds'
 import { IconButton } from '@/shared/ui/IconButton'
@@ -19,6 +19,9 @@ type Props = {
   // Registered and inside the logging window: the counter and TOP work.
   canLog: boolean
   onClose: () => void
+  // Move to the neighbouring boulders in the list; undefined at each end.
+  onPrevious?: () => void
+  onNext?: () => void
 }
 
 // Full-screen boulder over its wall photo, with the attempt counter (bottom left) and TOP (bottom right).
@@ -28,6 +31,8 @@ export function CompetitionBoulderViewer({
   competitionId,
   canLog,
   onClose,
+  onPrevious,
+  onNext,
 }: Props) {
   const { t } = useTranslation('competitions')
   const [shown, setShown] = useState(boulder)
@@ -66,6 +71,23 @@ export function CompetitionBoulderViewer({
         className="absolute top-3.5 left-3.5 bg-ground"
       >
         <BackIcon className="size-6" />
+      </IconButton>
+
+      <IconButton
+        label={t('viewer.previous')}
+        disabled={!onPrevious}
+        onClick={onPrevious}
+        className="absolute top-1/2 left-3.5 -translate-y-1/2 bg-ground disabled:opacity-40"
+      >
+        <BackIcon className="size-7" />
+      </IconButton>
+      <IconButton
+        label={t('viewer.next')}
+        disabled={!onNext}
+        onClick={onNext}
+        className="absolute top-1/2 right-3.5 -translate-y-1/2 bg-ground disabled:opacity-40"
+      >
+        <ChevronIcon className="size-7" />
       </IconButton>
 
       {canLog ? (

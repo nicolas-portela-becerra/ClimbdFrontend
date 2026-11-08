@@ -2,6 +2,7 @@ import { useActionState, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CompetitionType, type CompetitionRequest } from '@api'
 import { useCreateCompetition } from '@/api/queries/useCreateCompetition'
+import { useGym } from '@/api/queries/useGym'
 import { Button } from '@/shared/ui/Button'
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
 import { ModalHeader, ModalPanel } from '@/shared/ui/ModalPanel'
@@ -44,6 +45,7 @@ const FIELDS = Object.keys(emptyCompetitionValues) as (keyof CompetitionFormValu
 function CompetitionForm({ gymId, onCreated }: { gymId: number; onCreated: () => void }) {
   const { t } = useTranslation('competitions')
   const create = useCreateCompetition(gymId)
+  const gym = useGym(gymId)
   const [type, setType] = useState<string>(emptyCompetitionValues.type)
   const [formError, setFormError] = useState<string | null>(null)
 
@@ -54,7 +56,7 @@ function CompetitionForm({ gymId, onCreated }: { gymId: number; onCreated: () =>
         return [field, typeof value === 'string' ? value : '']
       }),
     ) as CompetitionFormValues
-    const { errors, request } = validateCompetition(values)
+    const { errors, request } = validateCompetition(values, gym.data?.timeZone)
     setFormError(null)
     return { fieldErrors: errors, values, toConfirm: request }
   }
@@ -127,6 +129,11 @@ function CompetitionForm({ gymId, onCreated }: { gymId: number; onCreated: () =>
         defaultValue={state.values.dateTo}
         error={error('dateTo')}
       />
+      {gym.data?.timeZone ? (
+        <p className="text-sm text-muted">
+          {t('create.timeZoneHint', { timeZone: gym.data.timeZone })}
+        </p>
+      ) : null}
       <TextField
         name="graceMinutes"
         inputMode="numeric"

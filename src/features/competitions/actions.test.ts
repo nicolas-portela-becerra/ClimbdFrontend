@@ -22,6 +22,13 @@ describe('validateCompetition', () => {
     expect(request?.dateFrom).toEqual(new Date('2026-12-01T10:00'))
   })
 
+  it('reads the entered times as wall-clock in the gym time zone', () => {
+    // Europe/Madrid is UTC+1 in December (no DST), so 10:00 there is 09:00 UTC.
+    const { request } = validateCompetition(valid, 'Europe/Madrid')
+    expect(request?.dateFrom.toISOString()).toBe('2026-12-01T09:00:00.000Z')
+    expect(request?.dateTo.toISOString()).toBe('2026-12-01T13:00:00.000Z')
+  })
+
   it('needs the attempt settings for X Attempts, with the minimum not above the base', () => {
     const type = CompetitionType.XAttempts
     expect(validateCompetition({ ...valid, type }).errors).toEqual({

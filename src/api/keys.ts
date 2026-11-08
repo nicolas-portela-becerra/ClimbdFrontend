@@ -18,6 +18,7 @@ export const qk = {
     boulders: (competitionId: number) =>
       [...qk.competitions.all, 'boulders', competitionId] as const,
     me: (competitionId: number) => [...qk.competitions.all, 'me', competitionId] as const,
+    ranking: (competitionId: number) => [...qk.competitions.all, 'ranking', competitionId] as const,
   },
   walls: {
     all: ['walls'] as const,

@@ -25,9 +25,3 @@ export function phaseOf(
   if (now < resultsOpenUntil(competition, entry) && entry?.send !== 'closed') return 'grace'
   return 'ended'
 }
-
-export function formatDateTime(iso: string, language: string): string {
-  return new Intl.DateTimeFormat(language, { dateStyle: 'medium', timeStyle: 'short' }).format(
-    new Date(iso),
-  )
-}

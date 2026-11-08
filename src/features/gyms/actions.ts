@@ -1,5 +1,6 @@
 import type { ParseKeys } from 'i18next'
 import { apiErrorKind } from '@/shared/lib/apiError'
+import { deviceTimeZone } from '@/shared/lib/timezone'
 
 type GymsKey = ParseKeys<'gyms'>
 
@@ -7,13 +8,13 @@ export type CreateGymFormState = {
   ok: boolean
   fieldErrors: Partial<Record<'name' | 'logo', GymsKey>>
   formError?: GymsKey
-  values: { name: string; location: string; description: string }
+  values: { name: string; location: string; description: string; timeZone: string }
 }
 
 export const initialCreateGymState: CreateGymFormState = {
   ok: false,
   fieldErrors: {},
-  values: { name: '', location: '', description: '' },
+  values: { name: '', location: '', description: '', timeZone: deviceTimeZone() },
 }
 
 export function validateGymName(name: string): GymsKey | null {

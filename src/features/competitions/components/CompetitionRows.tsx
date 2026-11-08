@@ -2,45 +2,47 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { useActiveCompetitions } from '@/api/queries/useActiveCompetitions'
+import { useGym } from '@/api/queries/useGym'
 import { ChevronIcon } from '@/shared/icons'
 import { cn } from '@/shared/lib/cn'
-import { listEntries, updateEntry, useEntriesVersion } from '../entryStore'
-import { formatDateTime, phaseOf } from '../phase'
-import { emptyEntry, type SavedCompetition } from '../results'
+import { formatDateTime } from '@/shared/lib/timezone'
+import { listEntries, updateEntry } from '../entryStore'
+import { phaseOf } from '../phase'
+import { emptyEntry } from '../results'
 import { toSaved } from '../toSaved'
 
-type Row = { competition: SavedCompetition; registered: boolean }
-
-// One row per competition of the gym, above the walls: the server's upcoming and running ones, plus the
-// ones this phone still has data for (after they end the server stops listing them).
+// One row per active competition of the gym, above the walls. It only shows what the active endpoint
+// returns; the phone no longer keeps a competition row after the server stops listing it.
 export function CompetitionRows({ gymId, userId }: { gymId: number; userId: number }) {
   const { t, i18n } = useTranslation('competitions')
   const query = useActiveCompetitions(gymId)
-  useEntriesVersion()
+  const gym = useGym(gymId)
 
   const active = (query.data ?? []).flatMap((announcement) => {
     const competition = toSaved(announcement, gymId)
     return competition ? [{ competition, registered: announcement.registered ?? false }] : []
   })
 
-  // A registered user keeps the competition on the phone, so its row survives the end.
+  // While the competition is active, the phone stores the user's data (logs, boulders, send state).
+  // When the server stops returning a competition, the saved entry for this gym is removed.
   useEffect(() => {
+    const activeIds = new Set(active.map((row) => row.competition.id))
+    for (const entry of listEntries(userId)) {
+      if (entry.competition.gymId === gymId && !activeIds.has(entry.competition.id)) {
+        updateEntry(userId, entry.competition.id, () => undefined)
+      }
+    }
+    // Also refresh the active rows' stored copy (still active).
     for (const row of active) {
       if (!row.registered) continue
       updateEntry(userId, row.competition.id, (current) =>
         current ? { ...current, competition: row.competition } : emptyEntry(row.competition),
       )
     }
-    // `active` is rebuilt every render; the data behind it is query.data.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query.data, userId])
+  }, [query.data, userId, gymId])
 
-  const saved: Row[] = listEntries(userId)
-    .filter((entry) => entry.competition.gymId === gymId)
-    .filter((entry) => !active.some((row) => row.competition.id === entry.competition.id))
-    .map((entry) => ({ competition: entry.competition, registered: true }))
-
-  const rows = [...active, ...saved].sort(
+  const rows = active.sort(
     (a, b) => Date.parse(a.competition.dateFrom) - Date.parse(b.competition.dateFrom),
   )
   if (rows.length === 0) return null
@@ -73,8 +75,8 @@ export function CompetitionRows({ gymId, userId }: { gymId: number; userId: numb
                   {competition.name}
                 </span>
                 <span className="mt-1 block text-sm text-muted">
-                  {formatDateTime(competition.dateFrom, i18n.language)} –{' '}
-                  {formatDateTime(competition.dateTo, i18n.language)}
+                  {formatDateTime(competition.dateFrom, i18n.language, gym.data?.timeZone)} –{' '}
+                  {formatDateTime(competition.dateTo, i18n.language, gym.data?.timeZone)}
                 </span>
                 {phase === 'upcoming' && !registered ? (
                   <span className="mt-1 block text-sm font-semibold">

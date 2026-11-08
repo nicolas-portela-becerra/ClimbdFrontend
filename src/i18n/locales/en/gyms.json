@@ -28,6 +28,7 @@
     "title": "New gym",
     "close": "Close",
     "name": "Gym name",
+    "timeZone": "Time zone",
     "location": "Location",
     "description": "Description",
     "logo": "Logo",

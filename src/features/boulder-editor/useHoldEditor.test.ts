@@ -31,19 +31,27 @@ describe('validateHolds', () => {
     expect(validateHolds([hold(1, FINISH_ROLE)])).toBe('needed')
   })
 
-  it('accepts 1-2 starts and exactly 1 finish', () => {
+  it('accepts 1-2 starts and 1-2 finishes', () => {
     expect(validateHolds([hold(1, START_ROLE), hold(2, FINISH_ROLE)])).toBeNull()
     expect(
       validateHolds([hold(1, START_ROLE), hold(2, START_ROLE), hold(3, FINISH_ROLE)]),
     ).toBeNull()
+    expect(
+      validateHolds([hold(1, START_ROLE), hold(2, FINISH_ROLE), hold(3, FINISH_ROLE)]),
+    ).toBeNull()
   })
 
-  it('rejects more than 2 starts or more than 1 finish', () => {
+  it('rejects more than 2 starts or more than 2 finishes', () => {
     const starts = [hold(1, START_ROLE), hold(2, START_ROLE), hold(3, START_ROLE)]
     expect(validateHolds([...starts, hold(4, FINISH_ROLE)])).toBe('tooManyStarts')
-    expect(validateHolds([hold(1, START_ROLE), hold(2, FINISH_ROLE), hold(3, FINISH_ROLE)])).toBe(
-      'tooManyFinishes',
-    )
+    expect(
+      validateHolds([
+        hold(1, START_ROLE),
+        hold(2, FINISH_ROLE),
+        hold(3, FINISH_ROLE),
+        hold(4, FINISH_ROLE),
+      ]),
+    ).toBe('tooManyFinishes')
   })
 })
 
@@ -51,7 +59,8 @@ describe('isRoleFull', () => {
   it('is full at 2 starts and at 1 finish, never for other roles', () => {
     expect(isRoleFull([hold(1, START_ROLE)], START_ROLE)).toBe(false)
     expect(isRoleFull([hold(1, START_ROLE), hold(2, START_ROLE)], START_ROLE)).toBe(true)
-    expect(isRoleFull([hold(1, FINISH_ROLE)], FINISH_ROLE)).toBe(true)
+    expect(isRoleFull([hold(1, FINISH_ROLE), hold(2, FINISH_ROLE)], FINISH_ROLE)).toBe(true)
+    expect(isRoleFull([hold(1, FINISH_ROLE)], FINISH_ROLE)).toBe(false)
     expect(
       isRoleFull([hold(1, HAND_ROLE), hold(2, HAND_ROLE), hold(3, HAND_ROLE)], HAND_ROLE),
     ).toBe(false)

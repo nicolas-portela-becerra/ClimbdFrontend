@@ -4,17 +4,20 @@ import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-do
 import { CompetitionType, type CompetitionBoulderDto } from '@api'
 import { useActiveCompetitions } from '@/api/queries/useActiveCompetitions'
 import { useCompetitionBoulders } from '@/api/queries/useCompetitionBoulders'
+import { useGym } from '@/api/queries/useGym'
 import { useMyCompetitionStatus } from '@/api/queries/useMyCompetitionStatus'
 import { BackIcon, PlusIcon } from '@/shared/icons'
 import { apiErrorKind } from '@/shared/lib/apiError'
+import { formatDateTime } from '@/shared/lib/timezone'
 import { Button } from '@/shared/ui/Button'
 import { ErrorState } from '@/shared/ui/ErrorState'
 import { Spinner } from '@/shared/ui/Spinner'
 import type { RenderCompetitionBoulderEditor } from '../editorSlot'
 import { updateEntry, useEntry } from '../entryStore'
-import { formatDateTime, phaseOf } from '../phase'
+import { phaseOf } from '../phase'
 import { applyServerStatus, emptyEntry } from '../results'
 import { toSaved } from '../toSaved'
+import { CheckResultsButton } from './CheckResultsButton'
 import { CompetitionBoulderList } from './CompetitionBoulderList'
 import { CompetitionBoulderMenu } from './CompetitionBoulderMenu'
 import { CompetitionBoulderViewer } from './CompetitionBoulderViewer'
@@ -42,12 +45,13 @@ export function CompetitionScreen({
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const active = useActiveCompetitions(gymId)
+  const gym = useGym(gymId)
   const entry = useEntry(userId, competitionId)
 
   const announcement = active.data?.find((item) => item.id === competitionId)
-  const competition = (announcement && toSaved(announcement, gymId)) ?? entry?.competition
-  // The phone only keeps data for competitions the user registered in.
-  const registered = announcement ? (announcement.registered ?? false) : entry !== undefined
+  const competition = announcement && toSaved(announcement, gymId)
+  // The phone only keeps data for competitions the user registered in, and only while they are active.
+  const registered = announcement ? (announcement.registered ?? false) : false
 
   const me = useMyCompetitionStatus(competitionId, registered)
   const boulders = useCompetitionBoulders(competitionId)
@@ -57,7 +61,11 @@ export function CompetitionScreen({
   const [editor, setEditor] = useState<EditorTarget | null>(null)
 
   // Keeps the competition, what the server stored and the boulders on the phone.
+  // When the active endpoint stops returning this competition, the saved entry is removed.
   useEffect(() => {
+    if (active.data && !announcement) {
+      updateEntry(userId, competitionId, () => undefined)
+    }
     if (!registered || !competition) return
     updateEntry(userId, competitionId, (current) => {
       let next = current ? { ...current, competition } : emptyEntry(competition)
@@ -98,6 +106,20 @@ export function CompetitionScreen({
     if (location.key !== 'default') void navigate(-1)
     else void navigate(`/gyms/${gymId}/competitions/${competitionId}`, { replace: true })
   }
+
+  // Prev/next navigation inside the viewer, following the boulders list order.
+  const selectedIndex = list ? list.findIndex((boulder) => boulder.id === requested) : -1
+  const goToBoulder = (boulder: CompetitionBoulderDto) => {
+    if (boulder.id == null) return
+    void navigate(`/gyms/${gymId}/competitions/${competitionId}?boulder=${boulder.id}`, {
+      replace: true,
+    })
+  }
+  const previous = selectedIndex > 0 ? list?.[selectedIndex - 1] : undefined
+  const next =
+    selectedIndex >= 0 && selectedIndex < (list?.length ?? 0) - 1
+      ? list?.[selectedIndex + 1]
+      : undefined
 
   const openEditor = (target: EditorTarget) => {
     setEditor(target)
@@ -174,8 +196,8 @@ export function CompetitionScreen({
         {t(`phase.${phase}`)} · {t(`type.${competition.type as CompetitionType}`)}
       </p>
       <p className="px-5 pb-3 text-sm text-muted">
-        {formatDateTime(competition.dateFrom, i18n.language)} –{' '}
-        {formatDateTime(competition.dateTo, i18n.language)}
+        {formatDateTime(competition.dateFrom, i18n.language, gym.data?.timeZone)} –{' '}
+        {formatDateTime(competition.dateTo, i18n.language, gym.data?.timeZone)}
       </p>
 
       {registered && started ? <SendStatus userId={userId} competitionId={competitionId} /> : null}
@@ -202,6 +224,12 @@ export function CompetitionScreen({
         </div>
       ) : null}
 
+      {phase === 'ended' ? (
+        <div className="px-5 pb-4">
+          <CheckResultsButton gymId={gymId} competitionId={competitionId} />
+        </div>
+      ) : null}
+
       {content}
 
       <CompetitionBoulderViewer
@@ -210,6 +238,8 @@ export function CompetitionScreen({
         competitionId={competitionId}
         canLog={canLog}
         onClose={closeBoulder}
+        onPrevious={previous ? () => goToBoulder(previous) : undefined}
+        onNext={next ? () => goToBoulder(next) : undefined}
       />
       <WallPickerModal
         open={picking}

@@ -7,7 +7,8 @@ type ConfirmDialogProps = {
   open: boolean
   title: string
   message: string
-  cancelLabel: string
+  // Omit for a single-button dialog (only the confirm action).
+  cancelLabel?: string
   confirmLabel: string
   onCancel: () => void
   onConfirm: () => void
@@ -55,13 +56,16 @@ export function ConfirmDialog({
       <div className="relative w-full max-w-sm animate-stage-in border-2 border-ink bg-ground p-5 motion-reduce:animate-none">
         <h2 className="font-display text-3xl leading-none font-extrabold uppercase">{title}</h2>
         <p className="mt-3 text-muted">{message}</p>
-        <div className="mt-5 grid grid-cols-2 gap-3">
-          <Button onClick={onCancel} disabled={loading} autoFocus>
-            {cancelLabel}
-          </Button>
+        <div className={cn('mt-5 grid gap-3', cancelLabel ? 'grid-cols-2' : 'grid-cols-1')}>
+          {cancelLabel ? (
+            <Button onClick={onCancel} disabled={loading} autoFocus>
+              {cancelLabel}
+            </Button>
+          ) : null}
           <Button
             onClick={onConfirm}
             loading={loading}
+            {...(cancelLabel ? {} : { autoFocus: true })}
             {...(destructive
               ? { className: 'border-error bg-error text-ground' }
               : { variant: 'primary' as const })}

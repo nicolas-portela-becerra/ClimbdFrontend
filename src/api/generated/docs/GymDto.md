@@ -12,6 +12,7 @@ Name | Type
 `location` | string
 `description` | string
 `createdByAdminId` | number
+`timeZone` | string
 `createdDate` | Date
 `updatedDate` | Date
 
@@ -28,6 +29,7 @@ const example = {
   "location": null,
   "description": null,
   "createdByAdminId": null,
+  "timeZone": Europe/Madrid,
   "createdDate": null,
   "updatedDate": null,
 } satisfies GymDto

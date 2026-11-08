@@ -29,6 +29,7 @@
     },
     "dateFrom": "Empieza",
     "dateTo": "Termina",
+    "timeZoneHint": "Los horarios usan la zona horaria del rocódromo ({{timeZone}})",
     "graceMinutes": "Minutos extra para enviar resultados",
     "basePoints": "Puntos por top al primer intento",
     "attemptPenalty": "Puntos que se restan por intento extra",
@@ -103,6 +104,8 @@
   "viewer": {
     "dialogLabel": "Bloque de la competición",
     "back": "Volver a la lista",
+    "previous": "Bloque anterior",
+    "next": "Bloque siguiente",
     "photoLabel": "Presas del bloque {{name}}",
     "less": "Quitar un intento",
     "more": "Añadir un intento",
@@ -129,5 +132,30 @@
     "label": "Crear",
     "newWall": "Nuevo muro",
     "newCompetition": "Nueva competición"
+  },
+  "checkResults": "Ver resultados",
+  "ranking": {
+    "title": "Resultados",
+    "subtitle": "Clasificación",
+    "back": "Volver a la competición",
+    "pos": "Pos",
+    "name": "Nombre",
+    "pts": "Pts",
+    "attempts": "Intentos",
+    "firstTops": "Flashes",
+    "filtersGender": "Género",
+    "genderAll": "Todos",
+    "filtersSection": "Categoría",
+    "sectionAll": "Todas",
+    "gender": {
+      "MAN": "Hombre",
+      "WOMAN": "Mujer",
+      "OTHER": "Otro"
+    },
+    "notReady": "Los resultados no están disponibles todavía",
+    "empty": "Nadie en este grupo: prueba otros filtros",
+    "staffTitle": "Resultados",
+    "staffMessage": "El staff compartirá los resultados",
+    "close": "Cerrar"
   }
 }

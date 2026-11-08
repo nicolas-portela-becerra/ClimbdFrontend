@@ -22,6 +22,7 @@ docs/CompetitionBoulderDto.md
 docs/CompetitionBoulderRequest.md
 docs/CompetitionDto.md
 docs/CompetitionParticipantDto.md
+docs/CompetitionRankingEntryDto.md
 docs/CompetitionRegistrationRequest.md
 docs/CompetitionRequest.md
 docs/CompetitionSection.md
@@ -69,6 +70,7 @@ models/CompetitionBoulderDto.ts
 models/CompetitionBoulderRequest.ts
 models/CompetitionDto.ts
 models/CompetitionParticipantDto.ts
+models/CompetitionRankingEntryDto.ts
 models/CompetitionRegistrationRequest.ts
 models/CompetitionRequest.ts
 models/CompetitionSection.ts
