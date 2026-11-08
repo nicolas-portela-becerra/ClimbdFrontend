@@ -17,17 +17,16 @@ type UploadWallModalProps = {
   open: boolean
   onClose: () => void
   gymId: number
-  userId: number
 }
 
-export function UploadWallModal({ open, onClose, ...ids }: UploadWallModalProps) {
+export function UploadWallModal({ open, onClose, gymId }: UploadWallModalProps) {
   const { t } = useTranslation('walls')
 
   return (
     <ModalPanel open={open} label={t('upload.title')}>
       <ModalHeader title={t('upload.title')} closeLabel={t('upload.close')} onClose={onClose} />
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <UploadForm onUploaded={onClose} {...ids} />
+        <UploadForm gymId={gymId} onUploaded={onClose} />
       </div>
     </ModalPanel>
   )
@@ -35,7 +34,6 @@ export function UploadWallModal({ open, onClose, ...ids }: UploadWallModalProps)
 
 function UploadForm({
   gymId,
-  userId,
   onUploaded,
 }: Omit<UploadWallModalProps, 'open' | 'onClose'> & { onUploaded: () => void }) {
   const { t } = useTranslation('walls')
@@ -57,7 +55,7 @@ function UploadForm({
     if (Object.keys(fieldErrors).length > 0 || !file) return { ok: false, fieldErrors, values }
 
     try {
-      await upload.mutateAsync({ image: file, wallName: name, uploadedBy: userId })
+      await upload.mutateAsync({ image: file, wallName: name })
       onUploaded()
       return { ok: true, fieldErrors: {}, values }
     } catch (error) {

@@ -35,6 +35,10 @@ export interface UpdateGymRequest {
      * 
      */
     description?: string;
+    /**
+     * New logo. Omit to keep the current one
+     */
+    logo?: string;
 }
 
 /**
@@ -58,6 +62,7 @@ export function UpdateGymRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
         'timeZone': json['timeZone'] == null ? undefined : json['timeZone'],
         'location': json['location'] == null ? undefined : json['location'],
         'description': json['description'] == null ? undefined : json['description'],
+        'logo': json['logo'] == null ? undefined : json['logo'],
     };
 }
 
@@ -76,6 +81,7 @@ export function UpdateGymRequestToJSONTyped(value?: UpdateGymRequest | null, ign
         'timeZone': value['timeZone'],
         'location': value['location'],
         'description': value['description'],
+        'logo': value['logo'],
     };
 }
 

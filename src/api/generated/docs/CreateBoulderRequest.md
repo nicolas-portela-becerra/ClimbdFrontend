@@ -10,7 +10,6 @@ Name | Type
 `grade` | string
 `description` | string
 `wallImageId` | number
-`createdBy` | number
 `holds` | [Array&lt;CreateHoldRequest&gt;](CreateHoldRequest.md)
 
 ## Example
@@ -24,7 +23,6 @@ const example = {
   "grade": null,
   "description": null,
   "wallImageId": null,
-  "createdBy": null,
   "holds": null,
 } satisfies CreateBoulderRequest
 

@@ -10,13 +10,11 @@ import { EditBoulderModal } from './EditBoulderModal'
 
 type BoulderMenuProps = {
   boulder: BoulderResponseDto
-  gymId: number
   wallImageId: number
-  userId: number
 }
 
 // Three-dots menu of a boulder row: edit it (same modal as creating) or delete it (with confirmation).
-export function BoulderMenu({ boulder, gymId, wallImageId, userId }: BoulderMenuProps) {
+export function BoulderMenu({ boulder, wallImageId }: BoulderMenuProps) {
   const { t } = useTranslation('editor')
   const { showError } = useToast()
   const remove = useDeleteBoulder(wallImageId)
@@ -48,9 +46,7 @@ export function BoulderMenu({ boulder, gymId, wallImageId, userId }: BoulderMenu
         open={editing}
         onClose={() => setEditing(false)}
         boulderId={boulderId}
-        gymId={gymId}
         wallImageId={wallImageId}
-        userId={userId}
       />
       <ConfirmDialog
         open={confirming}
