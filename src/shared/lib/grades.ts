@@ -1,5 +1,6 @@
 // Fontainebleau grades offered when creating a boulder.
 export const GRADES = [
+  '-',
   '4',
   '5',
   '6A',
