@@ -7,6 +7,7 @@
 Name | Type
 ------------ | -------------
 `name` | string
+`timeZone` | string
 `location` | string
 `description` | string
 
@@ -18,6 +19,7 @@ import type { UpdateGymRequest } from ''
 // TODO: Update the object below with actual values
 const example = {
   "name": null,
+  "timeZone": Europe/Madrid,
   "location": null,
   "description": null,
 } satisfies UpdateGymRequest

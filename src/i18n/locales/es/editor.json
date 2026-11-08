@@ -30,7 +30,8 @@
     "grade": "Grado",
     "gradePlaceholder": "Elige un grado",
     "description": "Descripción",
-    "submit": "Crear bloque"
+    "submit": "Crear bloque",
+    "points": "Puntos"
   },
   "errors": {
     "nameRequired": "Escribe un nombre",
@@ -38,7 +39,8 @@
     "network": "No se puede conectar con el servidor. Revisa tu conexión",
     "invalid": "Algunos datos no son válidos",
     "forbidden": "No tienes permiso para crear bloques aquí",
-    "unknown": "Algo ha salido mal. Inténtalo de nuevo"
+    "unknown": "Algo ha salido mal. Inténtalo de nuevo",
+    "pointsRequired": "Escribe los puntos (número entero)"
   },
   "photoLabel": "Foto del muro para marcar las presas",
   "menu": {
@@ -63,5 +65,9 @@
     "bigger": "Presa más grande",
     "smaller": "Presa más pequeña",
     "delete": "Borrar presa"
+  },
+  "competition": {
+    "createTitle": "Nuevo bloque de competición",
+    "editTitle": "Editar bloque de competición"
   }
 }

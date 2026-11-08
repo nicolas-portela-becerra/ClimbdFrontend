@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { Gender } from './Gender';
+import {
+    GenderFromJSON,
+    GenderFromJSONTyped,
+    GenderToJSON,
+    GenderToJSONTyped,
+} from './Gender';
+
 /**
  * 
  * @export
@@ -31,7 +39,13 @@ export interface RegisterRequest {
      * 
      */
     password: string;
+    /**
+     * 
+     */
+    gender: Gender;
 }
+
+
 
 /**
  * Check if a given object implements the RegisterRequest interface.
@@ -40,6 +54,7 @@ export function instanceOfRegisterRequest(value: object): value is RegisterReque
     if (!('email' in value) || value['email'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('password' in value) || value['password'] === undefined) return false;
+    if (!('gender' in value) || value['gender'] === undefined) return false;
     return true;
 }
 
@@ -56,6 +71,7 @@ export function RegisterRequestFromJSONTyped(json: any, ignoreDiscriminator: boo
         'email': json['email'],
         'name': json['name'],
         'password': json['password'],
+        'gender': GenderFromJSON(json['gender']),
     };
 }
 
@@ -73,6 +89,7 @@ export function RegisterRequestToJSONTyped(value?: RegisterRequest | null, ignor
         'email': value['email'],
         'name': value['name'],
         'password': value['password'],
+        'gender': GenderToJSON(value['gender']),
     };
 }
 

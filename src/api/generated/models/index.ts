@@ -1,5 +1,5 @@
 /* tslint:disable */
-/* eslint-disable */
+ 
 export * from './ActivateUsers200Response';
 export * from './AssignOwnerRequest';
 export * from './AuthResponse';
@@ -7,12 +7,27 @@ export * from './BoulderDetailDto';
 export * from './BoulderDto';
 export * from './BoulderPageResponse';
 export * from './BoulderResponseDto';
+export * from './BoulderResultDto';
+export * from './BoulderResultRequest';
 export * from './BoulderWithUserPageResponse';
+export * from './CompetitionAnnouncementDto';
+export * from './CompetitionBoulderDto';
+export * from './CompetitionBoulderRequest';
+export * from './CompetitionDto';
+export * from './CompetitionParticipantDto';
+export * from './CompetitionRankingEntryDto';
+export * from './CompetitionRegistrationRequest';
+export * from './CompetitionRequest';
+export * from './CompetitionSection';
+export * from './CompetitionStatus';
+export * from './CompetitionType';
+export * from './CompetitionUserStatusDto';
 export * from './CreateBoulderRequest';
 export * from './CreateGymRequest';
 export * from './CreateHoldRequest';
 export * from './DeactivatedUsersResponse';
 export * from './ErrorResponse';
+export * from './Gender';
 export * from './GymDto';
 export * from './GymPageResponse';
 export * from './HoldDto';
@@ -21,6 +36,7 @@ export * from './OAuthRequest';
 export * from './PageResponse';
 export * from './RefreshRequest';
 export * from './RegisterRequest';
+export * from './SubmitCompetitionResultsRequest';
 export * from './UpdateBoulderRequest';
 export * from './UpdateGymRequest';
 export * from './UserDto';

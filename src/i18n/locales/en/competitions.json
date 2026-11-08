@@ -1,0 +1,161 @@
+{
+  "rows": {
+    "label": "Competitions",
+    "registered": "Registered",
+    "tapToRegister": "Tap to register"
+  },
+  "phase": {
+    "upcoming": "Coming soon",
+    "running": "Live",
+    "grace": "Last minutes",
+    "ended": "Finished"
+  },
+  "type": {
+    "ALL_OR_NOTHING": "All or nothing",
+    "X_ATTEMPTS": "By attempts"
+  },
+  "section": {
+    "OPEN": "Open",
+    "AMATEUR": "Amateur"
+  },
+  "create": {
+    "title": "New competition",
+    "close": "Close",
+    "name": "Name",
+    "type": "Type",
+    "typeHint": {
+      "ALL_OR_NOTHING": "Each boulder gives its own points when topped, or 0.",
+      "X_ATTEMPTS": "Every boulder is worth the same and gives fewer points the more attempts it takes."
+    },
+    "dateFrom": "Starts",
+    "dateTo": "Ends",
+    "timeZoneHint": "Times use the gym's time zone ({{timeZone}})",
+    "graceMinutes": "Extra minutes to send results",
+    "basePoints": "Points for a top on the first attempt",
+    "attemptPenalty": "Points subtracted per extra attempt",
+    "minPoints": "Minimum points for a top",
+    "submit": "Create competition",
+    "confirmTitle": "Create competition?",
+    "confirmMessage": "You won't be able to change it yourself afterwards. Check the name, dates and points.",
+    "confirmCancel": "Review",
+    "confirmOk": "Create"
+  },
+  "errors": {
+    "nameRequired": "Enter a name",
+    "dateRequired": "Choose a date and time",
+    "endBeforeStart": "It must end after it starts",
+    "wholeNumber": "Enter a whole number (0 or more)",
+    "minAboveBase": "It can't be more than the first-attempt points",
+    "network": "Can't reach the server. Check your connection",
+    "invalid": "Some of the data is not valid",
+    "forbidden": "Only an admin or the gym owner can do this",
+    "unknown": "Something went wrong. Try again"
+  },
+  "screen": {
+    "back": "Back to walls",
+    "notFound": {
+      "title": "Competition not found",
+      "message": "This competition doesn't exist or is no longer available."
+    },
+    "hidden": "The boulders will be visible when the competition starts",
+    "noBoulders": "This competition has no boulders yet",
+    "boulders": "Competition boulders",
+    "points": "{{count}} pts",
+    "attempts_one": "{{count}} attempt",
+    "attempts_other": "{{count}} attempts",
+    "notTried": "Not tried",
+    "top": "Top",
+    "viewOnly": "You're not registered: you can see the boulders but not log attempts",
+    "noData": "This phone no longer has data for this competition",
+    "loadError": "Couldn't load the boulders"
+  },
+  "register": {
+    "title": "Registration",
+    "section": "Category",
+    "submit": "Register",
+    "registeredAs": "Registered in {{section}}",
+    "unregister": "Cancel registration",
+    "unregisterTitle": "Cancel registration?",
+    "unregisterMessage": "You can register again before it starts.",
+    "unregisterCancel": "Keep it",
+    "unregisterConfirm": "Cancel it",
+    "closed": "Registration is closed: the competition has started",
+    "notRegistered": "You didn't register for this competition",
+    "failed": "Couldn't complete it. Try again"
+  },
+  "send": {
+    "button": "Send results",
+    "pending": "Waiting to send: it will go when the connection is back",
+    "sentAt": "Sent at {{time}} · {{points}} pts",
+    "unsent": "You have unsent changes",
+    "nothing": "You haven't sent results yet",
+    "closed": "The time to send results is over",
+    "outcome": {
+      "sent": "Results sent",
+      "replaced": "Results updated",
+      "offline": "No connection: they'll be sent when it's back",
+      "tooManyRequests": "Too many sends in a row: retrying in a few seconds",
+      "closed": "The time to send results is over",
+      "notRegistered": "You're not registered for this competition",
+      "failed": "Couldn't send them. Try again"
+    },
+    "competitionOver": "Can't send results, competition is over"
+  },
+  "viewer": {
+    "dialogLabel": "Competition boulder",
+    "back": "Back to the list",
+    "previous": "Previous boulder",
+    "next": "Next boulder",
+    "photoLabel": "Holds of {{name}}",
+    "less": "Remove an attempt",
+    "more": "Add an attempt",
+    "attempts": "Attempts",
+    "top": "Top",
+    "topLocked": "Remove the top to change the attempts"
+  },
+  "organiser": {
+    "addBoulder": "Add boulder",
+    "pickWall": "Choose the wall",
+    "close": "Close",
+    "noWalls": "This gym has no walls yet",
+    "menu": "Boulder options",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteTitle": "Delete boulder?",
+    "deleteMessage": "{{name}} will be removed from the competition.",
+    "deleteCancel": "Cancel",
+    "deleteConfirm": "Delete",
+    "deleteFailed": "Couldn't delete the boulder",
+    "loadMore": "Load more"
+  },
+  "gymMenu": {
+    "label": "Create",
+    "newWall": "New wall",
+    "newCompetition": "New competition"
+  },
+  "checkResults": "Check results",
+  "ranking": {
+    "title": "Results",
+    "subtitle": "Ranking",
+    "back": "Back to the competition",
+    "pos": "Pos",
+    "name": "Name",
+    "pts": "Pts",
+    "attempts": "Attempts",
+    "firstTops": "Flashes",
+    "filtersGender": "Gender",
+    "genderAll": "All",
+    "filtersSection": "Category",
+    "sectionAll": "All",
+    "gender": {
+      "MAN": "Man",
+      "WOMAN": "Woman",
+      "OTHER": "Other"
+    },
+    "notReady": "Results are not available yet",
+    "empty": "No results for this group",
+    "staffTitle": "Results",
+    "staffMessage": "The staff will share the results",
+    "close": "Close"
+  }
+}

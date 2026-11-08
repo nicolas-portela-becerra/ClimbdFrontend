@@ -1,21 +1,22 @@
 import type { ParseKeys } from 'i18next'
+import { Gender } from '@api'
 import { apiErrorKind } from '@/shared/lib/apiError'
 import { login, register } from './session'
 
 type AuthKey = ParseKeys<'auth'>
-type Field = 'name' | 'email' | 'confirmEmail' | 'password' | 'confirmPassword'
+type Field = 'name' | 'email' | 'confirmEmail' | 'password' | 'confirmPassword' | 'gender'
 
 export type AuthFormState = {
   ok: boolean
   fieldErrors: Partial<Record<Field, AuthKey>>
   formError?: AuthKey
-  values: { name: string; email: string; confirmEmail: string }
+  values: { name: string; email: string; confirmEmail: string; gender: string }
 }
 
 export const initialAuthFormState: AuthFormState = {
   ok: false,
   fieldErrors: {},
-  values: { name: '', email: '', confirmEmail: '' },
+  values: { name: '', email: '', confirmEmail: '', gender: '' },
 }
 
 const EMAIL = /^\S+@\S+\.\S+$/
@@ -62,7 +63,7 @@ export async function loginAction(
 ): Promise<AuthFormState> {
   const email = text(data, 'email').trim()
   const password = text(data, 'password')
-  const values = { name: '', email, confirmEmail: '' }
+  const values = { name: '', email, confirmEmail: '', gender: '' }
 
   const fieldErrors = validateCredentials({ email, password }, false)
   if (Object.keys(fieldErrors).length > 0) return { ok: false, fieldErrors, values }
@@ -100,17 +101,20 @@ export async function registerAction(
   const confirmEmail = text(data, 'confirmEmail').trim()
   const password = text(data, 'password')
   const confirmPassword = text(data, 'confirmPassword')
-  const values = { name, email, confirmEmail }
+  const rawGender = text(data, 'gender')
+  const values = { name, email, confirmEmail, gender: rawGender }
+  const gender = toGender(rawGender)
 
   const firstErrors = validateCredentials({ name, email, password }, true)
   const fieldErrors = {
     ...firstErrors,
     ...validateConfirmations({ email, confirmEmail, password, confirmPassword }, firstErrors),
+    ...(gender ? {} : { gender: 'errors.genderRequired' as const }),
   }
-  if (Object.keys(fieldErrors).length > 0) return { ok: false, fieldErrors, values }
+  if (Object.keys(fieldErrors).length > 0 || !gender) return { ok: false, fieldErrors, values }
 
   try {
-    await register(name, email, password)
+    await register(name, email, password, gender)
     return { ok: true, fieldErrors: {}, values }
   } catch (error) {
     const kind = apiErrorKind(error)
@@ -124,4 +128,10 @@ export async function registerAction(
             : 'errors.unknown'
     return { ok: false, fieldErrors: {}, formError, values }
   }
+}
+
+export const GENDERS = Object.values(Gender)
+
+function toGender(value: string): Gender | null {
+  return GENDERS.find((gender) => gender === value) ?? null
 }

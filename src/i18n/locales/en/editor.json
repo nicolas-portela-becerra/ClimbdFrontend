@@ -30,7 +30,8 @@
     "grade": "Grade",
     "gradePlaceholder": "Select a grade",
     "description": "Description",
-    "submit": "Create boulder"
+    "submit": "Create boulder",
+    "points": "Points"
   },
   "errors": {
     "nameRequired": "Enter a name",
@@ -38,7 +39,8 @@
     "network": "Can't reach the server. Check your connection",
     "invalid": "Some of the data is not valid",
     "forbidden": "You don't have permission to create boulders here",
-    "unknown": "Something went wrong. Try again"
+    "unknown": "Something went wrong. Try again",
+    "pointsRequired": "Enter the points (whole number)"
   },
   "photoLabel": "Wall photo to mark the holds on",
   "menu": {
@@ -63,5 +65,9 @@
     "bigger": "Bigger hold",
     "smaller": "Smaller hold",
     "delete": "Delete hold"
+  },
+  "competition": {
+    "createTitle": "New competition boulder",
+    "editTitle": "Edit competition boulder"
   }
 }

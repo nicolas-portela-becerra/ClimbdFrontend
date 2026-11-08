@@ -44,11 +44,15 @@ export interface GymDto {
      */
     createdByAdminId?: number;
     /**
-     * 
+     * IANA time zone of the gym (region id such as Europe/Madrid, not a fixed offset). Competition times are shown in this zone.
+     */
+    timeZone?: string;
+    /**
+     * RFC 3339 date-time. Requests must include an offset or Z (e.g. 2026-11-20T19:00:00+01:00); responses are always UTC (Z).
      */
     createdDate?: Date;
     /**
-     * 
+     * RFC 3339 date-time. Requests must include an offset or Z (e.g. 2026-11-20T19:00:00+01:00); responses are always UTC (Z).
      */
     updatedDate?: Date;
 }
@@ -76,6 +80,7 @@ export function GymDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): Gy
         'location': json['location'] == null ? undefined : json['location'],
         'description': json['description'] == null ? undefined : json['description'],
         'createdByAdminId': json['createdByAdminId'] == null ? undefined : json['createdByAdminId'],
+        'timeZone': json['timeZone'] == null ? undefined : json['timeZone'],
         'createdDate': json['createdDate'] == null ? undefined : (parseDateTime(json['createdDate'])),
         'updatedDate': json['updatedDate'] == null ? undefined : (parseDateTime(json['updatedDate'])),
     };
@@ -98,6 +103,7 @@ export function GymDtoToJSONTyped(value?: GymDto | null, ignoreDiscriminator: bo
         'location': value['location'],
         'description': value['description'],
         'createdByAdminId': value['createdByAdminId'],
+        'timeZone': value['timeZone'],
         'createdDate': value['createdDate'] == null ? value['createdDate'] : serializeDateTime(value['createdDate']),
         'updatedDate': value['updatedDate'] == null ? value['updatedDate'] : serializeDateTime(value['updatedDate']),
     };

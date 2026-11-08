@@ -75,7 +75,7 @@ example().catch(console.error);
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: `application/json`
 
 
 ### HTTP response details
@@ -84,6 +84,7 @@ example().catch(console.error);
 | **204** | Wall image deleted |  -  |
 | **403** | Forbidden |  -  |
 | **404** | Wall image not found |  -  |
+| **409** | The wall image still has boulders |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 

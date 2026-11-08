@@ -1,8 +1,10 @@
-import { useActionState, useRef } from 'react'
+import { useActionState, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCreateGym } from '@/api/queries/useCreateGym'
+import { deviceTimeZone, ianaTimeZones } from '@/shared/lib/timezone'
 import { Button } from '@/shared/ui/Button'
 import { ModalHeader, ModalPanel } from '@/shared/ui/ModalPanel'
+import { SelectField } from '@/shared/ui/SelectField'
 import { TextAreaField } from '@/shared/ui/TextAreaField'
 import { TextField } from '@/shared/ui/TextField'
 import {
@@ -38,6 +40,12 @@ function CreateGymForm({ userId, onCreated }: { userId: number; onCreated: () =>
   const create = useCreateGym()
   const logo = useRef<string | null>(null)
 
+  const timeZones = useMemo(() => {
+    const zones = ianaTimeZones()
+    const device = deviceTimeZone()
+    return zones.includes(device) ? zones : [device, ...zones]
+  }, [])
+
   const submit = async (
     _previous: CreateGymFormState,
     data: FormData,
@@ -45,7 +53,8 @@ function CreateGymForm({ userId, onCreated }: { userId: number; onCreated: () =>
     const name = text(data, 'name')
     const location = text(data, 'location')
     const description = text(data, 'description')
-    const values = { name, location, description }
+    const timeZone = text(data, 'timeZone') || deviceTimeZone()
+    const values = { name, location, description, timeZone }
 
     const nameError = validateGymName(name)
     if (nameError) return { ok: false, fieldErrors: { name: nameError }, values }
@@ -53,6 +62,7 @@ function CreateGymForm({ userId, onCreated }: { userId: number; onCreated: () =>
     try {
       await create.mutateAsync({
         name,
+        timeZone,
         createdBy: userId,
         ...(location ? { location } : {}),
         ...(description ? { description } : {}),
@@ -81,6 +91,13 @@ function CreateGymForm({ userId, onCreated }: { userId: number; onCreated: () =>
         defaultValue={state.values.name}
         error={state.fieldErrors.name ? t(state.fieldErrors.name) : undefined}
       />
+      <SelectField name="timeZone" label={t('form.timeZone')} defaultValue={state.values.timeZone}>
+        {timeZones.map((zone) => (
+          <option key={zone} value={zone}>
+            {zone}
+          </option>
+        ))}
+      </SelectField>
       <TextField
         name="location"
         autoComplete="off"

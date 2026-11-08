@@ -1,8 +1,9 @@
 import { useActionState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/Button'
+import { SelectField } from '@/shared/ui/SelectField'
 import { TextField } from '@/shared/ui/TextField'
-import { initialAuthFormState, registerAction } from '../actions'
+import { GENDERS, initialAuthFormState, registerAction } from '../actions'
 
 export function RegisterForm({ onRegistered }: { onRegistered: () => void }) {
   const { t } = useTranslation('auth')
@@ -26,6 +27,21 @@ export function RegisterForm({ onRegistered }: { onRegistered: () => void }) {
         defaultValue={state.values.name}
         error={state.fieldErrors.name ? t(state.fieldErrors.name) : undefined}
       />
+      <SelectField
+        // React resets a <select> after a submit; remounting restores the chosen value.
+        key={state.values.gender}
+        name="gender"
+        label={t('fields.gender')}
+        defaultValue={state.values.gender}
+        error={state.fieldErrors.gender ? t(state.fieldErrors.gender) : undefined}
+      >
+        <option value="">{t('fields.genderPlaceholder')}</option>
+        {GENDERS.map((gender) => (
+          <option key={gender} value={gender}>
+            {t(`gender.${gender}`)}
+          </option>
+        ))}
+      </SelectField>
       <TextField
         name="email"
         type="email"

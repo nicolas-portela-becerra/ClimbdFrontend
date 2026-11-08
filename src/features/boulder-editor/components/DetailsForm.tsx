@@ -20,6 +20,8 @@ type DetailsFormProps = {
   onSubmit: (details: BoulderDetails) => Promise<void>
   // Called instead of showing an inline error when the server answers 403 (not allowed).
   onForbidden?: () => void
+  // Asks for the boulder's points (All or Nothing competitions).
+  withPoints?: boolean
 }
 
 function text(data: FormData, key: string): string {
@@ -32,6 +34,7 @@ export function DetailsForm({
   submitLabel,
   onSubmit,
   onForbidden,
+  withPoints = false,
 }: DetailsFormProps) {
   const { t } = useTranslation('editor')
 
@@ -39,9 +42,10 @@ export function DetailsForm({
     const name = text(data, 'name').trim()
     const grade = text(data, 'grade')
     const description = text(data, 'description').trim()
-    const values = { name, grade, description }
+    const points = withPoints ? text(data, 'points').trim() : undefined
+    const values = { name, grade, description, ...(points !== undefined ? { points } : {}) }
 
-    const fieldErrors = validateDetails({ name, grade })
+    const fieldErrors = validateDetails({ name, grade, points })
     if (Object.keys(fieldErrors).length > 0) return { ok: false, fieldErrors, values }
 
     try {
@@ -91,6 +95,16 @@ export function DetailsForm({
           </option>
         ))}
       </SelectField>
+      {withPoints ? (
+        <TextField
+          name="points"
+          inputMode="numeric"
+          autoComplete="off"
+          label={t('details.points')}
+          defaultValue={state.values.points ?? ''}
+          error={state.fieldErrors.points ? t(state.fieldErrors.points) : undefined}
+        />
+      ) : null}
       <TextAreaField
         name="description"
         label={t('details.description')}

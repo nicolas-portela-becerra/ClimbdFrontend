@@ -10,6 +10,7 @@ Name | Type
 `email` | string
 `name` | string
 `role` | string
+`gender` | [Gender](Gender.md)
 
 ## Example
 
@@ -22,6 +23,7 @@ const example = {
   "email": null,
   "name": null,
   "role": null,
+  "gender": null,
 } satisfies UserDto
 
 console.log(example)

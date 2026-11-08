@@ -1,4 +1,4 @@
-import { ResponseError } from '@api'
+import { FetchError, ResponseError } from '@api'
 
 export type ApiErrorKind =
   | 'invalid'
@@ -7,6 +7,7 @@ export type ApiErrorKind =
   | 'notFound'
   | 'conflict'
   | 'locked'
+  | 'tooManyRequests'
   | 'network'
   | 'unknown'
 
@@ -26,11 +27,13 @@ export function apiErrorKind(error: unknown): ApiErrorKind {
       case 423:
         // Locked: the account exists but is deactivated.
         return 'locked'
+      case 429:
+        return 'tooManyRequests'
       default:
         return 'unknown'
     }
   }
-  // fetch rejects with a TypeError when the network is unreachable
-  if (error instanceof TypeError) return 'network'
+  // fetch rejects with a TypeError when the network is unreachable; the generated client wraps it.
+  if (error instanceof FetchError || error instanceof TypeError) return 'network'
   return 'unknown'
 }

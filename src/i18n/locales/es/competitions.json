@@ -1,0 +1,161 @@
+{
+  "rows": {
+    "label": "Competiciones",
+    "registered": "Inscrito",
+    "tapToRegister": "Toca para inscribirte"
+  },
+  "phase": {
+    "upcoming": "Próximamente",
+    "running": "En curso",
+    "grace": "Últimos minutos",
+    "ended": "Terminada"
+  },
+  "type": {
+    "ALL_OR_NOTHING": "Todo o nada",
+    "X_ATTEMPTS": "Por intentos"
+  },
+  "section": {
+    "OPEN": "Open",
+    "AMATEUR": "Amateur"
+  },
+  "create": {
+    "title": "Nueva competición",
+    "close": "Cerrar",
+    "name": "Nombre",
+    "type": "Tipo",
+    "typeHint": {
+      "ALL_OR_NOTHING": "Cada bloque da sus puntos al hacer top, o 0 si no.",
+      "X_ATTEMPTS": "Todos los bloques valen lo mismo y dan menos puntos cuantos más intentos."
+    },
+    "dateFrom": "Empieza",
+    "dateTo": "Termina",
+    "timeZoneHint": "Los horarios usan la zona horaria del rocódromo ({{timeZone}})",
+    "graceMinutes": "Minutos extra para enviar resultados",
+    "basePoints": "Puntos por top al primer intento",
+    "attemptPenalty": "Puntos que se restan por intento extra",
+    "minPoints": "Puntos mínimos por top",
+    "submit": "Crear competición",
+    "confirmTitle": "¿Crear competición?",
+    "confirmMessage": "Después no podrás cambiarla tú mismo. Revisa el nombre, las fechas y los puntos.",
+    "confirmCancel": "Revisar",
+    "confirmOk": "Crear"
+  },
+  "errors": {
+    "nameRequired": "Escribe un nombre",
+    "dateRequired": "Elige fecha y hora",
+    "endBeforeStart": "Tiene que terminar después de empezar",
+    "wholeNumber": "Escribe un número entero (0 o más)",
+    "minAboveBase": "No puede ser mayor que los puntos al primer intento",
+    "network": "No hay conexión con el servidor. Revisa tu conexión",
+    "invalid": "Algunos datos no son válidos",
+    "forbidden": "Solo un admin o el dueño del rocódromo puede hacer esto",
+    "unknown": "Algo ha fallado. Inténtalo de nuevo"
+  },
+  "screen": {
+    "back": "Volver a los muros",
+    "notFound": {
+      "title": "Competición no encontrada",
+      "message": "Esta competición no existe o ya no está disponible."
+    },
+    "hidden": "Los bloques serán visibles cuando empiece la competición",
+    "noBoulders": "Esta competición aún no tiene bloques",
+    "boulders": "Bloques de la competición",
+    "points": "{{count}} pts",
+    "attempts_one": "{{count}} intento",
+    "attempts_other": "{{count}} intentos",
+    "notTried": "Sin intentar",
+    "top": "Top",
+    "viewOnly": "No estás inscrito: puedes ver los bloques pero no apuntar intentos",
+    "noData": "Ya no hay datos de esta competición en este teléfono",
+    "loadError": "No se pudieron cargar los bloques"
+  },
+  "register": {
+    "title": "Inscripción",
+    "section": "Categoría",
+    "submit": "Inscribirme",
+    "registeredAs": "Inscrito en {{section}}",
+    "unregister": "Anular inscripción",
+    "unregisterTitle": "¿Anular inscripción?",
+    "unregisterMessage": "Podrás volver a inscribirte antes de que empiece.",
+    "unregisterCancel": "Cancelar",
+    "unregisterConfirm": "Anular",
+    "closed": "La inscripción está cerrada: la competición ya ha empezado",
+    "notRegistered": "No te inscribiste en esta competición",
+    "failed": "No se pudo completar. Inténtalo de nuevo"
+  },
+  "send": {
+    "button": "Enviar resultados",
+    "pending": "Pendiente de envío: se enviará al recuperar la conexión",
+    "sentAt": "Enviado a las {{time}} · {{points}} pts",
+    "unsent": "Tienes cambios sin enviar",
+    "nothing": "Aún no has enviado resultados",
+    "closed": "El plazo para enviar resultados ha terminado",
+    "outcome": {
+      "sent": "Resultados enviados",
+      "replaced": "Resultados actualizados",
+      "offline": "Sin conexión: se enviarán cuando vuelva",
+      "tooManyRequests": "Demasiados envíos seguidos: se reintentará en unos segundos",
+      "closed": "El plazo para enviar resultados ha terminado",
+      "notRegistered": "No estás inscrito en esta competición",
+      "failed": "No se pudieron enviar. Inténtalo de nuevo"
+    },
+    "competitionOver": "No se pueden enviar resultados, la competición ha terminado"
+  },
+  "viewer": {
+    "dialogLabel": "Bloque de la competición",
+    "back": "Volver a la lista",
+    "previous": "Bloque anterior",
+    "next": "Bloque siguiente",
+    "photoLabel": "Presas del bloque {{name}}",
+    "less": "Quitar un intento",
+    "more": "Añadir un intento",
+    "attempts": "Intentos",
+    "top": "Top",
+    "topLocked": "Quita el top para cambiar los intentos"
+  },
+  "organiser": {
+    "addBoulder": "Añadir bloque",
+    "pickWall": "Elige el muro",
+    "close": "Cerrar",
+    "noWalls": "Este rocódromo aún no tiene muros",
+    "menu": "Opciones del bloque",
+    "edit": "Editar",
+    "delete": "Borrar",
+    "deleteTitle": "¿Borrar bloque?",
+    "deleteMessage": "{{name}} se borrará de la competición.",
+    "deleteCancel": "Cancelar",
+    "deleteConfirm": "Borrar",
+    "deleteFailed": "No se pudo borrar el bloque",
+    "loadMore": "Cargar más"
+  },
+  "gymMenu": {
+    "label": "Crear",
+    "newWall": "Nuevo muro",
+    "newCompetition": "Nueva competición"
+  },
+  "checkResults": "Ver resultados",
+  "ranking": {
+    "title": "Resultados",
+    "subtitle": "Clasificación",
+    "back": "Volver a la competición",
+    "pos": "Pos",
+    "name": "Nombre",
+    "pts": "Pts",
+    "attempts": "Intentos",
+    "firstTops": "Flashes",
+    "filtersGender": "Género",
+    "genderAll": "Todos",
+    "filtersSection": "Categoría",
+    "sectionAll": "Todas",
+    "gender": {
+      "MAN": "Hombre",
+      "WOMAN": "Mujer",
+      "OTHER": "Otro"
+    },
+    "notReady": "Los resultados no están disponibles todavía",
+    "empty": "Nadie en este grupo: prueba otros filtros",
+    "staffTitle": "Resultados",
+    "staffMessage": "El staff compartirá los resultados",
+    "close": "Cerrar"
+  }
+}
