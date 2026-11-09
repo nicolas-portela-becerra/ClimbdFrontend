@@ -3,6 +3,9 @@ dist
 .git
 .husky
 mockups
+.playwright-mcp
+.idea
+coverage
 docs
 .env*
 !.env.example
