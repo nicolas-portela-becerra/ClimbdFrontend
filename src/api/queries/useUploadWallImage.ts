@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { wallImagesApi } from '@/api/client'
 import { qk } from '@/api/keys'
 
-type UploadWallImageInput = { image: Blob; wallName: string; uploadedBy: number }
+type UploadWallImageInput = { image: Blob; wallName: string }
 
 export function useUploadWallImage(gymId: number) {
   const queryClient = useQueryClient()

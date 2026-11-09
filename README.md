@@ -15,6 +15,7 @@ It is the client of [ClimbdBackend](https://github.com/nicolas-portela-becerra/C
 - Automatic token refresh and session expiry handling
 - Protected routes
 - Admin screen to activate new users
+- Per-gym roles (owner and setter) with role-gated controls
 - Google OAuth authentication **(TODO)**
 - Apple OAuth authentication **(TODO)**
 
@@ -25,6 +26,8 @@ It is the client of [ClimbdBackend](https://github.com/nicolas-portela-becerra/C
 - Browse the walls of a gym
 - Upload walls with a photo (preview and rotation before uploading)
 - Edit the name and photo of a wall, or delete it
+- Edit the gym (name, location, description, time zone and logo) or delete it
+- Manage the gym staff: add and remove owners and setters by email
 - Authenticated images (thumbnails and full photos) loaded through the API client
 - Gym search **(TODO)**
 
@@ -86,6 +89,7 @@ src/
 │   ├── walls/
 │   ├── boulders/
 │   ├── boulder-editor/
+│   ├── competitions/
 │   └── users/
 ├── routes/         # one file per screen
 ├── shared/         # UI components, hooks, icons, pure helpers
@@ -116,6 +120,25 @@ npm run generate:api
 ```
 
 The generator needs Java installed. All calls are same-origin (`/api/...`), so there is no API URL to configure and no CORS.
+
+---
+
+## Roles
+
+There are two global roles (`user.role`: `ADMIN` or `USER`) and per-gym memberships. The session carries
+`gymRoles` (the gyms where the user is `OWNER` or `SETTER`); the backend still checks every request, so the
+frontend only hides controls it can't use. The helpers live in `src/features/auth/gymRoles.ts`:
+
+```ts
+isAdmin = user.role === 'ADMIN'
+gymRole(gymId) = gymRoles.find((r) => r.gymId === gymId)?.role
+canManageGym = isAdmin || role === 'OWNER' // gym settings and staff
+canSet = canManageGym || role === 'SETTER' // walls, competitions, every boulder of the gym
+```
+
+- **Admin**: creates and deletes gyms, and can do everything in any gym.
+- **Owner** (`canManageGym`): edits the gym (including its logo), manages staff, and everything a setter can.
+- **Setter** (`canSet`): manages walls, competitions (and their ranking) and every boulder of the gym.
 
 ---
 
@@ -195,7 +218,7 @@ Some of the areas explored by the project include:
 
 This project is actively being developed.
 
-Gym search, OAuth login, a logbook and offline mode are not built yet. Wall editing and deleting need endpoints that the backend does not provide yet.
+Gym search, OAuth login, a logbook and offline mode are not built yet.
 
 Some parts of the application may therefore change as the project evolves.
 

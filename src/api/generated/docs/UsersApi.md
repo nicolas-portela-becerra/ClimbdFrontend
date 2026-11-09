@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost:8080*
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
 | [**activateUsers**](UsersApi.md#activateusers) | **POST** /api/users/activate-users | Activate users by their IDs |
+| [**getCurrentUser**](UsersApi.md#getcurrentuser) | **GET** /api/users/me | Get the logged-in user with their per-gym roles |
 | [**getDeactivated**](UsersApi.md#getdeactivated) | **GET** /api/users/deactivated | Get all deactivated users |
 
 
@@ -78,6 +79,70 @@ example().catch(console.error);
 | **401** | Missing or invalid access token |  -  |
 | **403** | Forbidden - admin only |  -  |
 | **500** | Internal server error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## getCurrentUser
+
+> CurrentUserResponse getCurrentUser()
+
+Get the logged-in user with their per-gym roles
+
+Use it on app start and after a role change to decide which controls to show.
+
+### Example
+
+```ts
+import {
+  Configuration,
+  UsersApi,
+} from '';
+import type { GetCurrentUserRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: bearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new UsersApi(config);
+
+  try {
+    const data = await api.getCurrentUser();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**CurrentUserResponse**](CurrentUserResponse.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Current user |  -  |
+| **401** | Missing or invalid access token |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 

@@ -114,8 +114,6 @@ describe('hold payloads', () => {
   it('serialises every field of the update request body, including coordX and coordY', () => {
     const body = UpdateBoulderRequestToJSON({
       name: 'B',
-      creatorId: 13,
-      gymId: 1,
       wallImageId: 2,
       holds: [toUpdateHoldPayload({ id: 1, savedId: 10, x: 0.25, y: 0.75, r: 0.05, role: 1 }, 7)],
     })

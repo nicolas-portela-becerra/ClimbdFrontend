@@ -8,8 +8,6 @@ type UpdateBoulderInput = {
   name: string
   grade: string
   description: string
-  creatorId: number
-  gymId: number
   wallImageId: number
   // The boulder's holds after editing: the backend replaces all its holds with these.
   holds: HoldDto[]
@@ -24,8 +22,6 @@ export function useUpdateBoulder(wallImageId: number) {
       name,
       grade,
       description,
-      creatorId,
-      gymId,
       wallImageId: boulderWallImageId,
       holds,
     }: UpdateBoulderInput) =>
@@ -36,8 +32,6 @@ export function useUpdateBoulder(wallImageId: number) {
           name,
           grade,
           description,
-          creatorId,
-          gymId,
           wallImageId: boulderWallImageId,
           holds,
         },

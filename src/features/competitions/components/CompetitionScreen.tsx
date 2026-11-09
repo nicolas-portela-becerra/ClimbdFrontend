@@ -29,6 +29,9 @@ type CompetitionScreenProps = {
   gymId: number
   competitionId: number
   userId: number
+  // Whether the current user manages the gym (owner, setter or admin): gates the organiser controls
+  // and the results screen.
+  canManage: boolean
   renderBoulderEditor: RenderCompetitionBoulderEditor
 }
 
@@ -38,6 +41,7 @@ export function CompetitionScreen({
   gymId,
   competitionId,
   userId,
+  canManage,
   renderBoulderEditor,
 }: CompetitionScreenProps) {
   const { t, i18n } = useTranslation(['competitions', 'common'])
@@ -139,7 +143,7 @@ export function CompetitionScreen({
           competitionId={competitionId}
           showLogs={registered && started}
           renderActions={
-            started
+            started || !canManage
               ? undefined
               : (boulder) => (
                   <CompetitionBoulderMenu
@@ -215,7 +219,7 @@ export function CompetitionScreen({
           {t('screen.viewOnly')}
         </p>
       ) : null}
-      {!started ? (
+      {!started && canManage ? (
         <div className="px-5 pb-4">
           <Button onClick={() => setPicking(true)}>
             <PlusIcon className="size-5" />
@@ -224,7 +228,7 @@ export function CompetitionScreen({
         </div>
       ) : null}
 
-      {phase === 'ended' ? (
+      {phase === 'ended' && canManage ? (
         <div className="px-5 pb-4">
           <CheckResultsButton gymId={gymId} competitionId={competitionId} />
         </div>

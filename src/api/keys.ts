@@ -6,6 +6,7 @@ export const qk = {
     all: ['gyms'] as const,
     list: () => [...qk.gyms.all, 'list'] as const,
     detail: (gymId: number) => [...qk.gyms.all, 'detail', gymId] as const,
+    staff: (gymId: number) => [...qk.gyms.all, 'staff', gymId] as const,
   },
   boulders: {
     all: ['boulders'] as const,

@@ -1,7 +1,7 @@
 /* tslint:disable */
  
 export * from './ActivateUsers200Response';
-export * from './AssignOwnerRequest';
+export * from './AddGymStaffRequest';
 export * from './AuthResponse';
 export * from './BoulderDetailDto';
 export * from './BoulderDto';
@@ -25,11 +25,14 @@ export * from './CompetitionUserStatusDto';
 export * from './CreateBoulderRequest';
 export * from './CreateGymRequest';
 export * from './CreateHoldRequest';
+export * from './CurrentUserResponse';
 export * from './DeactivatedUsersResponse';
 export * from './ErrorResponse';
 export * from './Gender';
 export * from './GymDto';
 export * from './GymPageResponse';
+export * from './GymRole';
+export * from './GymStaffDto';
 export * from './HoldDto';
 export * from './LoginRequest';
 export * from './OAuthRequest';
@@ -40,6 +43,7 @@ export * from './SubmitCompetitionResultsRequest';
 export * from './UpdateBoulderRequest';
 export * from './UpdateGymRequest';
 export * from './UserDto';
+export * from './UserGymRoleDto';
 export * from './WallImageDetail';
 export * from './WallImagePageResponse';
 export * from './WallImageSummary';

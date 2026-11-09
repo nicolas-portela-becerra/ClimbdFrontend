@@ -14,15 +14,20 @@
 
 import * as runtime from '../runtime';
 import {
-    type AssignOwnerRequest,
-    AssignOwnerRequestFromJSON,
-    AssignOwnerRequestToJSON,
-} from '../models/AssignOwnerRequest';
+    type AddGymStaffRequest,
+    AddGymStaffRequestFromJSON,
+    AddGymStaffRequestToJSON,
+} from '../models/AddGymStaffRequest';
 import {
     type CreateGymRequest,
     CreateGymRequestFromJSON,
     CreateGymRequestToJSON,
 } from '../models/CreateGymRequest';
+import {
+    type ErrorResponse,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
+} from '../models/ErrorResponse';
 import {
     type GymDto,
     GymDtoFromJSON,
@@ -34,12 +39,17 @@ import {
     GymPageResponseToJSON,
 } from '../models/GymPageResponse';
 import {
+    type GymStaffDto,
+    GymStaffDtoFromJSON,
+    GymStaffDtoToJSON,
+} from '../models/GymStaffDto';
+import {
     type UpdateGymRequest,
     UpdateGymRequestFromJSON,
     UpdateGymRequestToJSON,
 } from '../models/UpdateGymRequest';
 
-export interface AssignGymOwnerRequest {
+export interface AddGymStaffOperationRequest {
     /**
      * 
      */
@@ -47,7 +57,7 @@ export interface AssignGymOwnerRequest {
     /**
      * 
      */
-    assignOwnerRequest: AssignOwnerRequest;
+    addGymStaffRequest: AddGymStaffRequest;
 }
 
 export interface CreateGymOperationRequest {
@@ -71,6 +81,13 @@ export interface GetGymByIdRequest {
     gymId: number;
 }
 
+export interface ListGymStaffRequest {
+    /**
+     * 
+     */
+    gymId: number;
+}
+
 export interface ListGymsRequest {
     /**
      * 
@@ -80,6 +97,17 @@ export interface ListGymsRequest {
      * 
      */
     size?: number;
+}
+
+export interface RemoveGymStaffRequest {
+    /**
+     * 
+     */
+    gymId: number;
+    /**
+     * 
+     */
+    userId: number;
 }
 
 export interface UpdateGymOperationRequest {
@@ -99,20 +127,20 @@ export interface UpdateGymOperationRequest {
 export class GymsApi extends runtime.BaseAPI {
 
     /**
-     * Creates request options for assignGymOwner without sending the request
+     * Creates request options for addGymStaff without sending the request
      */
-    async assignGymOwnerRequestOpts(requestParameters: AssignGymOwnerRequest): Promise<runtime.RequestOpts> {
+    async addGymStaffRequestOpts(requestParameters: AddGymStaffOperationRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['gymId'] == null) {
             throw new runtime.RequiredError(
                 'gymId',
-                'Required parameter "gymId" was null or undefined when calling assignGymOwner().'
+                'Required parameter "gymId" was null or undefined when calling addGymStaff().'
             );
         }
 
-        if (requestParameters['assignOwnerRequest'] == null) {
+        if (requestParameters['addGymStaffRequest'] == null) {
             throw new runtime.RequiredError(
-                'assignOwnerRequest',
-                'Required parameter "assignOwnerRequest" was null or undefined when calling assignGymOwner().'
+                'addGymStaffRequest',
+                'Required parameter "addGymStaffRequest" was null or undefined when calling addGymStaff().'
             );
         }
 
@@ -131,7 +159,7 @@ export class GymsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/api/gyms/{gymId}/owners`;
+        let urlPath = `/api/gyms/{gymId}/staff`;
         urlPath = urlPath.replace('{gymId}', encodeURIComponent(String(requestParameters['gymId'])));
 
         return {
@@ -139,25 +167,28 @@ export class GymsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: AssignOwnerRequestToJSON(requestParameters['assignOwnerRequest']),
+            body: AddGymStaffRequestToJSON(requestParameters['addGymStaffRequest']),
         };
     }
 
     /**
-     * Assign a gym owner (admin only)
+     * Gym owners can only add or change SETTERs. Only an admin can grant, change or remove the OWNER role.
+     * Add a user to the gym staff, or change their role (admin or gym owner)
      */
-    async assignGymOwnerRaw(requestParameters: AssignGymOwnerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const requestOptions = await this.assignGymOwnerRequestOpts(requestParameters);
+    async addGymStaffRaw(requestParameters: AddGymStaffOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GymStaffDto>> {
+        const requestOptions = await this.addGymStaffRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => GymStaffDtoFromJSON(jsonValue));
     }
 
     /**
-     * Assign a gym owner (admin only)
+     * Gym owners can only add or change SETTERs. Only an admin can grant, change or remove the OWNER role.
+     * Add a user to the gym staff, or change their role (admin or gym owner)
      */
-    async assignGymOwner(requestParameters: AssignGymOwnerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.assignGymOwnerRaw(requestParameters, initOverrides);
+    async addGymStaff(requestParameters: AddGymStaffOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GymStaffDto> {
+        const response = await this.addGymStaffRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -321,6 +352,59 @@ export class GymsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Creates request options for listGymStaff without sending the request
+     */
+    async listGymStaffRequestOpts(requestParameters: ListGymStaffRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['gymId'] == null) {
+            throw new runtime.RequiredError(
+                'gymId',
+                'Required parameter "gymId" was null or undefined when calling listGymStaff().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/gyms/{gymId}/staff`;
+        urlPath = urlPath.replace('{gymId}', encodeURIComponent(String(requestParameters['gymId'])));
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * List the owners and setters of a gym (admin or gym owner)
+     */
+    async listGymStaffRaw(requestParameters: ListGymStaffRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<GymStaffDto>>> {
+        const requestOptions = await this.listGymStaffRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(GymStaffDtoFromJSON));
+    }
+
+    /**
+     * List the owners and setters of a gym (admin or gym owner)
+     */
+    async listGymStaff(requestParameters: ListGymStaffRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GymStaffDto>> {
+        const response = await this.listGymStaffRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for listGyms without sending the request
      */
     async listGymsRequestOpts(requestParameters: ListGymsRequest): Promise<runtime.RequestOpts> {
@@ -374,6 +458,66 @@ export class GymsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Creates request options for removeGymStaff without sending the request
+     */
+    async removeGymStaffRequestOpts(requestParameters: RemoveGymStaffRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['gymId'] == null) {
+            throw new runtime.RequiredError(
+                'gymId',
+                'Required parameter "gymId" was null or undefined when calling removeGymStaff().'
+            );
+        }
+
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling removeGymStaff().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/gyms/{gymId}/staff/{userId}`;
+        urlPath = urlPath.replace('{gymId}', encodeURIComponent(String(requestParameters['gymId'])));
+        urlPath = urlPath.replace('{userId}', encodeURIComponent(String(requestParameters['userId'])));
+
+        return {
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Remove a user from the gym staff (admin or gym owner; only admins remove owners)
+     */
+    async removeGymStaffRaw(requestParameters: RemoveGymStaffRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.removeGymStaffRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Remove a user from the gym staff (admin or gym owner; only admins remove owners)
+     */
+    async removeGymStaff(requestParameters: RemoveGymStaffRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.removeGymStaffRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Creates request options for updateGym without sending the request
      */
     async updateGymRequestOpts(requestParameters: UpdateGymOperationRequest): Promise<runtime.RequestOpts> {
@@ -419,7 +563,7 @@ export class GymsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Update gym (admin or gym owner)
+     * Update gym, including its logo (admin or gym owner)
      */
     async updateGymRaw(requestParameters: UpdateGymOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GymDto>> {
         const requestOptions = await this.updateGymRequestOpts(requestParameters);
@@ -429,7 +573,7 @@ export class GymsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Update gym (admin or gym owner)
+     * Update gym, including its logo (admin or gym owner)
      */
     async updateGym(requestParameters: UpdateGymOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GymDto> {
         const response = await this.updateGymRaw(requestParameters, initOverrides);

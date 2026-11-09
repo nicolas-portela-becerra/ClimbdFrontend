@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/features/auth/useAuth'
+import { forgetSentEntries } from '@/features/competitions/entryStore'
 import { LogoutIcon } from '@/shared/icons'
 import { Button } from '@/shared/ui/Button'
 
 export default function Profile() {
   const { t } = useTranslation()
-  const { logout } = useAuth()
+  const { logout, user } = useAuth()
   const [loggingOut, setLoggingOut] = useState(false)
 
   return (
@@ -19,6 +20,7 @@ export default function Profile() {
         loading={loggingOut}
         onClick={() => {
           setLoggingOut(true)
+          if (user?.id !== undefined) forgetSentEntries(user.id)
           void logout()
         }}
         className="size-11 min-h-11 w-11 shrink-0 border-error bg-error px-0 text-black"

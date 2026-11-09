@@ -38,10 +38,6 @@ export interface CreateGymRequest {
     /**
      * 
      */
-    createdBy?: number;
-    /**
-     * 
-     */
     logo?: string;
 }
 
@@ -68,7 +64,6 @@ export function CreateGymRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
         'timeZone': json['timeZone'],
         'location': json['location'] == null ? undefined : json['location'],
         'description': json['description'] == null ? undefined : json['description'],
-        'createdBy': json['createdBy'] == null ? undefined : json['createdBy'],
         'logo': json['logo'] == null ? undefined : json['logo'],
     };
 }
@@ -88,7 +83,6 @@ export function CreateGymRequestToJSONTyped(value?: CreateGymRequest | null, ign
         'timeZone': value['timeZone'],
         'location': value['location'],
         'description': value['description'],
-        'createdBy': value['createdBy'],
         'logo': value['logo'],
     };
 }

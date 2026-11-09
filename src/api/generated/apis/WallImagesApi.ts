@@ -108,10 +108,6 @@ export interface UploadWallImageRequest {
      * Name of the physical wall (e.g. \"Cave\", \"Slab Left\")
      */
     wallName: string;
-    /**
-     * ID of the user who uploaded the image
-     */
-    uploadedBy: number;
 }
 
 /**
@@ -522,13 +518,6 @@ export class WallImagesApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['uploadedBy'] == null) {
-            throw new runtime.RequiredError(
-                'uploadedBy',
-                'Required parameter "uploadedBy" was null or undefined when calling uploadWallImage().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -565,10 +554,6 @@ export class WallImagesApi extends runtime.BaseAPI {
             formParams.append('wallName', requestParameters['wallName'] as any);
         }
 
-        if (requestParameters['uploadedBy'] != null) {
-            formParams.append('uploadedBy', requestParameters['uploadedBy'] as any);
-        }
-
 
         let urlPath = `/api/gyms/{gymId}/wall-images`;
         urlPath = urlPath.replace('{gymId}', encodeURIComponent(String(requestParameters['gymId'])));
@@ -583,7 +568,7 @@ export class WallImagesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Upload a wall image (admin or gym owner)
+     * Upload a wall image (admin or gym staff)
      */
     async uploadWallImageRaw(requestParameters: UploadWallImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const requestOptions = await this.uploadWallImageRequestOpts(requestParameters);
@@ -593,7 +578,7 @@ export class WallImagesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Upload a wall image (admin or gym owner)
+     * Upload a wall image (admin or gym staff)
      */
     async uploadWallImage(requestParameters: UploadWallImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.uploadWallImageRaw(requestParameters, initOverrides);

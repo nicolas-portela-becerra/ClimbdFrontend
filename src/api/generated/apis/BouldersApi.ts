@@ -219,7 +219,7 @@ export class BouldersApi extends runtime.BaseAPI {
     }
 
     /**
-     * Delete boulder (creator or admin)
+     * Delete boulder (creator, gym staff or admin)
      */
     async deleteBoulderRaw(requestParameters: DeleteBoulderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const requestOptions = await this.deleteBoulderRequestOpts(requestParameters);
@@ -229,7 +229,7 @@ export class BouldersApi extends runtime.BaseAPI {
     }
 
     /**
-     * Delete boulder (creator or admin)
+     * Delete boulder (creator, gym staff or admin)
      */
     async deleteBoulder(requestParameters: DeleteBoulderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteBoulderRaw(requestParameters, initOverrides);
@@ -456,7 +456,7 @@ export class BouldersApi extends runtime.BaseAPI {
     }
 
     /**
-     * Update boulder (creator only)
+     * Update boulder (creator, gym staff or admin)
      */
     async updateBoulderRaw(requestParameters: UpdateBoulderOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BoulderDto>> {
         const requestOptions = await this.updateBoulderRequestOpts(requestParameters);
@@ -466,7 +466,7 @@ export class BouldersApi extends runtime.BaseAPI {
     }
 
     /**
-     * Update boulder (creator only)
+     * Update boulder (creator, gym staff or admin)
      */
     async updateBoulder(requestParameters: UpdateBoulderOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BoulderDto> {
         const response = await this.updateBoulderRaw(requestParameters, initOverrides);

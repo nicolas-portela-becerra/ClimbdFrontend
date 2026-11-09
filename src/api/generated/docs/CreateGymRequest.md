@@ -10,7 +10,6 @@ Name | Type
 `timeZone` | string
 `location` | string
 `description` | string
-`createdBy` | number
 `logo` | string
 
 ## Example
@@ -24,7 +23,6 @@ const example = {
   "timeZone": Europe/Madrid,
   "location": null,
   "description": null,
-  "createdBy": null,
   "logo": null,
 } satisfies CreateGymRequest
 

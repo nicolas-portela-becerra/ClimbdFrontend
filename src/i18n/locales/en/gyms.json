@@ -46,5 +46,53 @@
       "network": "Can't reach the server. Check your connection",
       "unknown": "Something went wrong. Try again"
     }
+  },
+  "manage": {
+    "label": "Manage gym",
+    "editGym": "Edit gym",
+    "staff": "Manage staff",
+    "deleteGym": "Delete gym"
+  },
+  "edit": {
+    "title": "Edit gym",
+    "close": "Close",
+    "name": "Gym name",
+    "logoKept": "Leave the logo unpicked to keep the current one",
+    "submit": "Save changes",
+    "errors": {
+      "forbidden": "Only the gym owner or an admin can edit it"
+    }
+  },
+  "delete": {
+    "title": "Delete gym?",
+    "message": "The gym will be deleted and can't be recovered.",
+    "cancel": "Cancel",
+    "confirm": "Delete",
+    "forbidden": "Only admins can delete gyms",
+    "failed": "Couldn't delete the gym"
+  },
+  "staff": {
+    "title": "Gym staff",
+    "close": "Close",
+    "email": "Email",
+    "role": "Role",
+    "roleOwner": "Owner",
+    "roleSetter": "Setter",
+    "submit": "Add",
+    "empty": "This gym has no staff yet",
+    "remove": "Remove",
+    "removeTitle": "Remove from staff?",
+    "removeMessage": "{{name}} will stop managing this gym.",
+    "removeCancel": "Cancel",
+    "removeConfirm": "Remove",
+    "errors": {
+      "emailRequired": "Enter an email",
+      "invalid": "Some of the data is not valid",
+      "forbidden": "Only admins can grant the Owner role",
+      "notFound": "No user has that email",
+      "conflict": "You can't remove yourself from the staff",
+      "network": "Can't reach the server. Check your connection",
+      "unknown": "Something went wrong. Try again"
+    }
   }
 }

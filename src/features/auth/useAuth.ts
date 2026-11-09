@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import type { UserDto } from '@api'
+import type { UserDto, UserGymRoleDto } from '@api'
 
 export type AuthStatus = 'loading' | 'authenticated' | 'anonymous'
 // Why the user is not logged in anymore: they logged out (here or in another tab) or the session expired.
@@ -8,6 +8,8 @@ export type AuthEndReason = 'logout' | 'expired' | null
 export type AuthContextValue = {
   status: AuthStatus
   user: UserDto | null
+  // Gyms where the user is OWNER or SETTER. Empty for regular users.
+  gymRoles: UserGymRoleDto[]
   endReason: AuthEndReason
   logout: () => Promise<void>
 }

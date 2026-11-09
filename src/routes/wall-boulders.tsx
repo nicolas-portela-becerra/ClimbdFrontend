@@ -34,7 +34,7 @@ export default function WallBoulders() {
       name={name}
       action={
         user?.id !== undefined ? (
-          <NewBoulderButton gymId={Number(gymId)} wallImageId={Number(wallId)} userId={user.id} />
+          <NewBoulderButton gymId={Number(gymId)} wallImageId={Number(wallId)} />
         ) : null
       }
     >
@@ -42,14 +42,11 @@ export default function WallBoulders() {
         wallImageId={Number(wallId)}
         getHref={getHref}
         linkState={location.state}
+        // Every user can create boulders; the ⋮ menu stays visible to all and the backend decides who
+        // may edit or delete (staff of the gym, or the boulder's own creator).
         renderActions={(boulder) =>
           user?.id !== undefined ? (
-            <BoulderMenu
-              boulder={boulder}
-              gymId={Number(gymId)}
-              wallImageId={Number(wallId)}
-              userId={user.id}
-            />
+            <BoulderMenu boulder={boulder} wallImageId={Number(wallId)} />
           ) : null
         }
         className="border-t-2 border-ink"

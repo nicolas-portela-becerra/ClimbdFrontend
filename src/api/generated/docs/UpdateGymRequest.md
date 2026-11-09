@@ -10,6 +10,7 @@ Name | Type
 `timeZone` | string
 `location` | string
 `description` | string
+`logo` | string
 
 ## Example
 
@@ -22,6 +23,7 @@ const example = {
   "timeZone": Europe/Madrid,
   "location": null,
   "description": null,
+  "logo": null,
 } satisfies UpdateGymRequest
 
 console.log(example)

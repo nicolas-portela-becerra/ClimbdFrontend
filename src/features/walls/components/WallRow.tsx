@@ -4,7 +4,15 @@ import { useWallImageThumbnail } from '@/api/queries/useWallImageBlob'
 import { AuthImage } from '@/shared/ui/AuthImage'
 import { WallMenu } from './WallMenu'
 
-export function WallRow({ wall, gymId }: { wall: WallImageSummary; gymId: number }) {
+export function WallRow({
+  wall,
+  gymId,
+  canManage,
+}: {
+  wall: WallImageSummary
+  gymId: number
+  canManage: boolean
+}) {
   const name = wall.wallName ?? ''
   const thumbnail = useWallImageThumbnail(wall.id ?? 0)
 
@@ -24,7 +32,7 @@ export function WallRow({ wall, gymId }: { wall: WallImageSummary; gymId: number
           {name}
         </span>
       </Link>
-      <WallMenu wall={wall} gymId={gymId} className="absolute top-2 right-2" />
+      {canManage ? <WallMenu wall={wall} gymId={gymId} className="absolute top-2 right-2" /> : null}
     </li>
   )
 }

@@ -5,11 +5,11 @@ All URIs are relative to *http://localhost:8080*
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
 | [**createBoulder**](BouldersApi.md#createboulderoperation) | **POST** /api/gyms/{gymId}/boulders | Create a boulder with inline holds |
-| [**deleteBoulder**](BouldersApi.md#deleteboulder) | **DELETE** /api/boulders/{boulderId} | Delete boulder (creator or admin) |
+| [**deleteBoulder**](BouldersApi.md#deleteboulder) | **DELETE** /api/boulders/{boulderId} | Delete boulder (creator, gym staff or admin) |
 | [**getBoulderById**](BouldersApi.md#getboulderbyid) | **GET** /api/boulders/{boulderId} | Get boulder detail with holds |
 | [**listBoulders**](BouldersApi.md#listboulders) | **GET** /api/gyms/{gymId}/boulders | List boulders for a gym |
 | [**listBouldersByWall**](BouldersApi.md#listbouldersbywall) | **GET** /api/wall-images/{wallImageId}/boulders | List boulders for a wall image |
-| [**updateBoulder**](BouldersApi.md#updateboulderoperation) | **PUT** /api/boulders/{boulderId} | Update boulder (creator only) |
+| [**updateBoulder**](BouldersApi.md#updateboulderoperation) | **PUT** /api/boulders/{boulderId} | Update boulder (creator, gym staff or admin) |
 
 
 
@@ -90,7 +90,7 @@ example().catch(console.error);
 
 > deleteBoulder(boulderId)
 
-Delete boulder (creator or admin)
+Delete boulder (creator, gym staff or admin)
 
 ### Example
 
@@ -382,7 +382,7 @@ example().catch(console.error);
 
 > BoulderDto updateBoulder(boulderId, updateBoulderRequest)
 
-Update boulder (creator only)
+Update boulder (creator, gym staff or admin)
 
 ### Example
 

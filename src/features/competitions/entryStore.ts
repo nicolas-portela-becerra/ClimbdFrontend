@@ -75,6 +75,14 @@ export function listEntries(userId: number): CompetitionEntry[] {
   })
 }
 
+// On logout: drops the user's entries the server already has, so the next person on this phone can't
+// read them. Pending ones stay (results not sent yet would be lost) and are sent on the next login.
+export function forgetSentEntries(userId: number): void {
+  for (const entry of listEntries(userId)) {
+    if (entry.send !== 'pending') updateEntry(userId, entry.competition.id, () => undefined)
+  }
+}
+
 function subscribe(listener: () => void) {
   listeners.add(listener)
   // Another tab changed the data.
